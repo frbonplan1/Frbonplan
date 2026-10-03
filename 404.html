@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Page introuvable — Frbonplan</title>
+<meta name="description" content="Cette page n'existe pas ou plus. Retrouvez les bons plans Hacoo et la boutique de montres Frbonplan.">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b0f14">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" href="unnamed.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0b0f14;--card:#151b24;--border:#242c38;--gold:#d9a441;--gold-soft:#f0c368;--coral:#ff6952;--text:#f5f3ee;--text-soft:#a8b0bc;}
+  *{box-sizing:border-box;}
+  body{
+    margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center; text-align:center;
+    background:radial-gradient(900px 500px at 50% -10%, rgba(217,164,65,0.14), transparent 60%), var(--bg);
+    color:var(--text); font-family:'Inter', system-ui, sans-serif; padding:24px;
+  }
+  .box{max-width:440px;}
+  .code{font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:5rem; line-height:1;
+    background:linear-gradient(100deg, var(--gold-soft), var(--coral), var(--gold-soft)); background-size:200% auto;
+    -webkit-background-clip:text; background-clip:text; color:transparent; animation:shine 5s linear infinite; margin-bottom:10px;}
+  @keyframes shine{to{background-position:200% center;}}
+  h1{font-family:'Space Grotesk', sans-serif; font-size:1.3rem; margin:0 0 12px;}
+  p{color:var(--text-soft); font-size:0.95rem; line-height:1.6; margin:0 0 28px;}
+  .links{display:flex; flex-wrap:wrap; gap:12px; justify-content:center;}
+  a.btn{
+    display:inline-flex; align-items:center; gap:8px; text-decoration:none; font-weight:700; font-size:0.9rem;
+    padding:12px 22px; border-radius:999px; transition:0.2s;
+  }
+  a.btn-primary{background:linear-gradient(135deg, var(--gold), #d16f0a); color:#1a0f00; box-shadow:0 10px 26px rgba(232,138,18,0.35);}
+  a.btn-primary:hover{transform:translateY(-2px);}
+  a.btn-ghost{background:var(--card); color:var(--text); border:1px solid var(--border);}
+  a.btn-ghost:hover{border-color:var(--gold-soft);}
+</style>
+</head>
+<body>
+  <div class="box">
+    <div class="code">404</div>
+    <h1>Cette page n'existe pas (ou plus)</h1>
+    <p>Le lien est peut-être périmé. Retrouvez la sélection Hacoo du jour, les codes promo ou la boutique de montres directement depuis l'accueil.</p>
+    <div class="links">
+      <a class="btn btn-primary" href="./index.html">← Retour à l'accueil</a>
+      <a class="btn btn-ghost" href="./index.html#montres">⌚ Boutique montres</a>
+      <a class="btn btn-ghost" href="https://t.me/promohacoo" target="_blank" rel="noopener">Telegram</a>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Frbonplan — Admin produits Hacoo</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+  :root{
+    --bg:#0b0f14; --card:#151b24; --card-hi:#1d2430; --border:rgba(255,255,255,0.09);
+    --text:#f5f3ee; --text-soft:#d8dce3; --text-dim:#a8b0bc;
+    --gold:#d9a441; --gold-soft:#e8c178; --coral:#ff6952; --green:#5bc98a;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--bg); color:var(--text); min-height:100vh;
+    font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+    padding:24px 16px 80px;
+  }
+  .wrap{max-width:720px; margin:0 auto;}
+  h1{font-family:'Space Grotesk',system-ui,sans-serif; font-size:1.5rem; margin:0 0 4px;}
+  h1 span{color:var(--gold-soft)}
+  .sub{color:var(--text-dim); font-size:0.9rem; margin:0 0 24px;}
+  .card{
+    background:var(--card); border:1px solid var(--border); border-radius:16px;
+    padding:20px; margin-bottom:18px;
+  }
+  .card h2{font-size:1rem; margin:0 0 14px; color:var(--gold-soft);}
+  label{display:block; font-size:0.82rem; color:var(--text-dim); margin:12px 0 5px;}
+  label:first-child{margin-top:0}
+  input[type=text], input[type=password], input[type=url], textarea{
+    width:100%; background:var(--bg); border:1px solid var(--border); border-radius:10px;
+    padding:10px 12px; color:var(--text); font-size:0.9rem; font-family:inherit;
+  }
+  textarea{resize:vertical; min-height:60px}
+  .row2{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  button{
+    border:none; cursor:pointer; border-radius:999px; font-weight:700; font-family:inherit;
+    font-size:0.88rem; padding:11px 20px;
+  }
+  .btn-gold{background:linear-gradient(135deg,var(--gold),#d16f0a); color:#1a0f00;}
+  .btn-ghost{background:var(--card-hi); color:var(--text-soft); border:1px solid var(--border);}
+  .btn-danger{background:rgba(255,105,82,0.15); color:var(--coral); border:1px solid rgba(255,105,82,0.4);}
+  .btn-row{display:flex; gap:10px; margin-top:16px; flex-wrap:wrap;}
+  .product-item{
+    display:flex; gap:12px; align-items:center; padding:12px; border:1px solid var(--border);
+    border-radius:12px; margin-bottom:10px; background:var(--bg);
+  }
+  .product-item img{width:52px; height:52px; border-radius:8px; object-fit:cover; background:var(--card-hi); flex-shrink:0;}
+  .product-item .pi-info{flex:1; min-width:0;}
+  .product-item .pi-info b{display:block; font-size:0.86rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .product-item .pi-info span{font-size:0.78rem; color:var(--text-dim);}
+  .product-item .pi-actions{display:flex; gap:6px; flex-shrink:0;}
+  .product-item .pi-actions button{padding:7px 12px; font-size:0.78rem;}
+  .status{
+    font-size:0.85rem; padding:10px 14px; border-radius:10px; margin-top:14px; display:none;
+  }
+  .status.show{display:block}
+  .status.ok{background:rgba(91,201,138,0.12); color:var(--green); border:1px solid rgba(91,201,138,0.3);}
+  .status.err{background:rgba(255,105,82,0.12); color:var(--coral); border:1px solid rgba(255,105,82,0.3);}
+  .status.wait{background:rgba(217,164,65,0.12); color:var(--gold-soft); border:1px solid rgba(217,164,65,0.3);}
+  .help{font-size:0.78rem; color:var(--text-dim); line-height:1.5; margin-top:6px;}
+  .help a{color:var(--gold-soft)}
+  details summary{cursor:pointer; color:var(--gold-soft); font-size:0.85rem; font-weight:600; margin-bottom:10px;}
+  .gate{display:flex; align-items:center; justify-content:center; min-height:70vh;}
+  .gate .card{max-width:420px; width:100%;}
+  .empty{color:var(--text-dim); font-size:0.85rem; text-align:center; padding:20px;}
+  #appScreen{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- Écran de connexion : demande les infos GitHub une seule fois, stockées uniquement dans ce navigateur -->
+  <div class="gate" id="gateScreen">
+    <div class="card">
+      <h2>🔐 Connexion admin</h2>
+      <p class="help" style="margin-bottom:14px;">
+        Cette page modifie directement le fichier <code>products.json</code> de votre dépôt GitHub.
+        Rien n'est envoyé ailleurs qu'à GitHub, et votre jeton reste uniquement dans ce navigateur
+        (il n'est jamais sauvegardé dans le code du site).
+      </p>
+      <label for="ghOwner">Nom d'utilisateur / organisation GitHub</label>
+      <input type="text" id="ghOwner" placeholder="ex : votre-pseudo">
+      <label for="ghRepo">Nom du dépôt</label>
+      <input type="text" id="ghRepo" placeholder="ex : Frbonplan">
+      <label for="ghBranch">Branche</label>
+      <input type="text" id="ghBranch" placeholder="main" value="main">
+      <label for="ghToken">Jeton d'accès GitHub (Personal Access Token)</label>
+      <input type="password" id="ghToken" placeholder="ghp_...">
+      <details style="margin-top:12px;">
+        <summary>Comment créer ce jeton (une seule fois, 2 minutes) ?</summary>
+        <div class="help">
+          1. Allez sur <a href="https://github.com/settings/tokens?type=beta" target="_blank" rel="noopener">github.com/settings/tokens</a> (connecté à votre compte GitHub).<br>
+          2. Cliquez « Generate new token » → « Fine-grained token ».<br>
+          3. Dans « Repository access », choisissez « Only select repositories » et sélectionnez ce dépôt.<br>
+          4. Dans « Permissions » → « Contents », choisissez « Read and write ».<br>
+          5. Générez, copiez le jeton (il commence par <code>github_pat_</code>) et collez-le ci-dessus.<br>
+          6. Gardez-le secret — quiconque le possède peut modifier ce fichier sur votre dépôt.
+        </div>
+      </details>
+      <div class="btn-row">
+        <button class="btn-gold" onclick="connectAdmin()">Se connecter</button>
+      </div>
+      <div class="status" id="gateStatus"></div>
+    </div>
+  </div>
+
+  <!-- Écran principal : liste + formulaire -->
+  <div id="appScreen">
+    <h1>Admin produits <span>Hacoo</span></h1>
+    <p class="sub">Les changements publiés ici apparaissent automatiquement sur le site et l'appli, sans toucher au code.</p>
+
+    <div class="card">
+      <h2>➕ Ajouter / modifier un article</h2>
+      <input type="hidden" id="editingId">
+      <label for="pName">Nom affiché</label>
+      <input type="text" id="pName" placeholder="Ex : Chaussures de running — plusieurs coloris">
+      <label for="pShareName">Nom pour le partage (sans tiret, plus court)</label>
+      <input type="text" id="pShareName" placeholder="Ex : Chaussures de running, plusieurs coloris">
+      <div class="row2">
+        <div><label for="pPriceOld">Prix barré (optionnel)</label><input type="text" id="pPriceOld" placeholder="35,42 €"></div>
+        <div><label for="pPriceNew">Prix affiché</label><input type="text" id="pPriceNew" placeholder="30,46 €"></div>
+      </div>
+      <label for="pImage">Image (URL complète, ou nom de fichier déjà présent sur le dépôt)</label>
+      <input type="text" id="pImage" placeholder="https://... ou produit-xxx.png">
+      <label for="pLink">Lien Hacoo / affilié</label>
+      <input type="url" id="pLink" placeholder="https://...">
+      <label for="pBadge">Petit badge (optionnel, ex : Nouveau, Populaire)</label>
+      <input type="text" id="pBadge" placeholder="Laisser vide si aucun">
+      <div class="btn-row">
+        <button class="btn-gold" onclick="saveProduct()">Enregistrer cet article</button>
+        <button class="btn-ghost" onclick="resetForm()">Annuler</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📦 Articles actuels (<span id="productCount">0</span>)</h2>
+      <div id="productList"></div>
+      <p class="empty" id="emptyMsg" style="display:none;">Aucun article pour l'instant.</p>
+    </div>
+
+    <div class="card">
+      <h2>🚀 Publier</h2>
+      <p class="help">Enregistre la liste complète sur GitHub. Le site et l'appli afficheront les changements à la prochaine visite.</p>
+      <div class="btn-row">
+        <button class="btn-gold" onclick="publishProducts()">Publier sur le site</button>
+        <button class="btn-ghost" onclick="reloadProducts()">🔄 Recharger depuis GitHub</button>
+        <button class="btn-danger" onclick="disconnectAdmin()">Se déconnecter</button>
+      </div>
+      <div class="status" id="publishStatus"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const LS_KEY = 'frbonplan_admin_gh';
+  let products = [];
+  let currentSha = null;
+
+  function getConfig(){
+    try { return JSON.parse(localStorage.getItem(LS_KEY) || 'null'); } catch(e){ return null; }
+  }
+  function setConfig(cfg){
+    try { localStorage.setItem(LS_KEY, JSON.stringify(cfg)); } catch(e){}
+  }
+  function apiUrl(cfg){
+    return 'https://api.github.com/repos/' + encodeURIComponent(cfg.owner) + '/' + encodeURIComponent(cfg.repo) + '/contents/products.json';
+  }
+  function showStatus(id, type, msg){
+    const el = document.getElementById(id);
+    el.className = 'status show ' + type;
+    el.textContent = msg;
+  }
+
+  function connectAdmin(){
+    const owner = document.getElementById('ghOwner').value.trim();
+    const repo = document.getElementById('ghRepo').value.trim();
+    const branch = document.getElementById('ghBranch').value.trim() || 'main';
+    const token = document.getElementById('ghToken').value.trim();
+    if(!owner || !repo || !token){
+      showStatus('gateStatus', 'err', 'Merci de remplir le nom d\'utilisateur, le dépôt et le jeton.');
+      return;
+    }
+    setConfig({ owner, repo, branch, token });
+    showStatus('gateStatus', 'wait', 'Connexion en cours…');
+    loadFromGitHub();
+  }
+  function disconnectAdmin(){
+    if(!confirm('Se déconnecter ? Le jeton sera supprimé de ce navigateur.')) return;
+    localStorage.removeItem(LS_KEY);
+    location.reload();
+  }
+
+  function b64DecodeUtf8(b64){
+    const bin = atob(b64.replace(/\n/g, ''));
+    const bytes = new Uint8Array(bin.length);
+    for(let i=0; i<bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return new TextDecoder('utf-8').decode(bytes);
+  }
+  function b64EncodeUtf8(str){
+    const bytes = new TextEncoder().encode(str);
+    let bin = '';
+    bytes.forEach(b => bin += String.fromCharCode(b));
+    return btoa(bin);
+  }
+
+  async function loadFromGitHub(){
+    const cfg = getConfig();
+    if(!cfg) return;
+    try {
+      const res = await fetch(apiUrl(cfg) + '?ref=' + encodeURIComponent(cfg.branch), {
+        headers: { 'Authorization': 'Bearer ' + cfg.token, 'Accept': 'application/vnd.github+json' }
+      });
+      if(res.status === 404){
+        // Le fichier n'existe pas encore sur le dépôt : on part d'une liste vide
+        products = [];
+        currentSha = null;
+        showStatus('gateStatus', 'ok', 'Connecté — aucun products.json trouvé, il sera créé à la première publication.');
+      } else if(!res.ok){
+        if(res.status === 401 || res.status === 403){
+          showStatus('gateStatus', 'err', 'Jeton refusé par GitHub. Vérifiez qu\'il a bien l\'accès "Contents: Read and write" sur ce dépôt.');
+        } else {
+          showStatus('gateStatus', 'err', 'Erreur GitHub (' + res.status + '). Vérifiez le nom d\'utilisateur et le dépôt.');
+        }
+        return;
+      } else {
+        const data = await res.json();
+        currentSha = data.sha;
+        const json = JSON.parse(b64DecodeUtf8(data.content));
+        products = Array.isArray(json.products) ? json.products : [];
+      }
+      document.getElementById('gateScreen').style.display = 'none';
+      document.getElementById('appScreen').style.display = 'block';
+      renderProductList();
+    } catch(e){
+      showStatus('gateStatus', 'err', 'Connexion impossible : ' + e.message);
+    }
+  }
+
+  function reloadProducts(){
+    showStatus('publishStatus', 'wait', 'Rechargement…');
+    loadFromGitHub();
+  }
+
+  function renderProductList(){
+    const list = document.getElementById('productList');
+    const empty = document.getElementById('emptyMsg');
+    document.getElementById('productCount').textContent = products.length;
+    if(products.length === 0){
+      list.innerHTML = '';
+      empty.style.display = 'block';
+      return;
+    }
+    empty.style.display = 'none';
+    list.innerHTML = products.map((p, i) => (
+      '<div class="product-item">' +
+        '<img src="' + escapeAttr(p.image) + '" alt="" onerror="this.style.visibility=\'hidden\'">' +
+        '<div class="pi-info"><b>' + escapeHtml(p.name) + '</b><span>' + escapeHtml(p.priceNew || '') + '</span></div>' +
+        '<div class="pi-actions">' +
+          '<button class="btn-ghost" onclick="editProduct(' + i + ')">Modifier</button>' +
+          '<button class="btn-danger" onclick="deleteProduct(' + i + ')">Suppr.</button>' +
+        '</div>' +
+      '</div>'
+    )).join('');
+  }
+  function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+  function escapeAttr(s){ return escapeHtml(s); }
+
+  function resetForm(){
+    document.getElementById('editingId').value = '';
+    ['pName','pShareName','pPriceOld','pPriceNew','pImage','pLink','pBadge'].forEach(id => document.getElementById(id).value = '');
+  }
+  function editProduct(i){
+    const p = products[i];
+    document.getElementById('editingId').value = i;
+    document.getElementById('pName').value = p.name || '';
+    document.getElementById('pShareName').value = p.shareName || '';
+    document.getElementById('pPriceOld').value = p.priceOld || '';
+    document.getElementById('pPriceNew').value = p.priceNew || '';
+    document.getElementById('pImage').value = p.image || '';
+    document.getElementById('pLink').value = p.link || '';
+    document.getElementById('pBadge').value = p.badge || '';
+    window.scrollTo({ top:0, behavior:'smooth' });
+  }
+  function deleteProduct(i){
+    if(!confirm('Retirer « ' + products[i].name + ' » de la liste ? Cliquez ensuite sur Publier pour que ce soit définitif.')) return;
+    products.splice(i, 1);
+    renderProductList();
+  }
+  function slugify(s){
+    return (s||'produit').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'') || 'produit';
+  }
+  function saveProduct(){
+    const name = document.getElementById('pName').value.trim();
+    const link = document.getElementById('pLink').value.trim();
+    const priceNew = document.getElementById('pPriceNew').value.trim();
+    const image = document.getElementById('pImage').value.trim();
+    if(!name || !link || !priceNew || !image){
+      alert('Merci de remplir au moins : nom, prix affiché, image et lien.');
+      return;
+    }
+    const editingIdx = document.getElementById('editingId').value;
+    const data = {
+      id: editingIdx !== '' ? products[editingIdx].id : slugify(name) + '-' + Date.now().toString(36).slice(-4),
+      name: name,
+      shareName: document.getElementById('pShareName').value.trim() || name,
+      priceOld: document.getElementById('pPriceOld').value.trim(),
+      priceNew: priceNew,
+      image: image,
+      link: link,
+      badge: document.getElementById('pBadge').value.trim(),
+      delivery: '🚚 Livraison estimée 7-14 jours'
+    };
+    if(editingIdx !== ''){
+      products[editingIdx] = data;
+    } else {
+      products.push(data);
+    }
+    resetForm();
+    renderProductList();
+  }
+
+  async function publishProducts(){
+    const cfg = getConfig();
+    if(!cfg) return;
+    showStatus('publishStatus', 'wait', 'Publication en cours…');
+    try {
+      const payload = { updated: new Date().toISOString(), products: products };
+      const body = {
+        message: 'Mise à jour des produits Hacoo (' + products.length + ' articles) via l\'admin',
+        content: b64EncodeUtf8(JSON.stringify(payload, null, 2)),
+        branch: cfg.branch
+      };
+      if(currentSha) body.sha = currentSha;
+      const res = await fetch(apiUrl(cfg), {
+        method: 'PUT',
+        headers: {
+          'Authorization': 'Bearer ' + cfg.token,
+          'Accept': 'application/vnd.github+json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+      });
+      if(!res.ok){
+        const errData = await res.json().catch(() => ({}));
+        if(res.status === 409){
+          showStatus('publishStatus', 'err', 'Quelqu\'un d\'autre a modifié le fichier entre-temps. Cliquez "Recharger depuis GitHub" puis réessayez.');
+        } else {
+          showStatus('publishStatus', 'err', 'Échec de la publication (' + res.status + ') : ' + (errData.message || 'erreur inconnue'));
+        }
+        return;
+      }
+      const result = await res.json();
+      currentSha = result.content.sha;
+      showStatus('publishStatus', 'ok', '✅ Publié ! Les changements apparaîtront sur le site et l\'appli à la prochaine visite (quelques secondes à 1 minute).');
+    } catch(e){
+      showStatus('publishStatus', 'err', 'Erreur réseau : ' + e.message);
+    }
+  }
+
+  // Reconnexion automatique si déjà configuré sur ce navigateur
+  (function init(){
+    const cfg = getConfig();
+    if(cfg){
+      document.getElementById('ghOwner').value = cfg.owner || '';
+      document.getElementById('ghRepo').value = cfg.repo || '';
+      document.getElementById('ghBranch').value = cfg.branch || 'main';
+      document.getElementById('ghToken').value = cfg.token || '';
+      loadFromGitHub();
+    }
+  })();
+</script>
+</body>
+</html>

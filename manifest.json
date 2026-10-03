@@ -1,0 +1,49 @@
+{
+  "updated": "2025-01-01T00:00:00.000Z",
+  "products": [
+    {
+      "id": "sneakers-running",
+      "name": "Chaussures de running — plusieurs coloris",
+      "shareName": "Chaussures de running, plusieurs coloris",
+      "image": "produit-sneakers.png",
+      "link": "https://c.onlyaff.app/15arcP",
+      "priceOld": "35,42 €",
+      "priceNew": "30,46 €",
+      "delivery": "🚚 Livraison estimée 7-14 jours",
+      "badge": ""
+    },
+    {
+      "id": "tshirt-oversize",
+      "name": "T-shirt oversize — 100% coton",
+      "shareName": "T-shirt oversize 100% coton",
+      "image": "produit-tshirt.png",
+      "link": "https://c.onlyaff.app/aPGpP5",
+      "priceOld": "8,20 €",
+      "priceNew": "7,05 €",
+      "delivery": "🚚 Livraison estimée 7-14 jours",
+      "badge": ""
+    },
+    {
+      "id": "polo-casual",
+      "name": "Polo casual — plusieurs coloris",
+      "shareName": "Polo casual, plusieurs coloris",
+      "image": "produit-polo.png",
+      "link": "https://c.onlyaff.app/aPGtEq",
+      "priceOld": "12,71 €",
+      "priceNew": "10,93 €",
+      "delivery": "🚚 Livraison estimée 7-14 jours",
+      "badge": ""
+    },
+    {
+      "id": "ecouteurs-sans-fil",
+      "name": "Écouteurs sans fil — compatible Apple",
+      "shareName": "Écouteurs sans fil compatible Apple",
+      "image": "produit-ecouteurs.jpg",
+      "link": "https://c.onlyaff.app/aTdSJV",
+      "priceOld": "11,46 €",
+      "priceNew": "9,86 €",
+      "delivery": "🚚 Livraison estimée 7-14 jours",
+      "badge": ""
+    }
+  ]
+}
