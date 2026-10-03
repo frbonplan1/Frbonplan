@@ -2,375 +2,1885 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Frbonplan — Admin produits Hacoo</title>
-<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Frbonplan — Administration</title>
+<meta name="robots" content="noindex,nofollow">
+
 <style>
-  :root{
-    --bg:#0b0f14; --card:#151b24; --card-hi:#1d2430; --border:rgba(255,255,255,0.09);
-    --text:#f5f3ee; --text-soft:#d8dce3; --text-dim:#a8b0bc;
-    --gold:#d9a441; --gold-soft:#e8c178; --coral:#ff6952; --green:#5bc98a;
+:root{
+  --bg:#0b0f14;
+  --card:#151b24;
+  --card-hi:#1d2430;
+  --border:rgba(255,255,255,.09);
+  --text:#f5f3ee;
+  --soft:#d8dce3;
+  --dim:#a8b0bc;
+  --gold:#d9a441;
+  --gold-soft:#e8c178;
+  --coral:#ff6952;
+  --green:#5bc98a;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  padding:22px 14px 70px;
+}
+
+.wrap{
+  max-width:760px;
+  margin:auto;
+}
+
+h1{
+  font-size:1.5rem;
+  margin:0 0 5px;
+}
+
+h1 span{
+  color:var(--gold-soft);
+}
+
+.sub{
+  color:var(--dim);
+  font-size:.9rem;
+  margin:0 0 22px;
+}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:19px;
+  margin-bottom:17px;
+}
+
+.card h2{
+  font-size:1rem;
+  color:var(--gold-soft);
+  margin:0 0 15px;
+}
+
+label{
+  display:block;
+  color:var(--dim);
+  font-size:.82rem;
+  margin:12px 0 5px;
+}
+
+input[type=text],
+input[type=password],
+input[type=url]{
+  width:100%;
+  padding:11px 12px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:var(--bg);
+  color:var(--text);
+  font:inherit;
+}
+
+input[type=file]{
+  width:100%;
+  padding:10px;
+  border-radius:10px;
+  border:1px dashed var(--border);
+  background:var(--bg);
+  color:var(--soft);
+}
+
+.row2{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.shop-choice{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:8px;
+}
+
+.shop-choice label{
+  margin:0;
+  cursor:pointer;
+}
+
+.shop-choice input{
+  display:none;
+}
+
+.shop-choice .choice{
+  display:block;
+  padding:14px 12px;
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:var(--bg);
+  text-align:center;
+  font-weight:700;
+  color:var(--soft);
+  transition:.15s;
+}
+
+.shop-choice input:checked + .choice{
+  border-color:var(--gold);
+  background:rgba(217,164,65,.12);
+  color:var(--gold-soft);
+}
+
+.help{
+  color:var(--dim);
+  font-size:.78rem;
+  line-height:1.5;
+  margin-top:6px;
+}
+
+.buttons{
+  display:flex;
+  gap:9px;
+  flex-wrap:wrap;
+  margin-top:16px;
+}
+
+button{
+  border:0;
+  cursor:pointer;
+  border-radius:999px;
+  padding:10px 18px;
+  font:700 .88rem inherit;
+}
+
+.gold{
+  background:linear-gradient(135deg,#d9a441,#d16f0a);
+  color:#1a0f00;
+}
+
+.ghost{
+  background:var(--card-hi);
+  color:var(--soft);
+  border:1px solid var(--border);
+}
+
+.danger{
+  background:rgba(255,105,82,.13);
+  color:var(--coral);
+  border:1px solid rgba(255,105,82,.35);
+}
+
+.status{
+  display:none;
+  margin-top:13px;
+  padding:10px 13px;
+  border-radius:10px;
+  font-size:.84rem;
+}
+
+.status.show{display:block}
+
+.status.ok{
+  color:var(--green);
+  background:rgba(91,201,138,.1);
+  border:1px solid rgba(91,201,138,.3);
+}
+
+.status.err{
+  color:var(--coral);
+  background:rgba(255,105,82,.1);
+  border:1px solid rgba(255,105,82,.3);
+}
+
+.status.wait{
+  color:var(--gold-soft);
+  background:rgba(217,164,65,.1);
+  border:1px solid rgba(217,164,65,.3);
+}
+
+.product{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:11px;
+  margin-bottom:9px;
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:12px;
+}
+
+.product img{
+  width:56px;
+  height:56px;
+  object-fit:cover;
+  border-radius:9px;
+  background:var(--card-hi);
+  flex-shrink:0;
+}
+
+.product-info{
+  flex:1;
+  min-width:0;
+}
+
+.product-info b{
+  display:block;
+  font-size:.86rem;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.product-info span{
+  display:block;
+  margin-top:3px;
+  color:var(--dim);
+  font-size:.75rem;
+}
+
+.product-actions{
+  display:flex;
+  gap:6px;
+}
+
+.product-actions button{
+  padding:7px 10px;
+  font-size:.75rem;
+}
+
+.shop-tag{
+  display:inline-block;
+  margin-top:5px;
+  padding:3px 7px;
+  border-radius:999px;
+  font-size:.68rem;
+  font-weight:700;
+  background:rgba(217,164,65,.12);
+  color:var(--gold-soft);
+}
+
+.image-preview{
+  display:none;
+  margin-top:10px;
+}
+
+.image-preview img{
+  width:100px;
+  height:100px;
+  object-fit:cover;
+  border-radius:12px;
+  border:1px solid var(--border);
+}
+
+.existing-images{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+  margin-top:10px;
+}
+
+.existing-image{
+  position:relative;
+  cursor:pointer;
+  border:1px solid var(--border);
+  border-radius:10px;
+  overflow:hidden;
+  background:var(--bg);
+}
+
+.existing-image img{
+  width:100%;
+  aspect-ratio:1;
+  object-fit:cover;
+  display:block;
+}
+
+.existing-image small{
+  display:block;
+  padding:5px;
+  font-size:.62rem;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  color:var(--soft);
+}
+
+.empty{
+  text-align:center;
+  color:var(--dim);
+  padding:18px;
+  font-size:.84rem;
+}
+
+#app{
+  display:none;
+}
+
+@media(max-width:560px){
+  .row2,
+  .shop-choice{
+    grid-template-columns:1fr;
   }
-  *{box-sizing:border-box}
-  body{
-    margin:0; background:var(--bg); color:var(--text); min-height:100vh;
-    font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
-    padding:24px 16px 80px;
+
+  .product-actions{
+    flex-direction:column;
   }
-  .wrap{max-width:720px; margin:0 auto;}
-  h1{font-family:'Space Grotesk',system-ui,sans-serif; font-size:1.5rem; margin:0 0 4px;}
-  h1 span{color:var(--gold-soft)}
-  .sub{color:var(--text-dim); font-size:0.9rem; margin:0 0 24px;}
-  .card{
-    background:var(--card); border:1px solid var(--border); border-radius:16px;
-    padding:20px; margin-bottom:18px;
+
+  .existing-images{
+    grid-template-columns:repeat(3,1fr);
   }
-  .card h2{font-size:1rem; margin:0 0 14px; color:var(--gold-soft);}
-  label{display:block; font-size:0.82rem; color:var(--text-dim); margin:12px 0 5px;}
-  label:first-child{margin-top:0}
-  input[type=text], input[type=password], input[type=url], textarea{
-    width:100%; background:var(--bg); border:1px solid var(--border); border-radius:10px;
-    padding:10px 12px; color:var(--text); font-size:0.9rem; font-family:inherit;
-  }
-  textarea{resize:vertical; min-height:60px}
-  .row2{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
-  button{
-    border:none; cursor:pointer; border-radius:999px; font-weight:700; font-family:inherit;
-    font-size:0.88rem; padding:11px 20px;
-  }
-  .btn-gold{background:linear-gradient(135deg,var(--gold),#d16f0a); color:#1a0f00;}
-  .btn-ghost{background:var(--card-hi); color:var(--text-soft); border:1px solid var(--border);}
-  .btn-danger{background:rgba(255,105,82,0.15); color:var(--coral); border:1px solid rgba(255,105,82,0.4);}
-  .btn-row{display:flex; gap:10px; margin-top:16px; flex-wrap:wrap;}
-  .product-item{
-    display:flex; gap:12px; align-items:center; padding:12px; border:1px solid var(--border);
-    border-radius:12px; margin-bottom:10px; background:var(--bg);
-  }
-  .product-item img{width:52px; height:52px; border-radius:8px; object-fit:cover; background:var(--card-hi); flex-shrink:0;}
-  .product-item .pi-info{flex:1; min-width:0;}
-  .product-item .pi-info b{display:block; font-size:0.86rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
-  .product-item .pi-info span{font-size:0.78rem; color:var(--text-dim);}
-  .product-item .pi-actions{display:flex; gap:6px; flex-shrink:0;}
-  .product-item .pi-actions button{padding:7px 12px; font-size:0.78rem;}
-  .status{
-    font-size:0.85rem; padding:10px 14px; border-radius:10px; margin-top:14px; display:none;
-  }
-  .status.show{display:block}
-  .status.ok{background:rgba(91,201,138,0.12); color:var(--green); border:1px solid rgba(91,201,138,0.3);}
-  .status.err{background:rgba(255,105,82,0.12); color:var(--coral); border:1px solid rgba(255,105,82,0.3);}
-  .status.wait{background:rgba(217,164,65,0.12); color:var(--gold-soft); border:1px solid rgba(217,164,65,0.3);}
-  .help{font-size:0.78rem; color:var(--text-dim); line-height:1.5; margin-top:6px;}
-  .help a{color:var(--gold-soft)}
-  details summary{cursor:pointer; color:var(--gold-soft); font-size:0.85rem; font-weight:600; margin-bottom:10px;}
-  .gate{display:flex; align-items:center; justify-content:center; min-height:70vh;}
-  .gate .card{max-width:420px; width:100%;}
-  .empty{color:var(--text-dim); font-size:0.85rem; text-align:center; padding:20px;}
-  #appScreen{display:none}
+}
 </style>
 </head>
+
 <body>
+
 <div class="wrap">
 
-  <!-- Écran de connexion : demande les infos GitHub une seule fois, stockées uniquement dans ce navigateur -->
-  <div class="gate" id="gateScreen">
+  <!-- CONNEXION -->
+  <div id="loginScreen">
+
     <div class="card">
-      <h2>🔐 Connexion admin</h2>
-      <p class="help" style="margin-bottom:14px;">
-        Cette page modifie directement le fichier <code>products.json</code> de votre dépôt GitHub.
-        Rien n'est envoyé ailleurs qu'à GitHub, et votre jeton reste uniquement dans ce navigateur
-        (il n'est jamais sauvegardé dans le code du site).
+
+      <h2>🔐 Connexion administrateur</h2>
+
+      <p class="help">
+        Cette page communique directement avec ton dépôt GitHub.
+        Le jeton GitHub n'est pas enregistré dans le navigateur.
+        Il reste uniquement en mémoire pendant cette session.
       </p>
-      <label for="ghOwner">Nom d'utilisateur / organisation GitHub</label>
-      <input type="text" id="ghOwner" placeholder="ex : votre-pseudo">
-      <label for="ghRepo">Nom du dépôt</label>
-      <input type="text" id="ghRepo" placeholder="ex : Frbonplan">
-      <label for="ghBranch">Branche</label>
-      <input type="text" id="ghBranch" placeholder="main" value="main">
-      <label for="ghToken">Jeton d'accès GitHub (Personal Access Token)</label>
-      <input type="password" id="ghToken" placeholder="ghp_...">
-      <details style="margin-top:12px;">
-        <summary>Comment créer ce jeton (une seule fois, 2 minutes) ?</summary>
-        <div class="help">
-          1. Allez sur <a href="https://github.com/settings/tokens?type=beta" target="_blank" rel="noopener">github.com/settings/tokens</a> (connecté à votre compte GitHub).<br>
-          2. Cliquez « Generate new token » → « Fine-grained token ».<br>
-          3. Dans « Repository access », choisissez « Only select repositories » et sélectionnez ce dépôt.<br>
-          4. Dans « Permissions » → « Contents », choisissez « Read and write ».<br>
-          5. Générez, copiez le jeton (il commence par <code>github_pat_</code>) et collez-le ci-dessus.<br>
-          6. Gardez-le secret — quiconque le possède peut modifier ce fichier sur votre dépôt.
-        </div>
-      </details>
-      <div class="btn-row">
-        <button class="btn-gold" onclick="connectAdmin()">Se connecter</button>
+
+      <label for="token">Jeton GitHub</label>
+      <input
+        id="token"
+        type="password"
+        autocomplete="off"
+        placeholder="github_pat_..."
+      >
+
+      <div class="buttons">
+        <button class="gold" onclick="connect()">
+          Se connecter
+        </button>
       </div>
-      <div class="status" id="gateStatus"></div>
+
+      <div id="loginStatus" class="status"></div>
+
     </div>
+
   </div>
 
-  <!-- Écran principal : liste + formulaire -->
-  <div id="appScreen">
-    <h1>Admin produits <span>Hacoo</span></h1>
-    <p class="sub">Les changements publiés ici apparaissent automatiquement sur le site et l'appli, sans toucher au code.</p>
 
+  <!-- APPLICATION -->
+  <div id="app">
+
+    <h1>Administration <span>Frbonplan</span></h1>
+
+    <p class="sub">
+      Ajoute, modifie et publie tes produits directement sur GitHub.
+    </p>
+
+
+    <!-- PRODUIT -->
     <div class="card">
-      <h2>➕ Ajouter / modifier un article</h2>
+
+      <h2>➕ Ajouter / modifier un produit</h2>
+
       <input type="hidden" id="editingId">
-      <label for="pName">Nom affiché</label>
-      <input type="text" id="pName" placeholder="Ex : Chaussures de running — plusieurs coloris">
-      <label for="pShareName">Nom pour le partage (sans tiret, plus court)</label>
-      <input type="text" id="pShareName" placeholder="Ex : Chaussures de running, plusieurs coloris">
+
+      <label>Type de boutique</label>
+
+      <div class="shop-choice">
+
+        <label>
+          <input
+            type="radio"
+            name="shop"
+            value="hacoo"
+            checked
+          >
+          <span class="choice">
+            🛍️ Hacoo
+          </span>
+        </label>
+
+        <label>
+          <input
+            type="radio"
+            name="shop"
+            value="montres"
+          >
+          <span class="choice">
+            ⌚ Boutique de montres
+          </span>
+        </label>
+
+      </div>
+
+      <p class="help">
+        Choisis une seule boutique pour chaque produit.
+      </p>
+
+
+      <label for="name">Nom du produit</label>
+
+      <input
+        id="name"
+        type="text"
+        placeholder="Ex : Chaussures de running"
+      >
+
+
+      <label for="shareName">
+        Nom court pour le partage
+      </label>
+
+      <input
+        id="shareName"
+        type="text"
+        placeholder="Ex : Chaussures de running"
+      >
+
+
       <div class="row2">
-        <div><label for="pPriceOld">Prix barré (optionnel)</label><input type="text" id="pPriceOld" placeholder="35,42 €"></div>
-        <div><label for="pPriceNew">Prix affiché</label><input type="text" id="pPriceNew" placeholder="30,46 €"></div>
+
+        <div>
+          <label for="priceOld">
+            Ancien prix
+          </label>
+
+          <input
+            id="priceOld"
+            type="text"
+            placeholder="35,99 €"
+          >
+        </div>
+
+        <div>
+          <label for="priceNew">
+            Prix actuel
+          </label>
+
+          <input
+            id="priceNew"
+            type="text"
+            placeholder="29,99 €"
+          >
+        </div>
+
       </div>
-      <label for="pImage">Image (URL complète, ou nom de fichier déjà présent sur le dépôt)</label>
-      <input type="text" id="pImage" placeholder="https://... ou produit-xxx.png">
-      <label for="pLink">Lien Hacoo / affilié</label>
-      <input type="url" id="pLink" placeholder="https://...">
-      <label for="pBadge">Petit badge (optionnel, ex : Nouveau, Populaire)</label>
-      <input type="text" id="pBadge" placeholder="Laisser vide si aucun">
-      <div class="btn-row">
-        <button class="btn-gold" onclick="saveProduct()">Enregistrer cet article</button>
-        <button class="btn-ghost" onclick="resetForm()">Annuler</button>
+
+
+      <!-- IMAGE -->
+      <label>
+        📷 Image depuis la galerie du téléphone
+      </label>
+
+      <input
+        id="imageFile"
+        type="file"
+        accept="image/*"
+        onchange="previewImage()"
+      >
+
+      <p class="help">
+        JPG, PNG ou WebP recommandé. L'image sera envoyée directement dans ton dépôt GitHub.
+      </p>
+
+      <div id="preview" class="image-preview">
+        <img id="previewImg" alt="Aperçu">
       </div>
+
+
+      <label for="image">
+        Ou chemin / URL d'une image
+      </label>
+
+      <input
+        id="image"
+        type="text"
+        placeholder="images/ma-photo.jpg"
+      >
+
+
+      <button
+        class="ghost"
+        type="button"
+        onclick="loadExistingImages()"
+        style="margin-top:9px"
+      >
+        🖼️ Voir les images déjà sur GitHub
+      </button>
+
+      <div id="existingImages" class="existing-images"></div>
+
+
+      <label for="link">
+        Lien du produit
+      </label>
+
+      <input
+        id="link"
+        type="url"
+        placeholder="https://..."
+      >
+
+
+      <label for="badge">
+        Badge
+      </label>
+
+      <input
+        id="badge"
+        type="text"
+        placeholder="Nouveau, Populaire, -40%, etc."
+      >
+
+
+      <div class="buttons">
+
+        <button
+          class="gold"
+          onclick="saveProduct()"
+        >
+          💾 Enregistrer le produit
+        </button>
+
+        <button
+          class="ghost"
+          onclick="resetForm()"
+        >
+          Annuler
+        </button>
+
+      </div>
+
+      <div id="formStatus" class="status"></div>
+
     </div>
 
+
+    <!-- LISTE -->
     <div class="card">
-      <h2>📦 Articles actuels (<span id="productCount">0</span>)</h2>
-      <div id="productList"></div>
-      <p class="empty" id="emptyMsg" style="display:none;">Aucun article pour l'instant.</p>
+
+      <h2>
+        📦 Produits
+        (<span id="count">0</span>)
+      </h2>
+
+      <div id="list"></div>
+
+      <div id="empty" class="empty">
+        Aucun produit pour l'instant.
+      </div>
+
     </div>
 
+
+    <!-- PUBLICATION -->
     <div class="card">
-      <h2>🚀 Publier</h2>
-      <p class="help">Enregistre la liste complète sur GitHub. Le site et l'appli afficheront les changements à la prochaine visite.</p>
-      <div class="btn-row">
-        <button class="btn-gold" onclick="publishProducts()">Publier sur le site</button>
-        <button class="btn-ghost" onclick="reloadProducts()">🔄 Recharger depuis GitHub</button>
-        <button class="btn-danger" onclick="disconnectAdmin()">Se déconnecter</button>
+
+      <h2>🚀 Publication</h2>
+
+      <p class="help">
+        Publie la liste actuelle dans products.json.
+        Les changements seront ensuite récupérés par ton site.
+      </p>
+
+      <div class="buttons">
+
+        <button
+          class="gold"
+          onclick="publish()"
+        >
+          🚀 Publier sur le site
+        </button>
+
+        <button
+          class="ghost"
+          onclick="reloadProducts()"
+        >
+          🔄 Recharger
+        </button>
+
+        <button
+          class="danger"
+          onclick="logout()"
+        >
+          Se déconnecter
+        </button>
+
       </div>
-      <div class="status" id="publishStatus"></div>
+
+      <div id="publishStatus" class="status"></div>
+
     </div>
+
   </div>
 
 </div>
 
+
 <script>
-  const LS_KEY = 'frbonplan_admin_gh';
-  let products = [];
-  let currentSha = null;
 
-  function getConfig(){
-    try { return JSON.parse(localStorage.getItem(LS_KEY) || 'null'); } catch(e){ return null; }
-  }
-  function setConfig(cfg){
-    try { localStorage.setItem(LS_KEY, JSON.stringify(cfg)); } catch(e){}
-  }
-  function apiUrl(cfg){
-    return 'https://api.github.com/repos/' + encodeURIComponent(cfg.owner) + '/' + encodeURIComponent(cfg.repo) + '/contents/products.json';
-  }
-  function showStatus(id, type, msg){
-    const el = document.getElementById(id);
-    el.className = 'status show ' + type;
-    el.textContent = msg;
+const OWNER = "frbonplan1";
+const REPO = "Frbonplan";
+const BRANCH = "main";
+
+const PRODUCTS_PATH = "products.json";
+
+let token = "";
+let products = [];
+let currentSha = null;
+
+
+/* =========================
+   GITHUB
+========================= */
+
+function apiUrl(path){
+
+  return (
+    "https://api.github.com/repos/" +
+    OWNER +
+    "/" +
+    REPO +
+    "/contents/" +
+    path
+  );
+
+}
+
+
+function headers(){
+
+  return {
+    "Authorization":"Bearer " + token,
+    "Accept":"application/vnd.github+json",
+    "X-GitHub-Api-Version":"2022-11-28"
+  };
+
+}
+
+
+/* =========================
+   STATUT
+========================= */
+
+function status(id,type,message){
+
+  const el = document.getElementById(id);
+
+  el.className = "status show " + type;
+
+  el.textContent = message;
+
+}
+
+
+/* =========================
+   BASE64
+========================= */
+
+function decodeBase64(base64){
+
+  const binary = atob(
+    base64.replace(/\n/g,"")
+  );
+
+  const bytes = new Uint8Array(
+    binary.length
+  );
+
+  for(let i=0;i<binary.length;i++){
+
+    bytes[i] = binary.charCodeAt(i);
+
   }
 
-  function connectAdmin(){
-    const owner = document.getElementById('ghOwner').value.trim();
-    const repo = document.getElementById('ghRepo').value.trim();
-    const branch = document.getElementById('ghBranch').value.trim() || 'main';
-    const token = document.getElementById('ghToken').value.trim();
-    if(!owner || !repo || !token){
-      showStatus('gateStatus', 'err', 'Merci de remplir le nom d\'utilisateur, le dépôt et le jeton.');
-      return;
+  return new TextDecoder("utf-8").decode(bytes);
+
+}
+
+
+function encodeBase64(text){
+
+  const bytes =
+    new TextEncoder().encode(text);
+
+  let binary = "";
+
+  bytes.forEach(byte => {
+    binary += String.fromCharCode(byte);
+  });
+
+  return btoa(binary);
+
+}
+
+
+/* =========================
+   CONNEXION
+========================= */
+
+async function connect(){
+
+  token =
+    document.getElementById("token")
+    .value.trim();
+
+  if(!token){
+
+    status(
+      "loginStatus",
+      "err",
+      "Entre ton jeton GitHub."
+    );
+
+    return;
+  }
+
+  status(
+    "loginStatus",
+    "wait",
+    "Connexion à GitHub..."
+  );
+
+  await loadProducts(true);
+
+}
+
+
+/* =========================
+   CHARGER PRODUCTS.JSON
+========================= */
+
+async function loadProducts(firstLoad=false){
+
+  try{
+
+    const response =
+      await fetch(
+        apiUrl(PRODUCTS_PATH) +
+        "?ref=" +
+        encodeURIComponent(BRANCH) +
+        "&t=" +
+        Date.now(),
+        {
+          headers:headers()
+        }
+      );
+
+
+    if(response.status === 404){
+
+      products = [];
+
+      currentSha = null;
+
     }
-    setConfig({ owner, repo, branch, token });
-    showStatus('gateStatus', 'wait', 'Connexion en cours…');
-    loadFromGitHub();
-  }
-  function disconnectAdmin(){
-    if(!confirm('Se déconnecter ? Le jeton sera supprimé de ce navigateur.')) return;
-    localStorage.removeItem(LS_KEY);
-    location.reload();
-  }
 
-  function b64DecodeUtf8(b64){
-    const bin = atob(b64.replace(/\n/g, ''));
-    const bytes = new Uint8Array(bin.length);
-    for(let i=0; i<bin.length; i++) bytes[i] = bin.charCodeAt(i);
-    return new TextDecoder('utf-8').decode(bytes);
-  }
-  function b64EncodeUtf8(str){
-    const bytes = new TextEncoder().encode(str);
-    let bin = '';
-    bytes.forEach(b => bin += String.fromCharCode(b));
-    return btoa(bin);
-  }
+    else if(!response.ok){
 
-  async function loadFromGitHub(){
-    const cfg = getConfig();
-    if(!cfg) return;
-    try {
-      const res = await fetch(apiUrl(cfg) + '?ref=' + encodeURIComponent(cfg.branch), {
-        headers: { 'Authorization': 'Bearer ' + cfg.token, 'Accept': 'application/vnd.github+json' }
-      });
-      if(res.status === 404){
-        // Le fichier n'existe pas encore sur le dépôt : on part d'une liste vide
+      if(
+        response.status === 401 ||
+        response.status === 403
+      ){
+
+        throw new Error(
+          "GitHub refuse le jeton. Vérifie que Contents est bien en Read and write."
+        );
+
+      }
+
+      throw new Error(
+        "Erreur GitHub " +
+        response.status
+      );
+
+    }
+
+    else{
+
+      const data =
+        await response.json();
+
+      currentSha = data.sha;
+
+      const json =
+        JSON.parse(
+          decodeBase64(data.content)
+        );
+
+      /*
+       * Accepte à la fois :
+       * []
+       * ou
+       * {products:[]}
+       */
+      if(Array.isArray(json)){
+
+        products = json;
+
+      }
+      else if(
+        json &&
+        Array.isArray(json.products)
+      ){
+
+        products = json.products;
+
+      }
+      else{
+
         products = [];
-        currentSha = null;
-        showStatus('gateStatus', 'ok', 'Connecté — aucun products.json trouvé, il sera créé à la première publication.');
-      } else if(!res.ok){
-        if(res.status === 401 || res.status === 403){
-          showStatus('gateStatus', 'err', 'Jeton refusé par GitHub. Vérifiez qu\'il a bien l\'accès "Contents: Read and write" sur ce dépôt.');
-        } else {
-          showStatus('gateStatus', 'err', 'Erreur GitHub (' + res.status + '). Vérifiez le nom d\'utilisateur et le dépôt.');
-        }
-        return;
-      } else {
-        const data = await res.json();
-        currentSha = data.sha;
-        const json = JSON.parse(b64DecodeUtf8(data.content));
-        products = Array.isArray(json.products) ? json.products : [];
+
       }
-      document.getElementById('gateScreen').style.display = 'none';
-      document.getElementById('appScreen').style.display = 'block';
-      renderProductList();
-    } catch(e){
-      showStatus('gateStatus', 'err', 'Connexion impossible : ' + e.message);
+
     }
+
+
+    document.getElementById(
+      "loginScreen"
+    ).style.display = "none";
+
+    document.getElementById(
+      "app"
+    ).style.display = "block";
+
+    renderList();
+
   }
 
-  function reloadProducts(){
-    showStatus('publishStatus', 'wait', 'Rechargement…');
-    loadFromGitHub();
+  catch(error){
+
+    status(
+      firstLoad
+        ? "loginStatus"
+        : "publishStatus",
+      "err",
+      "Connexion impossible : " +
+      error.message
+    );
+
   }
 
-  function renderProductList(){
-    const list = document.getElementById('productList');
-    const empty = document.getElementById('emptyMsg');
-    document.getElementById('productCount').textContent = products.length;
-    if(products.length === 0){
-      list.innerHTML = '';
-      empty.style.display = 'block';
-      return;
-    }
-    empty.style.display = 'none';
-    list.innerHTML = products.map((p, i) => (
-      '<div class="product-item">' +
-        '<img src="' + escapeAttr(p.image) + '" alt="" onerror="this.style.visibility=\'hidden\'">' +
-        '<div class="pi-info"><b>' + escapeHtml(p.name) + '</b><span>' + escapeHtml(p.priceNew || '') + '</span></div>' +
-        '<div class="pi-actions">' +
-          '<button class="btn-ghost" onclick="editProduct(' + i + ')">Modifier</button>' +
-          '<button class="btn-danger" onclick="deleteProduct(' + i + ')">Suppr.</button>' +
-        '</div>' +
-      '</div>'
-    )).join('');
-  }
-  function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-  function escapeAttr(s){ return escapeHtml(s); }
+}
 
-  function resetForm(){
-    document.getElementById('editingId').value = '';
-    ['pName','pShareName','pPriceOld','pPriceNew','pImage','pLink','pBadge'].forEach(id => document.getElementById(id).value = '');
-  }
-  function editProduct(i){
-    const p = products[i];
-    document.getElementById('editingId').value = i;
-    document.getElementById('pName').value = p.name || '';
-    document.getElementById('pShareName').value = p.shareName || '';
-    document.getElementById('pPriceOld').value = p.priceOld || '';
-    document.getElementById('pPriceNew').value = p.priceNew || '';
-    document.getElementById('pImage').value = p.image || '';
-    document.getElementById('pLink').value = p.link || '';
-    document.getElementById('pBadge').value = p.badge || '';
-    window.scrollTo({ top:0, behavior:'smooth' });
-  }
-  function deleteProduct(i){
-    if(!confirm('Retirer « ' + products[i].name + ' » de la liste ? Cliquez ensuite sur Publier pour que ce soit définitif.')) return;
-    products.splice(i, 1);
-    renderProductList();
-  }
-  function slugify(s){
-    return (s||'produit').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'') || 'produit';
-  }
-  function saveProduct(){
-    const name = document.getElementById('pName').value.trim();
-    const link = document.getElementById('pLink').value.trim();
-    const priceNew = document.getElementById('pPriceNew').value.trim();
-    const image = document.getElementById('pImage').value.trim();
-    if(!name || !link || !priceNew || !image){
-      alert('Merci de remplir au moins : nom, prix affiché, image et lien.');
-      return;
-    }
-    const editingIdx = document.getElementById('editingId').value;
-    const data = {
-      id: editingIdx !== '' ? products[editingIdx].id : slugify(name) + '-' + Date.now().toString(36).slice(-4),
-      name: name,
-      shareName: document.getElementById('pShareName').value.trim() || name,
-      priceOld: document.getElementById('pPriceOld').value.trim(),
-      priceNew: priceNew,
-      image: image,
-      link: link,
-      badge: document.getElementById('pBadge').value.trim(),
-      delivery: '🚚 Livraison estimée 7-14 jours'
-    };
-    if(editingIdx !== ''){
-      products[editingIdx] = data;
-    } else {
-      products.push(data);
-    }
-    resetForm();
-    renderProductList();
+
+/* =========================
+   LISTE PRODUITS
+========================= */
+
+function renderList(){
+
+  const list =
+    document.getElementById("list");
+
+  const empty =
+    document.getElementById("empty");
+
+  document.getElementById("count")
+    .textContent = products.length;
+
+
+  if(!products.length){
+
+    list.innerHTML = "";
+
+    empty.style.display = "block";
+
+    return;
+
   }
 
-  async function publishProducts(){
-    const cfg = getConfig();
-    if(!cfg) return;
-    showStatus('publishStatus', 'wait', 'Publication en cours…');
-    try {
-      const payload = { updated: new Date().toISOString(), products: products };
-      const body = {
-        message: 'Mise à jour des produits Hacoo (' + products.length + ' articles) via l\'admin',
-        content: b64EncodeUtf8(JSON.stringify(payload, null, 2)),
-        branch: cfg.branch
-      };
-      if(currentSha) body.sha = currentSha;
-      const res = await fetch(apiUrl(cfg), {
-        method: 'PUT',
-        headers: {
-          'Authorization': 'Bearer ' + cfg.token,
-          'Accept': 'application/vnd.github+json',
-          'Content-Type': 'application/json'
+
+  empty.style.display = "none";
+
+  list.innerHTML = products
+    .map((p,index) => {
+
+      const shop =
+        p.shop === "montres"
+          ? "⌚ Boutique de montres"
+          : "🛍️ Hacoo";
+
+      const image =
+        p.image || "";
+
+      return `
+        <div class="product">
+
+          <img
+            src="${escapeAttr(image)}"
+            alt=""
+            onerror="this.style.visibility='hidden'"
+          >
+
+          <div class="product-info">
+
+            <b>${escapeHtml(p.name)}</b>
+
+            <span>
+              ${escapeHtml(p.priceNew || "")}
+            </span>
+
+            <span class="shop-tag">
+              ${escapeHtml(shop)}
+            </span>
+
+          </div>
+
+          <div class="product-actions">
+
+            <button
+              class="ghost"
+              onclick="editProduct(${index})"
+            >
+              Modifier
+            </button>
+
+            <button
+              class="danger"
+              onclick="deleteProduct(${index})"
+            >
+              Suppr.
+            </button>
+
+          </div>
+
+        </div>
+      `;
+
+    })
+    .join("");
+
+}
+
+
+/* =========================
+   SECURITE HTML
+========================= */
+
+function escapeHtml(value){
+
+  return String(value ?? "")
+    .replace(
+      /[&<>"']/g,
+      char => ({
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        '"':"&quot;",
+        "'":"&#39;"
+      }[char])
+    );
+
+}
+
+
+function escapeAttr(value){
+
+  return escapeHtml(value);
+
+}
+
+
+/* =========================
+   FORMULAIRE
+========================= */
+
+function getShop(){
+
+  return document.querySelector(
+    'input[name="shop"]:checked'
+  )?.value || "hacoo";
+
+}
+
+
+function setShop(shop){
+
+  const radio =
+    document.querySelector(
+      'input[name="shop"][value="' +
+      shop +
+      '"]'
+    );
+
+  if(radio) radio.checked = true;
+
+}
+
+
+function resetForm(){
+
+  document.getElementById(
+    "editingId"
+  ).value = "";
+
+  [
+    "name",
+    "shareName",
+    "priceOld",
+    "priceNew",
+    "image",
+    "link",
+    "badge"
+  ].forEach(id => {
+
+    document.getElementById(id).value = "";
+
+  });
+
+
+  document.getElementById(
+    "imageFile"
+  ).value = "";
+
+  document.getElementById(
+    "preview"
+  ).style.display = "none";
+
+  document.getElementById(
+    "existingImages"
+  ).innerHTML = "";
+
+  setShop("hacoo");
+
+}
+
+
+function editProduct(index){
+
+  const p = products[index];
+
+  document.getElementById(
+    "editingId"
+  ).value = index;
+
+  document.getElementById(
+    "name"
+  ).value = p.name || "";
+
+  document.getElementById(
+    "shareName"
+  ).value = p.shareName || "";
+
+  document.getElementById(
+    "priceOld"
+  ).value = p.priceOld || "";
+
+  document.getElementById(
+    "priceNew"
+  ).value = p.priceNew || "";
+
+  document.getElementById(
+    "image"
+  ).value = p.image || "";
+
+  document.getElementById(
+    "link"
+  ).value = p.link || "";
+
+  document.getElementById(
+    "badge"
+  ).value = p.badge || "";
+
+  setShop(
+    p.shop === "montres"
+      ? "montres"
+      : "hacoo"
+  );
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
+}
+
+
+/* =========================
+   IMAGE GALERIE
+========================= */
+
+function previewImage(){
+
+  const file =
+    document.getElementById(
+      "imageFile"
+    ).files[0];
+
+  const preview =
+    document.getElementById(
+      "preview"
+    );
+
+  const img =
+    document.getElementById(
+      "previewImg"
+    );
+
+
+  if(!file){
+
+    preview.style.display = "none";
+
+    return;
+
+  }
+
+
+  if(file.size > 8 * 1024 * 1024){
+
+    alert(
+      "Image trop grande. Choisis une image de moins de 8 Mo."
+    );
+
+    document.getElementById(
+      "imageFile"
+    ).value = "";
+
+    preview.style.display = "none";
+
+    return;
+
+  }
+
+
+  const reader =
+    new FileReader();
+
+
+  reader.onload = event => {
+
+    img.src =
+      event.target.result;
+
+    preview.style.display =
+      "block";
+
+  };
+
+
+  reader.readAsDataURL(file);
+
+}
+
+
+/* =========================
+   NOM FICHIER
+========================= */
+
+function slugify(text){
+
+  return String(text || "produit")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(
+      /[\u0300-\u036f]/g,
+      ""
+    )
+    .replace(
+      /[^a-z0-9]+/g,
+      "-"
+    )
+    .replace(
+      /^-+|-+$/g,
+      ""
+    ) || "produit";
+
+}
+
+
+/* =========================
+   UPLOAD IMAGE GITHUB
+========================= */
+
+async function uploadImage(file,name){
+
+  if(!file) return null;
+
+
+  const extension =
+    (
+      file.name
+        .split(".")
+        .pop() || "jpg"
+    )
+    .toLowerCase()
+    .replace(
+      /[^a-z0-9]/g,
+      ""
+    );
+
+
+  const safeName =
+    slugify(name) +
+    "-" +
+    Date.now() +
+    "." +
+    extension;
+
+
+  const path =
+    "images/" +
+    safeName;
+
+
+  const dataUrl =
+    await readFile(file);
+
+
+  const base64 =
+    dataUrl.split(",")[1];
+
+
+  const response =
+    await fetch(
+      apiUrl(path),
+      {
+        method:"PUT",
+
+        headers:{
+          ...headers(),
+          "Content-Type":
+            "application/json"
         },
-        body: JSON.stringify(body)
-      });
-      if(!res.ok){
-        const errData = await res.json().catch(() => ({}));
-        if(res.status === 409){
-          showStatus('publishStatus', 'err', 'Quelqu\'un d\'autre a modifié le fichier entre-temps. Cliquez "Recharger depuis GitHub" puis réessayez.');
-        } else {
-          showStatus('publishStatus', 'err', 'Échec de la publication (' + res.status + ') : ' + (errData.message || 'erreur inconnue'));
-        }
-        return;
+
+        body:JSON.stringify({
+
+          message:
+            "Ajout image produit " +
+            name,
+
+          content:base64,
+
+          branch:BRANCH
+
+        })
+
       }
-      const result = await res.json();
-      currentSha = result.content.sha;
-      showStatus('publishStatus', 'ok', '✅ Publié ! Les changements apparaîtront sur le site et l\'appli à la prochaine visite (quelques secondes à 1 minute).');
-    } catch(e){
-      showStatus('publishStatus', 'err', 'Erreur réseau : ' + e.message);
-    }
+    );
+
+
+  if(!response.ok){
+
+    const error =
+      await response
+        .json()
+        .catch(() => ({}));
+
+    throw new Error(
+      "Impossible d'envoyer l'image : " +
+      (error.message ||
+      response.status)
+    );
+
   }
 
-  // Reconnexion automatique si déjà configuré sur ce navigateur
-  (function init(){
-    const cfg = getConfig();
-    if(cfg){
-      document.getElementById('ghOwner').value = cfg.owner || '';
-      document.getElementById('ghRepo').value = cfg.repo || '';
-      document.getElementById('ghBranch').value = cfg.branch || 'main';
-      document.getElementById('ghToken').value = cfg.token || '';
-      loadFromGitHub();
+
+  return path;
+
+}
+
+
+function readFile(file){
+
+  return new Promise(
+    (resolve,reject) => {
+
+      const reader =
+        new FileReader();
+
+      reader.onload =
+        () => resolve(
+          reader.result
+        );
+
+      reader.onerror =
+        reject;
+
+      reader.readAsDataURL(file);
+
     }
-  })();
+  );
+
+}
+
+
+/* =========================
+   ENREGISTRER PRODUIT
+========================= */
+
+async function saveProduct(){
+
+  const name =
+    document.getElementById(
+      "name"
+    ).value.trim();
+
+  const priceNew =
+    document.getElementById(
+      "priceNew"
+    ).value.trim();
+
+  const link =
+    document.getElementById(
+      "link"
+    ).value.trim();
+
+  let image =
+    document.getElementById(
+      "image"
+    ).value.trim();
+
+  const file =
+    document.getElementById(
+      "imageFile"
+    ).files[0];
+
+
+  if(!name || !priceNew || !link){
+
+    alert(
+      "Merci de remplir le nom, le prix et le lien."
+    );
+
+    return;
+
+  }
+
+
+  if(!image && !file){
+
+    alert(
+      "Choisis une image depuis la galerie ou indique une image existante."
+    );
+
+    return;
+
+  }
+
+
+  const editing =
+    document.getElementById(
+      "editingId"
+    ).value;
+
+
+  try{
+
+    status(
+      "formStatus",
+      "wait",
+      file
+        ? "Envoi de l'image sur GitHub..."
+        : "Enregistrement..."
+    );
+
+
+    if(file){
+
+      image =
+        await uploadImage(
+          file,
+          name
+        );
+
+    }
+
+
+    const old =
+      editing !== ""
+        ? products[Number(editing)]
+        : null;
+
+
+    const product = {
+
+      id:
+        old?.id ||
+        slugify(name) +
+        "-" +
+        Date.now()
+          .toString(36)
+          .slice(-5),
+
+      shop:getShop(),
+
+      name:name,
+
+      shareName:
+        document.getElementById(
+          "shareName"
+        ).value.trim() || name,
+
+      priceOld:
+        document.getElementById(
+          "priceOld"
+        ).value.trim(),
+
+      priceNew:priceNew,
+
+      image:image,
+
+      link:link,
+
+      badge:
+        document.getElementById(
+          "badge"
+        ).value.trim(),
+
+      delivery:
+        getShop() === "montres"
+          ? "📦 Livraison selon la fiche produit"
+          : "🚚 Livraison estimée 7-14 jours"
+
+    };
+
+
+    if(editing !== ""){
+
+      products[
+        Number(editing)
+      ] = product;
+
+    }
+    else{
+
+      products.push(product);
+
+    }
+
+
+    renderList();
+
+    resetForm();
+
+    status(
+      "formStatus",
+      "ok",
+      "Produit enregistré. Il faut maintenant cliquer sur « Publier sur le site »."
+    );
+
+  }
+
+  catch(error){
+
+    status(
+      "formStatus",
+      "err",
+      error.message
+    );
+
+  }
+
+}
+
+
+/* =========================
+   SUPPRESSION
+========================= */
+
+function deleteProduct(index){
+
+  const product =
+    products[index];
+
+  if(!confirm(
+    "Supprimer « " +
+    product.name +
+    " » ?"
+  )) return;
+
+
+  products.splice(
+    index,
+    1
+  );
+
+  renderList();
+
+}
+
+
+/* =========================
+   IMAGES EXISTANTES
+========================= */
+
+async function loadExistingImages(){
+
+  const box =
+    document.getElementById(
+      "existingImages"
+    );
+
+  box.innerHTML =
+    "<div class='help'>Chargement des images...</div>";
+
+
+  try{
+
+    const files = [];
+
+
+    // Images à la racine
+    const root =
+      await getDirectory("");
+
+
+    root.forEach(file => {
+
+      if(isImage(file.name)){
+
+        files.push(file);
+
+      }
+
+    });
+
+
+    // Images dans /images
+    const images =
+      await getDirectory("images");
+
+
+    images.forEach(file => {
+
+      if(isImage(file.name)){
+
+        files.push(file);
+
+      }
+
+    });
+
+
+    if(!files.length){
+
+      box.innerHTML =
+        "<div class='help'>Aucune image trouvée.</div>";
+
+      return;
+
+    }
+
+
+    box.innerHTML = "";
+
+
+    files.forEach(file => {
+
+      const item =
+        document.createElement(
+          "div"
+        );
+
+      item.className =
+        "existing-image";
+
+
+      const img =
+        document.createElement(
+          "img"
+        );
+
+      img.src =
+        file.download_url ||
+        file.html_url;
+
+      img.alt =
+        file.name;
+
+
+      const name =
+        document.createElement(
+          "small"
+        );
+
+      name.textContent =
+        file.path;
+
+
+      item.appendChild(img);
+
+      item.appendChild(name);
+
+
+      item.onclick = () => {
+
+        document.getElementById(
+          "image"
+        ).value =
+          file.path;
+
+        document.getElementById(
+          "imageFile"
+        ).value = "";
+
+        document.getElementById(
+          "preview"
+        ).style.display =
+          "none";
+
+        box.innerHTML =
+          "<div class='help'>Image sélectionnée : " +
+          file.path +
+          "</div>";
+
+      };
+
+
+      box.appendChild(item);
+
+    });
+
+  }
+
+  catch(error){
+
+    box.innerHTML =
+      "<div class='help'>Impossible de charger les images : " +
+      escapeHtml(error.message) +
+      "</div>";
+
+  }
+
+}
+
+
+async function getDirectory(path){
+
+  const url =
+    apiUrl(
+      path
+    ) +
+    "?ref=" +
+    encodeURIComponent(BRANCH);
+
+
+  const response =
+    await fetch(
+      url,
+      {
+        headers:headers()
+      }
+    );
+
+
+  if(response.status === 404){
+
+    return [];
+
+  }
+
+
+  if(!response.ok){
+
+    throw new Error(
+      "GitHub " +
+      response.status
+    );
+
+  }
+
+
+  const data =
+    await response.json();
+
+
+  return Array.isArray(data)
+    ? data
+    : [];
+
+}
+
+
+function isImage(name){
+
+  return /\.(jpg|jpeg|png|webp|gif|avif)$/i
+    .test(name);
+
+}
+
+
+/* =========================
+   PUBLICATION
+========================= */
+
+async function publish(){
+
+  if(!token){
+
+    alert(
+      "Tu n'es pas connecté."
+    );
+
+    return;
+
+  }
+
+
+  status(
+    "publishStatus",
+    "wait",
+    "Publication sur GitHub..."
+  );
+
+
+  try{
+
+    const payload = {
+
+      updated:
+        new Date().toISOString(),
+
+      products:products
+
+    };
+
+
+    const body = {
+
+      message:
+        "Mise à jour des produits Frbonplan",
+
+      content:
+        encodeBase64(
+          JSON.stringify(
+            payload,
+            null,
+            2
+          )
+        ),
+
+      branch:BRANCH
+
+    };
+
+
+    if(currentSha){
+
+      body.sha =
+        currentSha;
+
+    }
+
+
+    const response =
+      await fetch(
+        apiUrl(PRODUCTS_PATH),
+        {
+          method:"PUT",
+
+          headers:{
+            ...headers(),
+            "Content-Type":
+              "application/json"
+          },
+
+          body:
+            JSON.stringify(body)
+
+        }
+      );
+
+
+    const result =
+      await response
+        .json()
+        .catch(() => ({}));
+
+
+    if(!response.ok){
+
+      if(response.status === 409){
+
+        throw new Error(
+          "Le fichier a été modifié entre-temps. Recharge depuis GitHub puis réessaie."
+        );
+
+      }
+
+      throw new Error(
+        result.message ||
+        "Erreur GitHub " +
+        response.status
+      );
+
+    }
+
+
+    currentSha =
+      result.content.sha;
+
+
+    status(
+      "publishStatus",
+      "ok",
+      "✅ Publié sur GitHub. Les changements vont apparaître sur le site."
+    );
+
+  }
+
+  catch(error){
+
+    status(
+      "publishStatus",
+      "err",
+      "Publication impossible : " +
+      error.message
+    );
+
+  }
+
+}
+
+
+/* =========================
+   RECHARGEMENT
+========================= */
+
+async function reloadProducts(){
+
+  status(
+    "publishStatus",
+    "wait",
+    "Rechargement depuis GitHub..."
+  );
+
+  await loadProducts(false);
+
+}
+
+
+/* =========================
+   DECONNEXION
+========================= */
+
+function logout(){
+
+  if(!confirm(
+    "Se déconnecter ?"
+  )) return;
+
+
+  token = "";
+
+  products = [];
+
+  currentSha = null;
+
+  location.reload();
+
+}
+
 </script>
+
 </body>
 </html>
