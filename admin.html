@@ -1,1886 +1,270 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Frbonplan — Administration</title>
-<meta name="robots" content="noindex,nofollow">
-
+<title>Admin — Frbonplan</title>
 <style>
-:root{
-  --bg:#0b0f14;
-  --card:#151b24;
-  --card-hi:#1d2430;
-  --border:rgba(255,255,255,.09);
-  --text:#f5f3ee;
-  --soft:#d8dce3;
-  --dim:#a8b0bc;
-  --gold:#d9a441;
-  --gold-soft:#e8c178;
-  --coral:#ff6952;
-  --green:#5bc98a;
-}
-
-*{box-sizing:border-box}
-
-body{
-  margin:0;
-  min-height:100vh;
-  background:var(--bg);
-  color:var(--text);
-  font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-  padding:22px 14px 70px;
-}
-
-.wrap{
-  max-width:760px;
-  margin:auto;
-}
-
-h1{
-  font-size:1.5rem;
-  margin:0 0 5px;
-}
-
-h1 span{
-  color:var(--gold-soft);
-}
-
-.sub{
-  color:var(--dim);
-  font-size:.9rem;
-  margin:0 0 22px;
-}
-
-.card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:19px;
-  margin-bottom:17px;
-}
-
-.card h2{
-  font-size:1rem;
-  color:var(--gold-soft);
-  margin:0 0 15px;
-}
-
-label{
-  display:block;
-  color:var(--dim);
-  font-size:.82rem;
-  margin:12px 0 5px;
-}
-
-input[type=text],
-input[type=password],
-input[type=url]{
-  width:100%;
-  padding:11px 12px;
-  border-radius:10px;
-  border:1px solid var(--border);
-  background:var(--bg);
-  color:var(--text);
-  font:inherit;
-}
-
-input[type=file]{
-  width:100%;
-  padding:10px;
-  border-radius:10px;
-  border:1px dashed var(--border);
-  background:var(--bg);
-  color:var(--soft);
-}
-
-.row2{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-}
-
-.shop-choice{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-  margin-top:8px;
-}
-
-.shop-choice label{
-  margin:0;
-  cursor:pointer;
-}
-
-.shop-choice input{
-  display:none;
-}
-
-.shop-choice .choice{
-  display:block;
-  padding:14px 12px;
-  border:1px solid var(--border);
-  border-radius:12px;
-  background:var(--bg);
-  text-align:center;
-  font-weight:700;
-  color:var(--soft);
-  transition:.15s;
-}
-
-.shop-choice input:checked + .choice{
-  border-color:var(--gold);
-  background:rgba(217,164,65,.12);
-  color:var(--gold-soft);
-}
-
-.help{
-  color:var(--dim);
-  font-size:.78rem;
-  line-height:1.5;
-  margin-top:6px;
-}
-
-.buttons{
-  display:flex;
-  gap:9px;
-  flex-wrap:wrap;
-  margin-top:16px;
-}
-
-button{
-  border:0;
-  cursor:pointer;
-  border-radius:999px;
-  padding:10px 18px;
-  font:700 .88rem inherit;
-}
-
-.gold{
-  background:linear-gradient(135deg,#d9a441,#d16f0a);
-  color:#1a0f00;
-}
-
-.ghost{
-  background:var(--card-hi);
-  color:var(--soft);
-  border:1px solid var(--border);
-}
-
-.danger{
-  background:rgba(255,105,82,.13);
-  color:var(--coral);
-  border:1px solid rgba(255,105,82,.35);
-}
-
-.status{
-  display:none;
-  margin-top:13px;
-  padding:10px 13px;
-  border-radius:10px;
-  font-size:.84rem;
-}
-
-.status.show{display:block}
-
-.status.ok{
-  color:var(--green);
-  background:rgba(91,201,138,.1);
-  border:1px solid rgba(91,201,138,.3);
-}
-
-.status.err{
-  color:var(--coral);
-  background:rgba(255,105,82,.1);
-  border:1px solid rgba(255,105,82,.3);
-}
-
-.status.wait{
-  color:var(--gold-soft);
-  background:rgba(217,164,65,.1);
-  border:1px solid rgba(217,164,65,.3);
-}
-
-.product{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  padding:11px;
-  margin-bottom:9px;
-  background:var(--bg);
-  border:1px solid var(--border);
-  border-radius:12px;
-}
-
-.product img{
-  width:56px;
-  height:56px;
-  object-fit:cover;
-  border-radius:9px;
-  background:var(--card-hi);
-  flex-shrink:0;
-}
-
-.product-info{
-  flex:1;
-  min-width:0;
-}
-
-.product-info b{
-  display:block;
-  font-size:.86rem;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-}
-
-.product-info span{
-  display:block;
-  margin-top:3px;
-  color:var(--dim);
-  font-size:.75rem;
-}
-
-.product-actions{
-  display:flex;
-  gap:6px;
-}
-
-.product-actions button{
-  padding:7px 10px;
-  font-size:.75rem;
-}
-
-.shop-tag{
-  display:inline-block;
-  margin-top:5px;
-  padding:3px 7px;
-  border-radius:999px;
-  font-size:.68rem;
-  font-weight:700;
-  background:rgba(217,164,65,.12);
-  color:var(--gold-soft);
-}
-
-.image-preview{
-  display:none;
-  margin-top:10px;
-}
-
-.image-preview img{
-  width:100px;
-  height:100px;
-  object-fit:cover;
-  border-radius:12px;
-  border:1px solid var(--border);
-}
-
-.existing-images{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:8px;
-  margin-top:10px;
-}
-
-.existing-image{
-  position:relative;
-  cursor:pointer;
-  border:1px solid var(--border);
-  border-radius:10px;
-  overflow:hidden;
-  background:var(--bg);
-}
-
-.existing-image img{
-  width:100%;
-  aspect-ratio:1;
-  object-fit:cover;
-  display:block;
-}
-
-.existing-image small{
-  display:block;
-  padding:5px;
-  font-size:.62rem;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  color:var(--soft);
-}
-
-.empty{
-  text-align:center;
-  color:var(--dim);
-  padding:18px;
-  font-size:.84rem;
-}
-
-#app{
-  display:none;
-}
-
-@media(max-width:560px){
-  .row2,
-  .shop-choice{
-    grid-template-columns:1fr;
-  }
-
-  .product-actions{
-    flex-direction:column;
-  }
-
-  .existing-images{
-    grid-template-columns:repeat(3,1fr);
-  }
-}
+:root{--bg:#0b0f14;--card:#151b24;--card2:#1b222d;--border:#2a3442;--text:#f5f3ee;--muted:#a8b0bc;--gold:#f0c368;--red:#ff6952;--green:#5bd18b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px Inter,system-ui,sans-serif}
+.wrap{max-width:1050px;margin:auto;padding:20px}.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px;margin:16px 0}
+h1,h2{margin:0 0 10px}h1 span{color:var(--gold)}.muted{color:var(--muted);font-size:.9rem}
+label{display:block;font-weight:700;margin:14px 0 6px}input,select{width:100%;padding:12px;border:1px solid var(--border);border-radius:10px;background:var(--bg);color:var(--text);font:inherit}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}.shops{display:grid;grid-template-columns:1fr 1fr;gap:10px}.shop{padding:13px;border:1px solid var(--border);border-radius:12px;cursor:pointer;text-align:center;font-weight:800}.shop.active{border-color:var(--gold);background:#211b10}
+button{border:0;border-radius:10px;padding:11px 14px;font:inherit;font-weight:800;cursor:pointer}.gold{background:var(--gold);color:#191307}.dark{background:var(--card2);color:var(--text);border:1px solid var(--border)}.danger{background:#5b1f1a;color:#ffd8d2}.green{background:#164c30;color:#d8ffe8}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px}.status{margin-top:12px;padding:10px;border-radius:10px;display:none}.status.show{display:block}.ok{background:#12351f;color:#bff6d0}.err{background:#431b17;color:#ffd1ca}.wait{background:#302711;color:#ffe8a5}
+.preview{display:none;margin-top:10px}.preview img{width:110px;height:110px;object-fit:cover;border-radius:12px;border:1px solid var(--border)}
+.toolbar{display:grid;grid-template-columns:1fr 180px;gap:10px}.product{display:grid;grid-template-columns:72px 1fr auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--border)}.product:last-child{border-bottom:0}.product img{width:72px;height:72px;object-fit:cover;border-radius:10px;background:var(--bg)}.name{font-weight:800}.tag{display:inline-block;margin-top:5px;padding:4px 8px;border-radius:999px;background:#272014;color:var(--gold);font-size:.75rem}.price{font-weight:900;margin-top:5px}.productBtns{display:flex;gap:6px}.productBtns button{padding:8px 10px;font-size:.8rem}
+.notice{padding:12px;border:1px dashed var(--gold);border-radius:12px;background:#211b10;color:#f8df9d}
+@media(max-width:650px){.grid2,.shops,.toolbar{grid-template-columns:1fr}.product{grid-template-columns:58px 1fr}.productBtns{grid-column:1/-1}.product img{width:58px;height:58px}}
 </style>
 </head>
-
 <body>
-
 <div class="wrap">
+  <h1>Administration <span>Frbonplan</span></h1>
+  <p class="muted">Ajoute, modifie, supprime et publie les produits directement dans GitHub.</p>
 
-  <!-- CONNEXION -->
-  <div id="loginScreen">
-
-    <div class="card">
-
-      <h2>🔐 Connexion administrateur</h2>
-
-      <p class="help">
-        Cette page communique directement avec ton dépôt GitHub.
-        Le jeton GitHub n'est pas enregistré dans le navigateur.
-        Il reste uniquement en mémoire pendant cette session.
-      </p>
-
-      <label for="token">Jeton GitHub</label>
-      <input
-        id="token"
-        type="password"
-        autocomplete="off"
-        placeholder="github_pat_..."
-      >
-
-      <div class="buttons">
-        <button class="gold" onclick="connect()">
-          Se connecter
-        </button>
-      </div>
-
-      <div id="loginStatus" class="status"></div>
-
-    </div>
-
+  <div id="login" class="card">
+    <h2>🔐 Connexion</h2>
+    <p class="muted">Le jeton reste uniquement en mémoire dans cette session.</p>
+    <label for="token">Jeton GitHub</label>
+    <input id="token" type="password" autocomplete="off" placeholder="github_pat_…">
+    <div class="actions"><button class="gold" onclick="connect()">Se connecter</button></div>
+    <div id="loginStatus" class="status"></div>
   </div>
 
-
-  <!-- APPLICATION -->
-  <div id="app">
-
-    <h1>Administration <span>Frbonplan</span></h1>
-
-    <p class="sub">
-      Ajoute, modifie et publie tes produits directement sur GitHub.
-    </p>
-
-
-    <!-- PRODUIT -->
+  <div id="app" style="display:none">
     <div class="card">
-
-      <h2>➕ Ajouter / modifier un produit</h2>
-
-      <input type="hidden" id="editingId">
-
-      <label>Type de boutique</label>
-
-      <div class="shop-choice">
-
-        <label>
-          <input
-            type="radio"
-            name="shop"
-            value="hacoo"
-            checked
-          >
-          <span class="choice">
-            🛍️ Hacoo
-          </span>
-        </label>
-
-        <label>
-          <input
-            type="radio"
-            name="shop"
-            value="montres"
-          >
-          <span class="choice">
-            ⌚ Boutique de montres
-          </span>
-        </label>
-
+      <div class="actions" style="margin-top:0">
+        <button class="green" onclick="recoverHistory()">♻️ Récupérer les anciens produits</button>
+        <button class="dark" onclick="reloadProducts()">↻ Recharger GitHub</button>
+        <button class="gold" onclick="publish()">☁️ Publier sur le site</button>
+        <button class="dark" onclick="logout()">Déconnexion</button>
       </div>
+      <div id="publishStatus" class="status"></div>
+      <div id="recoveryStatus" class="status"></div>
+    </div>
 
-      <p class="help">
-        Choisis une seule boutique pour chaque produit.
-      </p>
+    <div class="card">
+      <h2 id="formTitle">➕ Ajouter un produit</h2>
+      <input id="editingIndex" type="hidden">
 
+      <label>Boutique</label>
+      <div class="shops">
+        <div id="shopHacoo" class="shop active" onclick="setShop('hacoo')">🛍️ Boutique Hacoo</div>
+        <div id="shopMontres" class="shop" onclick="setShop('montres')">⌚ Boutique officielle</div>
+      </div>
 
       <label for="name">Nom du produit</label>
+      <input id="name" placeholder="Ex. Montre automatique squelette">
 
-      <input
-        id="name"
-        type="text"
-        placeholder="Ex : Chaussures de running"
-      >
-
-
-      <label for="shareName">
-        Nom court pour le partage
-      </label>
-
-      <input
-        id="shareName"
-        type="text"
-        placeholder="Ex : Chaussures de running"
-      >
-
-
-      <div class="row2">
-
-        <div>
-          <label for="priceOld">
-            Ancien prix
-          </label>
-
-          <input
-            id="priceOld"
-            type="text"
-            placeholder="35,99 €"
-          >
-        </div>
-
-        <div>
-          <label for="priceNew">
-            Prix actuel
-          </label>
-
-          <input
-            id="priceNew"
-            type="text"
-            placeholder="29,99 €"
-          >
-        </div>
-
+      <div class="grid2">
+        <div><label for="priceOld">Ancien prix (facultatif)</label><input id="priceOld" inputmode="decimal" placeholder="49,99"></div>
+        <div><label for="priceNew">Prix actuel</label><input id="priceNew" inputmode="decimal" placeholder="29,99"></div>
       </div>
+      <p class="muted">Tu écris seulement le nombre. Le site ajoute automatiquement « € ».</p>
 
+      <label for="imageFile">📷 Image depuis la galerie du téléphone</label>
+      <input id="imageFile" type="file" accept="image/*" onchange="previewImage()">
+      <div id="preview" class="preview"><img id="previewImg" alt="Aperçu"></div>
 
-      <!-- IMAGE -->
-      <label>
-        📷 Image depuis la galerie du téléphone
-      </label>
+      <label for="image">Ou image déjà présente dans GitHub</label>
+      <input id="image" placeholder="images/mon-produit.jpg">
 
-      <input
-        id="imageFile"
-        type="file"
-        accept="image/*"
-        onchange="previewImage()"
-      >
+      <label for="link">Lien du produit</label>
+      <input id="link" type="url" placeholder="https://…">
 
-      <p class="help">
-        JPG, PNG ou WebP recommandé. L'image sera envoyée directement dans ton dépôt GitHub.
-      </p>
+      <label for="badge">Petit badge (facultatif)</label>
+      <input id="badge" placeholder="Nouveau, -40%, Populaire…">
 
-      <div id="preview" class="image-preview">
-        <img id="previewImg" alt="Aperçu">
+      <div class="actions">
+        <button class="gold" onclick="saveProduct()">💾 Enregistrer le produit</button>
+        <button class="dark" onclick="resetForm()">Annuler</button>
       </div>
-
-
-      <label for="image">
-        Ou chemin / URL d'une image
-      </label>
-
-      <input
-        id="image"
-        type="text"
-        placeholder="images/ma-photo.jpg"
-      >
-
-
-      <button
-        class="ghost"
-        type="button"
-        onclick="loadExistingImages()"
-        style="margin-top:9px"
-      >
-        🖼️ Voir les images déjà sur GitHub
-      </button>
-
-      <div id="existingImages" class="existing-images"></div>
-
-
-      <label for="link">
-        Lien du produit
-      </label>
-
-      <input
-        id="link"
-        type="url"
-        placeholder="https://..."
-      >
-
-
-      <label for="badge">
-        Badge
-      </label>
-
-      <input
-        id="badge"
-        type="text"
-        placeholder="Nouveau, Populaire, -40%, etc."
-      >
-
-
-      <div class="buttons">
-
-        <button
-          class="gold"
-          onclick="saveProduct()"
-        >
-          💾 Enregistrer le produit
-        </button>
-
-        <button
-          class="ghost"
-          onclick="resetForm()"
-        >
-          Annuler
-        </button>
-
-      </div>
-
       <div id="formStatus" class="status"></div>
-
     </div>
 
-
-    <!-- LISTE -->
     <div class="card">
-
-      <h2>
-        📦 Produits
-        (<span id="count">0</span>)
-      </h2>
-
-      <div id="list"></div>
-
-      <div id="empty" class="empty">
-        Aucun produit pour l'instant.
+      <h2>📦 Produits <span id="count">0</span></h2>
+      <div class="toolbar">
+        <input id="search" oninput="renderList()" placeholder="🔎 Rechercher un produit…">
+        <select id="filter" onchange="renderList()">
+          <option value="all">Toutes les boutiques</option>
+          <option value="hacoo">🛍️ Hacoo</option>
+          <option value="montres">⌚ Boutique officielle</option>
+        </select>
       </div>
-
+      <div id="list" style="margin-top:12px"></div>
+      <div id="empty" class="notice" style="display:none;margin-top:12px">Aucun produit dans la liste actuelle.</div>
     </div>
-
-
-    <!-- PUBLICATION -->
-    <div class="card">
-
-      <h2>🚀 Publication</h2>
-
-      <p class="help">
-        Publie la liste actuelle dans products.json.
-        Les changements seront ensuite récupérés par ton site.
-      </p>
-
-      <div class="buttons">
-
-        <button
-          class="gold"
-          onclick="publish()"
-        >
-          🚀 Publier sur le site
-        </button>
-
-        <button
-          class="ghost"
-          onclick="reloadProducts()"
-        >
-          🔄 Recharger
-        </button>
-
-        <button
-          class="danger"
-          onclick="logout()"
-        >
-          Se déconnecter
-        </button>
-
-      </div>
-
-      <div id="publishStatus" class="status"></div>
-
-    </div>
-
   </div>
-
 </div>
 
-
 <script>
+const OWNER='frbonplan1', REPO='Frbonplan', BRANCH='main', PATH='products.json';
+const API='https://api.github.com/repos/'+OWNER+'/'+REPO+'/contents/';
+let token='', products=[], currentSha=null, shop='hacoo';
 
-const OWNER = "frbonplan1";
-const REPO = "Frbonplan";
-const BRANCH = "main";
-
-const PRODUCTS_PATH = "products.json";
-
-let token = "";
-let products = [];
-let currentSha = null;
-
-
-/* =========================
-   GITHUB
-========================= */
-
-function apiUrl(path){
-
-  return (
-    "https://api.github.com/repos/" +
-    OWNER +
-    "/" +
-    REPO +
-    "/contents/" +
-    path
-  );
-
+function api(path){return API+path.split('/').map(encodeURIComponent).join('/')}
+function headers(){return {'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json'}}
+function status(id,type,msg){const e=document.getElementById(id);e.className='status show '+type;e.textContent=msg}
+function b64decode(s){const bin=atob(s.replace(/\n/g,''));const bytes=Uint8Array.from(bin,c=>c.charCodeAt(0));return new TextDecoder().decode(bytes)}
+function b64encode(s){const bytes=new TextEncoder().encode(s);let bin='';bytes.forEach(b=>bin+=String.fromCharCode(b));return btoa(bin)}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function normalizePrice(v){
+  if(v==null||String(v).trim()==='') return '';
+  let s=String(v).trim().replace(/€/g,'').replace(/\s/g,'').replace(',','.');
+  const n=Number(s);
+  if(!Number.isFinite(n)) return String(v).trim();
+  return n.toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2})+' €';
 }
-
-
-function headers(){
-
-  return {
-    "Authorization":"Bearer " + token,
-    "Accept":"application/vnd.github+json",
-    "X-GitHub-Api-Version":"2022-11-28"
-  };
-
-}
-
-
-/* =========================
-   STATUT
-========================= */
-
-function status(id,type,message){
-
-  const el = document.getElementById(id);
-
-  el.className = "status show " + type;
-
-  el.textContent = message;
-
-}
-
-
-/* =========================
-   BASE64
-========================= */
-
-function decodeBase64(base64){
-
-  const binary = atob(
-    base64.replace(/\n/g,"")
-  );
-
-  const bytes = new Uint8Array(
-    binary.length
-  );
-
-  for(let i=0;i<binary.length;i++){
-
-    bytes[i] = binary.charCodeAt(i);
-
-  }
-
-  return new TextDecoder("utf-8").decode(bytes);
-
-}
-
-
-function encodeBase64(text){
-
-  const bytes =
-    new TextEncoder().encode(text);
-
-  let binary = "";
-
-  bytes.forEach(byte => {
-    binary += String.fromCharCode(byte);
-  });
-
-  return btoa(binary);
-
-}
-
-
-/* =========================
-   CONNEXION
-========================= */
+function setShop(v){shop=v;document.getElementById('shopHacoo').classList.toggle('active',v==='hacoo');document.getElementById('shopMontres').classList.toggle('active',v==='montres')}
+function slug(s){return String(s).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,70)}
 
 async function connect(){
-
-  token =
-    document.getElementById("token")
-    .value.trim();
-
-  if(!token){
-
-    status(
-      "loginStatus",
-      "err",
-      "Entre ton jeton GitHub."
-    );
-
-    return;
-  }
-
-  status(
-    "loginStatus",
-    "wait",
-    "Connexion à GitHub..."
-  );
-
+  token=document.getElementById('token').value.trim();
+  if(!token)return status('loginStatus','err','Entre ton jeton GitHub.');
+  status('loginStatus','wait','Connexion à GitHub…');
   await loadProducts(true);
-
 }
-
-
-/* =========================
-   CHARGER PRODUCTS.JSON
-========================= */
-
-async function loadProducts(firstLoad=false){
-
+async function loadProducts(first=false){
   try{
-
-    const response =
-      await fetch(
-        apiUrl(PRODUCTS_PATH) +
-        "?ref=" +
-        encodeURIComponent(BRANCH) +
-        "&t=" +
-        Date.now(),
-        {
-          headers:headers()
-        }
-      );
-
-
-    if(response.status === 404){
-
-      products = [];
-
-      currentSha = null;
-
-    }
-
-    else if(!response.ok){
-
-      if(
-        response.status === 401 ||
-        response.status === 403
-      ){
-
-        throw new Error(
-          "GitHub refuse le jeton. Vérifie que Contents est bien en Read and write."
-        );
-
-      }
-
-      throw new Error(
-        "Erreur GitHub " +
-        response.status
-      );
-
-    }
-
+    const r=await fetch(api(PATH)+'?ref='+encodeURIComponent(BRANCH)+'&t='+Date.now(),{headers:headers()});
+    if(r.status===404){products=[];currentSha=null}
     else{
-
-      const data =
-        await response.json();
-
-      currentSha = data.sha;
-
-      const json =
-        JSON.parse(
-          decodeBase64(data.content)
-        );
-
-      /*
-       * Accepte à la fois :
-       * []
-       * ou
-       * {products:[]}
-       */
-      if(Array.isArray(json)){
-
-        products = json;
-
-      }
-      else if(
-        json &&
-        Array.isArray(json.products)
-      ){
-
-        products = json.products;
-
-      }
-      else{
-
-        products = [];
-
-      }
-
+      if(!r.ok)throw new Error('GitHub '+r.status+' — vérifie les droits Contents Read and write.');
+      const d=await r.json();currentSha=d.sha;
+      const j=JSON.parse(b64decode(d.content));
+      products=Array.isArray(j)?j:(j&&Array.isArray(j.products)?j.products:[]);
     }
-
-
-    document.getElementById(
-      "loginScreen"
-    ).style.display = "none";
-
-    document.getElementById(
-      "app"
-    ).style.display = "block";
-
+    document.getElementById('login').style.display='none';
+    document.getElementById('app').style.display='block';
     renderList();
-
-  }
-
-  catch(error){
-
-    status(
-      firstLoad
-        ? "loginStatus"
-        : "publishStatus",
-      "err",
-      "Connexion impossible : " +
-      error.message
-    );
-
-  }
-
+    if(first&&products.length===0) status('recoveryStatus','wait','La liste actuelle est vide. Utilise « Récupérer les anciens produits » pour chercher une ancienne version dans l’historique Git.');
+  }catch(e){status(first?'loginStatus':'publishStatus','err','Connexion impossible : '+e.message)}
 }
-
-
-/* =========================
-   LISTE PRODUITS
-========================= */
+async function reloadProducts(){await loadProducts(false)}
 
 function renderList(){
-
-  const list =
-    document.getElementById("list");
-
-  const empty =
-    document.getElementById("empty");
-
-  document.getElementById("count")
-    .textContent = products.length;
-
-
-  if(!products.length){
-
-    list.innerHTML = "";
-
-    empty.style.display = "block";
-
-    return;
-
-  }
-
-
-  empty.style.display = "none";
-
-  list.innerHTML = products
-    .map((p,index) => {
-
-      const shop =
-        p.shop === "montres"
-          ? "⌚ Boutique de montres"
-          : "🛍️ Hacoo";
-
-      const image =
-        p.image || "";
-
-      return `
-        <div class="product">
-
-          <img
-            src="${escapeAttr(image)}"
-            alt=""
-            onerror="this.style.visibility='hidden'"
-          >
-
-          <div class="product-info">
-
-            <b>${escapeHtml(p.name)}</b>
-
-            <span>
-              ${escapeHtml(p.priceNew || "")}
-            </span>
-
-            <span class="shop-tag">
-              ${escapeHtml(shop)}
-            </span>
-
-          </div>
-
-          <div class="product-actions">
-
-            <button
-              class="ghost"
-              onclick="editProduct(${index})"
-            >
-              Modifier
-            </button>
-
-            <button
-              class="danger"
-              onclick="deleteProduct(${index})"
-            >
-              Suppr.
-            </button>
-
-          </div>
-
-        </div>
-      `;
-
-    })
-    .join("");
-
+  const q=document.getElementById('search').value.trim().toLowerCase();
+  const f=document.getElementById('filter').value;
+  const visible=products.map((p,i)=>({p,i})).filter(x=>{
+    const hay=(x.p.name||'')+' '+(x.p.shareName||'');
+    return (!q||hay.toLowerCase().includes(q)) && (f==='all'||(x.p.shop||'hacoo')===f);
+  });
+  document.getElementById('count').textContent=products.length;
+  document.getElementById('empty').style.display=visible.length?'none':'block';
+  document.getElementById('list').innerHTML=visible.map(({p,i})=>{
+    const s=p.shop==='montres'?'montres':'hacoo';
+    const tag=s==='montres'?'⌚ Boutique officielle':'🛍️ Boutique Hacoo';
+    return '<div class="product"><img src="'+esc(p.image||'unnamed.png')+'" alt=""><div><div class="name">'+esc(p.name)+'</div><div class="price">'+esc(normalizePrice(p.priceNew))+(p.priceOld?' · <s>'+esc(normalizePrice(p.priceOld))+'</s>':'')+'</div><span class="tag">'+tag+'</span></div><div class="productBtns"><button class="dark" onclick="editProduct('+i+')">Modifier</button><button class="danger" onclick="deleteProduct('+i+')">Supprimer</button></div></div>'
+  }).join('');
 }
-
-
-/* =========================
-   SECURITE HTML
-========================= */
-
-function escapeHtml(value){
-
-  return String(value ?? "")
-    .replace(
-      /[&<>"']/g,
-      char => ({
-        "&":"&amp;",
-        "<":"&lt;",
-        ">":"&gt;",
-        '"':"&quot;",
-        "'":"&#39;"
-      }[char])
-    );
-
-}
-
-
-function escapeAttr(value){
-
-  return escapeHtml(value);
-
-}
-
-
-/* =========================
-   FORMULAIRE
-========================= */
-
-function getShop(){
-
-  return document.querySelector(
-    'input[name="shop"]:checked'
-  )?.value || "hacoo";
-
-}
-
-
-function setShop(shop){
-
-  const radio =
-    document.querySelector(
-      'input[name="shop"][value="' +
-      shop +
-      '"]'
-    );
-
-  if(radio) radio.checked = true;
-
-}
-
-
 function resetForm(){
-
-  document.getElementById(
-    "editingId"
-  ).value = "";
-
-  [
-    "name",
-    "shareName",
-    "priceOld",
-    "priceNew",
-    "image",
-    "link",
-    "badge"
-  ].forEach(id => {
-
-    document.getElementById(id).value = "";
-
-  });
-
-
-  document.getElementById(
-    "imageFile"
-  ).value = "";
-
-  document.getElementById(
-    "preview"
-  ).style.display = "none";
-
-  document.getElementById(
-    "existingImages"
-  ).innerHTML = "";
-
-  setShop("hacoo");
-
+  document.getElementById('editingIndex').value='';
+  document.getElementById('formTitle').textContent='➕ Ajouter un produit';
+  ['name','priceOld','priceNew','image','link','badge'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('imageFile').value='';
+  document.getElementById('preview').style.display='none';
+  setShop('hacoo');
 }
-
-
-function editProduct(index){
-
-  const p = products[index];
-
-  document.getElementById(
-    "editingId"
-  ).value = index;
-
-  document.getElementById(
-    "name"
-  ).value = p.name || "";
-
-  document.getElementById(
-    "shareName"
-  ).value = p.shareName || "";
-
-  document.getElementById(
-    "priceOld"
-  ).value = p.priceOld || "";
-
-  document.getElementById(
-    "priceNew"
-  ).value = p.priceNew || "";
-
-  document.getElementById(
-    "image"
-  ).value = p.image || "";
-
-  document.getElementById(
-    "link"
-  ).value = p.link || "";
-
-  document.getElementById(
-    "badge"
-  ).value = p.badge || "";
-
-  setShop(
-    p.shop === "montres"
-      ? "montres"
-      : "hacoo"
-  );
-
-  window.scrollTo({
-    top:0,
-    behavior:"smooth"
-  });
-
+function editProduct(i){
+  const p=products[i];document.getElementById('editingIndex').value=i;
+  document.getElementById('formTitle').textContent='✏️ Modifier le produit';
+  document.getElementById('name').value=p.name||'';
+  document.getElementById('priceOld').value=p.priceOld||'';
+  document.getElementById('priceNew').value=p.priceNew||'';
+  document.getElementById('image').value=p.image||'';
+  document.getElementById('link').value=p.link||'';
+  document.getElementById('badge').value=p.badge||'';
+  setShop(p.shop==='montres'?'montres':'hacoo');
+  window.scrollTo({top:0,behavior:'smooth'});
 }
-
-
-/* =========================
-   IMAGE GALERIE
-========================= */
-
+function deleteProduct(i){
+  if(!confirm('Supprimer « '+products[i].name+' » ?'))return;
+  products.splice(i,1);renderList();
+}
 function previewImage(){
-
-  const file =
-    document.getElementById(
-      "imageFile"
-    ).files[0];
-
-  const preview =
-    document.getElementById(
-      "preview"
-    );
-
-  const img =
-    document.getElementById(
-      "previewImg"
-    );
-
-
-  if(!file){
-
-    preview.style.display = "none";
-
-    return;
-
-  }
-
-
-  if(file.size > 8 * 1024 * 1024){
-
-    alert(
-      "Image trop grande. Choisis une image de moins de 8 Mo."
-    );
-
-    document.getElementById(
-      "imageFile"
-    ).value = "";
-
-    preview.style.display = "none";
-
-    return;
-
-  }
-
-
-  const reader =
-    new FileReader();
-
-
-  reader.onload = event => {
-
-    img.src =
-      event.target.result;
-
-    preview.style.display =
-      "block";
-
-  };
-
-
-  reader.readAsDataURL(file);
-
+  const f=document.getElementById('imageFile').files[0], box=document.getElementById('preview'), img=document.getElementById('previewImg');
+  if(!f){box.style.display='none';return}
+  img.src=URL.createObjectURL(f);box.style.display='block';
 }
-
-
-/* =========================
-   NOM FICHIER
-========================= */
-
-function slugify(text){
-
-  return String(text || "produit")
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(
-      /[\u0300-\u036f]/g,
-      ""
-    )
-    .replace(
-      /[^a-z0-9]+/g,
-      "-"
-    )
-    .replace(
-      /^-+|-+$/g,
-      ""
-    ) || "produit";
-
-}
-
-
-/* =========================
-   UPLOAD IMAGE GITHUB
-========================= */
-
+function readFile(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(f)})}
 async function uploadImage(file,name){
-
-  if(!file) return null;
-
-
-  const extension =
-    (
-      file.name
-        .split(".")
-        .pop() || "jpg"
-    )
-    .toLowerCase()
-    .replace(
-      /[^a-z0-9]/g,
-      ""
-    );
-
-
-  const safeName =
-    slugify(name) +
-    "-" +
-    Date.now() +
-    "." +
-    extension;
-
-
-  const path =
-    "images/" +
-    safeName;
-
-
-  const dataUrl =
-    await readFile(file);
-
-
-  const base64 =
-    dataUrl.split(",")[1];
-
-
-  const response =
-    await fetch(
-      apiUrl(path),
-      {
-        method:"PUT",
-
-        headers:{
-          ...headers(),
-          "Content-Type":
-            "application/json"
-        },
-
-        body:JSON.stringify({
-
-          message:
-            "Ajout image produit " +
-            name,
-
-          content:base64,
-
-          branch:BRANCH
-
-        })
-
-      }
-    );
-
-
-  if(!response.ok){
-
-    const error =
-      await response
-        .json()
-        .catch(() => ({}));
-
-    throw new Error(
-      "Impossible d'envoyer l'image : " +
-      (error.message ||
-      response.status)
-    );
-
-  }
-
-
+  if(file.size>7*1024*1024)throw new Error('Image trop lourde. Choisis une image de moins de 7 Mo.');
+  const ext=(file.name.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'')||'jpg';
+  const path='images/'+slug(name)+'-'+Date.now()+'.'+ext;
+  const data=(await readFile(file)).split(',')[1];
+  const r=await fetch(api(path),{method:'PUT',headers:{...headers(),'Content-Type':'application/json'},body:JSON.stringify({message:'Ajout image produit '+name,content:data,branch:BRANCH})});
+  if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(e.message||'Erreur upload image')}
   return path;
-
 }
-
-
-function readFile(file){
-
-  return new Promise(
-    (resolve,reject) => {
-
-      const reader =
-        new FileReader();
-
-      reader.onload =
-        () => resolve(
-          reader.result
-        );
-
-      reader.onerror =
-        reject;
-
-      reader.readAsDataURL(file);
-
-    }
-  );
-
-}
-
-
-/* =========================
-   ENREGISTRER PRODUIT
-========================= */
-
 async function saveProduct(){
-
-  const name =
-    document.getElementById(
-      "name"
-    ).value.trim();
-
-  const priceNew =
-    document.getElementById(
-      "priceNew"
-    ).value.trim();
-
-  const link =
-    document.getElementById(
-      "link"
-    ).value.trim();
-
-  let image =
-    document.getElementById(
-      "image"
-    ).value.trim();
-
-  const file =
-    document.getElementById(
-      "imageFile"
-    ).files[0];
-
-
-  if(!name || !priceNew || !link){
-
-    alert(
-      "Merci de remplir le nom, le prix et le lien."
-    );
-
-    return;
-
-  }
-
-
-  if(!image && !file){
-
-    alert(
-      "Choisis une image depuis la galerie ou indique une image existante."
-    );
-
-    return;
-
-  }
-
-
-  const editing =
-    document.getElementById(
-      "editingId"
-    ).value;
-
-
+  const name=document.getElementById('name').value.trim(), link=document.getElementById('link').value.trim();
+  let image=document.getElementById('image').value.trim();
+  const file=document.getElementById('imageFile').files[0];
+  if(!name||!document.getElementById('priceNew').value.trim()||!link)return status('formStatus','err','Remplis au minimum le nom, le prix actuel et le lien.');
+  if(!image&&!file)return status('formStatus','err','Choisis une image depuis la galerie ou indique une image déjà présente dans GitHub.');
   try{
-
-    status(
-      "formStatus",
-      "wait",
-      file
-        ? "Envoi de l'image sur GitHub..."
-        : "Enregistrement..."
-    );
-
-
-    if(file){
-
-      image =
-        await uploadImage(
-          file,
-          name
-        );
-
-    }
-
-
-    const old =
-      editing !== ""
-        ? products[Number(editing)]
-        : null;
-
-
-    const product = {
-
-      id:
-        old?.id ||
-        slugify(name) +
-        "-" +
-        Date.now()
-          .toString(36)
-          .slice(-5),
-
-      shop:getShop(),
-
-      name:name,
-
-      shareName:
-        document.getElementById(
-          "shareName"
-        ).value.trim() || name,
-
-      priceOld:
-        document.getElementById(
-          "priceOld"
-        ).value.trim(),
-
-      priceNew:priceNew,
-
-      image:image,
-
-      link:link,
-
-      badge:
-        document.getElementById(
-          "badge"
-        ).value.trim(),
-
-      delivery:
-        getShop() === "montres"
-          ? "📦 Livraison selon la fiche produit"
-          : "🚚 Livraison estimée 7-14 jours"
-
+    status('formStatus','wait',file?'Envoi de l’image sur GitHub…':'Enregistrement…');
+    if(file)image=await uploadImage(file,name);
+    const idx=document.getElementById('editingIndex').value;
+    const old=idx!==''?products[Number(idx)]:null;
+    const p={
+      id:old?.id||slug(name)+'-'+Date.now().toString(36),
+      shop,name,
+      shareName:name,
+      priceOld:normalizePrice(document.getElementById('priceOld').value),
+      priceNew:normalizePrice(document.getElementById('priceNew').value),
+      image,link,
+      badge:document.getElementById('badge').value.trim(),
+      delivery:shop==='montres'?'📦 Livraison selon la fiche produit':'🚚 Livraison estimée 7-14 jours'
     };
-
-
-    if(editing !== ""){
-
-      products[
-        Number(editing)
-      ] = product;
-
-    }
-    else{
-
-      products.push(product);
-
-    }
-
-
-    renderList();
-
-    resetForm();
-
-    status(
-      "formStatus",
-      "ok",
-      "Produit enregistré. Il faut maintenant cliquer sur « Publier sur le site »."
-    );
-
-  }
-
-  catch(error){
-
-    status(
-      "formStatus",
-      "err",
-      error.message
-    );
-
-  }
-
+    if(idx!=='')products[Number(idx)]=p;else products.push(p);
+    renderList();resetForm();
+    status('formStatus','ok','Produit enregistré dans la liste. Clique ensuite sur « Publier sur le site ».');
+  }catch(e){status('formStatus','err',e.message)}
 }
-
-
-/* =========================
-   SUPPRESSION
-========================= */
-
-function deleteProduct(index){
-
-  const product =
-    products[index];
-
-  if(!confirm(
-    "Supprimer « " +
-    product.name +
-    " » ?"
-  )) return;
-
-
-  products.splice(
-    index,
-    1
-  );
-
-  renderList();
-
-}
-
-
-/* =========================
-   IMAGES EXISTANTES
-========================= */
-
-async function loadExistingImages(){
-
-  const box =
-    document.getElementById(
-      "existingImages"
-    );
-
-  box.innerHTML =
-    "<div class='help'>Chargement des images...</div>";
-
-
-  try{
-
-    const files = [];
-
-
-    // Images à la racine
-    const root =
-      await getDirectory("");
-
-
-    root.forEach(file => {
-
-      if(isImage(file.name)){
-
-        files.push(file);
-
-      }
-
-    });
-
-
-    // Images dans /images
-    const images =
-      await getDirectory("images");
-
-
-    images.forEach(file => {
-
-      if(isImage(file.name)){
-
-        files.push(file);
-
-      }
-
-    });
-
-
-    if(!files.length){
-
-      box.innerHTML =
-        "<div class='help'>Aucune image trouvée.</div>";
-
-      return;
-
-    }
-
-
-    box.innerHTML = "";
-
-
-    files.forEach(file => {
-
-      const item =
-        document.createElement(
-          "div"
-        );
-
-      item.className =
-        "existing-image";
-
-
-      const img =
-        document.createElement(
-          "img"
-        );
-
-      img.src =
-        file.download_url ||
-        file.html_url;
-
-      img.alt =
-        file.name;
-
-
-      const name =
-        document.createElement(
-          "small"
-        );
-
-      name.textContent =
-        file.path;
-
-
-      item.appendChild(img);
-
-      item.appendChild(name);
-
-
-      item.onclick = () => {
-
-        document.getElementById(
-          "image"
-        ).value =
-          file.path;
-
-        document.getElementById(
-          "imageFile"
-        ).value = "";
-
-        document.getElementById(
-          "preview"
-        ).style.display =
-          "none";
-
-        box.innerHTML =
-          "<div class='help'>Image sélectionnée : " +
-          file.path +
-          "</div>";
-
-      };
-
-
-      box.appendChild(item);
-
-    });
-
-  }
-
-  catch(error){
-
-    box.innerHTML =
-      "<div class='help'>Impossible de charger les images : " +
-      escapeHtml(error.message) +
-      "</div>";
-
-  }
-
-}
-
-
-async function getDirectory(path){
-
-  const url =
-    apiUrl(
-      path
-    ) +
-    "?ref=" +
-    encodeURIComponent(BRANCH);
-
-
-  const response =
-    await fetch(
-      url,
-      {
-        headers:headers()
-      }
-    );
-
-
-  if(response.status === 404){
-
-    return [];
-
-  }
-
-
-  if(!response.ok){
-
-    throw new Error(
-      "GitHub " +
-      response.status
-    );
-
-  }
-
-
-  const data =
-    await response.json();
-
-
-  return Array.isArray(data)
-    ? data
-    : [];
-
-}
-
-
-function isImage(name){
-
-  return /\.(jpg|jpeg|png|webp|gif|avif)$/i
-    .test(name);
-
-}
-
-
-/* =========================
-   PUBLICATION
-========================= */
 
 async function publish(){
-
-  if(!token){
-
-    alert(
-      "Tu n'es pas connecté."
-    );
-
-    return;
-
-  }
-
-
-  status(
-    "publishStatus",
-    "wait",
-    "Publication sur GitHub..."
-  );
-
-
+  if(!token)return;
+  if(!products.length&&!confirm('La liste contient 0 produit. Publier maintenant supprimerait les produits actuellement dans products.json. Continuer ?'))return;
+  status('publishStatus','wait','Publication sur GitHub…');
   try{
+    const body={message:'Mise à jour des produits Frbonplan',content:b64encode(JSON.stringify({updated:new Date().toISOString(),products},null,2)),branch:BRANCH};
+    if(currentSha)body.sha=currentSha;
+    const r=await fetch(api(PATH),{method:'PUT',headers:{...headers(),'Content-Type':'application/json'},body:JSON.stringify(body)});
+    const d=await r.json().catch(()=>({}));
+    if(!r.ok)throw new Error(d.message||'GitHub '+r.status);
+    currentSha=d.content.sha;
+    status('publishStatus','ok','✅ Publié. Les produits ne seront plus effacés par une nouvelle publication.');
+  }catch(e){status('publishStatus','err','Publication impossible : '+e.message)}
+}
 
-    const payload = {
-
-      updated:
-        new Date().toISOString(),
-
-      products:products
-
-    };
-
-
-    const body = {
-
-      message:
-        "Mise à jour des produits Frbonplan",
-
-      content:
-        encodeBase64(
-          JSON.stringify(
-            payload,
-            null,
-            2
-          )
-        ),
-
-      branch:BRANCH
-
-    };
-
-
-    if(currentSha){
-
-      body.sha =
-        currentSha;
-
+async function recoverHistory(){
+  if(!token)return;
+  status('recoveryStatus','wait','Recherche d’une ancienne version de products.json…');
+  try{
+    const cr=await fetch(API.replace('/contents/','')+'/commits?path='+encodeURIComponent(PATH)+'&per_page=50',{headers:headers()});
+    if(!cr.ok)throw new Error('Impossible de lire l’historique GitHub ('+cr.status+').');
+    const commits=await cr.json();
+    let found=null;
+    for(const c of commits){
+      const r=await fetch(api(PATH)+'?ref='+encodeURIComponent(c.sha),{headers:headers()});
+      if(!r.ok)continue;
+      const d=await r.json();let j;
+      try{j=JSON.parse(b64decode(d.content))}catch(e){continue}
+      const list=Array.isArray(j)?j:(j&&Array.isArray(j.products)?j.products:[]);
+      if(list.length){found={list,sha:d.sha,commit:c};break}
     }
-
-
-    const response =
-      await fetch(
-        apiUrl(PRODUCTS_PATH),
-        {
-          method:"PUT",
-
-          headers:{
-            ...headers(),
-            "Content-Type":
-              "application/json"
-          },
-
-          body:
-            JSON.stringify(body)
-
-        }
-      );
-
-
-    const result =
-      await response
-        .json()
-        .catch(() => ({}));
-
-
-    if(!response.ok){
-
-      if(response.status === 409){
-
-        throw new Error(
-          "Le fichier a été modifié entre-temps. Recharge depuis GitHub puis réessaie."
-        );
-
-      }
-
-      throw new Error(
-        result.message ||
-        "Erreur GitHub " +
-        response.status
-      );
-
-    }
-
-
-    currentSha =
-      result.content.sha;
-
-
-    status(
-      "publishStatus",
-      "ok",
-      "✅ Publié sur GitHub. Les changements vont apparaître sur le site."
-    );
-
-  }
-
-  catch(error){
-
-    status(
-      "publishStatus",
-      "err",
-      "Publication impossible : " +
-      error.message
-    );
-
-  }
-
+    if(!found)throw new Error('Aucune ancienne version non vide de products.json n’a été trouvée dans les 50 derniers commits.');
+    if(!confirm('J’ai trouvé '+found.list.length+' anciens produits. Les charger dans l’admin ? Rien ne sera publié tant que tu ne cliques pas sur « Publier ».'))return;
+    products=found.list.map(p=>({...p,shop:p.shop==='montres'?'montres':'hacoo'}));
+    renderList();
+    status('recoveryStatus','ok','♻️ '+products.length+' anciens produits récupérés depuis l’historique. Vérifie la liste puis publie.');
+  }catch(e){status('recoveryStatus','err',e.message)}
 }
-
-
-/* =========================
-   RECHARGEMENT
-========================= */
-
-async function reloadProducts(){
-
-  status(
-    "publishStatus",
-    "wait",
-    "Rechargement depuis GitHub..."
-  );
-
-  await loadProducts(false);
-
-}
-
-
-/* =========================
-   DECONNEXION
-========================= */
-
-function logout(){
-
-  if(!confirm(
-    "Se déconnecter ?"
-  )) return;
-
-
-  token = "";
-
-  products = [];
-
-  currentSha = null;
-
-  location.reload();
-
-}
-
+function logout(){token='';location.reload()}
 </script>
-
 </body>
 </html>
