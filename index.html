@@ -9867,49 +9867,74 @@ body.app-standalone .jump-articles-link { display:none }
     trackEvent('watch_shop_visit_bonus', {});
   }, true);
 
-  // ---------- Produits Hacoo centralisés (products.json) — admin sans toucher au HTML ----------
+  // ---------- Produits gérés depuis l'administration GitHub ----------
+  // Un seul catalogue JSON, avec shop: "hacoo" ou shop: "montres".
   function escapeHtml(s){
-    return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+    return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    }[c]));
   }
-  function hacooCardHtml(p, idx){
-    const favId = 'hacoo-' + p.id;
-    const cmpId = 'hacoo-' + p.id;
-    const shareName = escapeHtml(p.shareName || p.name);
-    const oldPriceHtml = p.priceOld ? '<span class="shop-price-old">' + escapeHtml(p.priceOld) + '</span>' : '';
-    const badgeHtml = p.badge ? '<span class="shop-new-badge">' + escapeHtml(p.badge) + '</span>' : '';
+
+  function formatProductPrice(value){
+    if(value == null || value === '') return '';
+    const raw = String(value).replace(/[€\s]/g,'').replace(',', '.');
+    const n = Number(raw);
+    if(!Number.isFinite(n)) return escapeHtml(String(value));
+    return n.toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' €';
+  }
+
+  function productCardHtml(p){
+    const shop = p.shop === 'montres' ? 'montres' : 'hacoo';
+    const official = shop === 'montres';
+    const favId = (shop === 'montres' ? 'montres-' : 'hacoo-') + p.id;
+    const cmpId = 'cmp-' + p.id;
+    const shareName = escapeHtml(p.shareName || p.name || '');
+    const badge = official
+      ? '<span class="shop-badge-official">⌚ Boutique officielle</span>'
+      : '<span class="shop-new-badge">🛍️ Boutique Hacoo</span>';
+    const oldPrice = p.priceOld
+      ? '<span class="shop-price-old">' + formatProductPrice(p.priceOld) + '</span>'
+      : '';
+    const cta = official ? 'Voir sur notre boutique →' : 'Voir sur Hacoo →';
+    const cardClass = official ? 'shop-card shop-card-official reveal' : 'shop-card reveal';
+
     return (
-      '<a class="shop-card reveal" href="' + escapeHtml(p.link) + '" target="_blank" rel="noopener" data-product-id="' + escapeHtml(p.id) + '">' +
+      '<a class="' + cardClass + '" href="' + escapeHtml(p.link || '#') + '" target="_blank" rel="noopener" data-product-id="' + escapeHtml(p.id) + '" data-shop="' + shop + '">' +
       '<div class="shop-card-img">' +
-      '<button class="shop-fav" data-fav-id="' + favId + '" onclick="event.preventDefault(); event.stopPropagation(); toggleFav(this)" aria-label="Ajouter aux favoris"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l8.8-8.6 1-1a5.5 5.5 0 0 0 0-7.8Z"/></svg></button>' +
-      badgeHtml +
-      '<button class="shop-share" onclick="event.preventDefault(); shareProduct(\'' + shareName.replace(/'/g, "\\'") + '\', this)" aria-label="Partager cet article"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.5 6.8-3.9M8.6 13.5l6.8 3.9"/></svg></button>' +
-      '<button class="shop-compare" data-cmp-id="' + cmpId + '" onclick="event.preventDefault(); event.stopPropagation(); toggleCompare(this, \'' + shareName.replace(/'/g, "\\'") + '\')" aria-label="Ajouter au comparateur"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg></button>' +
-      '<img src="' + escapeHtml(p.image) + '" alt="' + escapeHtml(p.name) + '" loading="lazy" decoding="async" onclick="event.preventDefault(); event.stopPropagation(); openZoom(this.src, this.alt)">' +
+      '<button class="shop-fav" data-fav-id="' + escapeHtml(favId) + '" onclick="event.preventDefault(); event.stopPropagation(); toggleFav(this)" aria-label="Ajouter aux favoris">' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l8.8-8.6 1-1a5.5 5.5 0 0 0 0-7.8Z"/></svg></button>' +
+      badge +
+      '<button class="shop-share" onclick="event.preventDefault(); shareProduct(\'' + shareName.replace(/'/g,"\\'") + '\', this)" aria-label="Partager cet article">' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.5 6.8-3.9M8.6 13.5l6.8 3.9"/></svg></button>' +
+      '<button class="shop-compare" data-cmp-id="' + escapeHtml(cmpId) + '" onclick="event.preventDefault(); event.stopPropagation(); toggleCompare(this, \'' + shareName.replace(/'/g,"\\'") + '\')" aria-label="Ajouter au comparateur">' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg></button>' +
+      '<img src="' + escapeHtml(p.image || 'unnamed.png') + '" alt="' + escapeHtml(p.name || '') + '" loading="lazy" decoding="async" onclick="event.preventDefault(); event.stopPropagation(); openZoom(this.src, this.alt)">' +
       '</div>' +
       '<div class="shop-card-body">' +
-      '<h3>' + escapeHtml(p.name) + '</h3>' +
-      '<div class="shop-price-row">' + oldPriceHtml + '<span class="shop-price-new">' + escapeHtml(p.priceNew || '') + '</span></div>' +
-      '<div style="font-size:0.74rem; color:var(--text-dim);">' + escapeHtml(p.delivery || '🚚 Livraison estimée 7-14 jours') + '</div>' +
-      '<div class="shop-cta">Voir sur Hacoo →</div>' +
+      '<h3>' + escapeHtml(p.name || '') + '</h3>' +
+      '<div class="shop-price-row">' + oldPrice + '<span class="shop-price-new">' + formatProductPrice(p.priceNew) + '</span></div>' +
+      '<div style="font-size:0.74rem;color:var(--text-dim);">' + escapeHtml(p.delivery || (official ? '📦 Livraison selon la fiche produit' : '🚚 Livraison estimée 7-14 jours')) + '</div>' +
+      '<div class="shop-cta' + (official ? '-official' : '') + '">' + cta + '</div>' +
       '</div></a>'
     );
   }
-  function renderHacooProducts(products){
+
+  function renderDynamicProducts(products){
     const grid = document.getElementById('hacooProductGrid');
     if(!grid) return;
     if(!Array.isArray(products) || products.length === 0){
       grid.innerHTML = '';
       return;
     }
-    grid.outerHTML = products.map((p, i) => hacooCardHtml(p, i)).join('') + '<div id="hacooProductGrid" style="display:none"></div>';
+    grid.outerHTML = products.map(productCardHtml).join('') + '<div id="hacooProductGrid" style="display:none"></div>';
     try { restoreFavs(); } catch(e){}
     document.querySelectorAll('#boutique .shop-card').forEach(c => c.classList.add('in-view'));
   }
+
   fetch('products.json?v=' + Date.now())
     .then(r => r.ok ? r.json() : Promise.reject())
-    .then(data => renderHacooProducts(data.products))
+    .then(data => renderDynamicProducts(Array.isArray(data) ? data : data.products))
     .catch(() => {
-      // Hors-ligne ou fichier momentanément indisponible : le reste du site continue de fonctionner normalement.
       const grid = document.getElementById('hacooProductGrid');
       if(grid) grid.innerHTML = '';
     });
