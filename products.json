@@ -1,4 +1,17 @@
 {
-  "updated": "2026-10-04T10:20:02.339Z",
-  "products": []
+  "updated": "2026-10-04T10:36:57.511Z",
+  "products": [
+    {
+      "id": "montre-pagani-luxe-wykh9",
+      "shop": "montres",
+      "name": "Montre Pagani luxe",
+      "shareName": "Montre Pagani luxe",
+      "priceOld": "230,00 €",
+      "priceNew": "185,00 €",
+      "image": "https://frbonplan.myshopify.com/cdn/shop/files/Ac827a2a192fe42978704161b94f1eaaeb.webp?v=1790432880&width=1200",
+      "link": "https://frbonplan.myshopify.com/products/2026-new-pagani-design-mens-moon-watches-top-brand-luxury-quartz-watch-men-black-automatic-date-speed-chronograph-waterproof-stainless-steel-wristwathch-shipped-locally-in-europe?variant=55069373170003",
+      "badge": "",
+      "delivery": "📦 Livraison selon la fiche produit"
+    }
+  ]
 }
