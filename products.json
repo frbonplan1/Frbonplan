@@ -1,17 +1,4 @@
 {
-  "updated": "2026-10-04T10:43:28.053Z",
-  "products": [
-    {
-      "id": "produit-test-mutozv3n",
-      "shop": "hacoo",
-      "name": "Produit test",
-      "shareName": "Produit test",
-      "priceOld": "",
-      "priceNew": "29,99 €",
-      "image": "images/produit-test-1791110580398.jpg",
-      "link": "https://frbonplan.myshopify.com/products/montres-pour-hommes-olevs-lxuxry-brand-gold-montre-chronographe-en-acier-inoxydable-entierement-squelettee-etanche-lumineuse-a-quartz",
-      "badge": "Populaire",
-      "delivery": "🚚 Livraison estimée 7-14 jours"
-    }
-  ]
+  "updated": "2026-10-04T10:45:02.405Z",
+  "products": []
 }
