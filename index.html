@@ -5281,6 +5281,17 @@ body.app-standalone .app-dashboard {
   background:var(--coral); color:#fff; font-size:0.62rem; font-weight:700;
   border-radius:999px; padding:1px 7px; margin-top:-2px;
 }
+.app-status-row {
+  display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:8px 14px;
+  margin-top:12px; padding:9px 12px; border:1px solid var(--border); border-radius:12px;
+  background:linear-gradient(180deg,rgba(255,255,255,.025),transparent);
+  color:var(--text-dim); font-size:.68rem; font-weight:600;
+}
+.app-status-row span { display:inline-flex; align-items:center; gap:5px }
+.app-status-row i { width:7px; height:7px; border-radius:50%; background:#5bc98a; box-shadow:0 0 0 4px rgba(91,201,138,.10) }
+@media (max-width:560px){
+  .app-status-row { justify-content:flex-start; overflow:hidden; white-space:nowrap }
+}
 
 /* GROS 1 : bouton Préférences (accessibilité + confort + éco-données) */
 .prefs-toggle {
@@ -5777,7 +5788,13 @@ body.app-standalone .jump-articles-link { display:none }
           <a class="app-dash-btn" href="https://frbonplan.myshopify.com/discount/FRBONPLAN?redirect=%2F" target="_blank" rel="noopener"><span class="app-dash-ico">⌚</span>Montres<span class="app-dash-badge">+20 pts</span></a>
           <button type="button" class="app-dash-btn" onclick="openFavSheet()"><span class="app-dash-ico">❤️</span>Favoris</button>
           <a class="app-dash-btn" href="#offres"><span class="app-dash-ico">🔥</span>Offre du jour</a>
+          <button type="button" class="app-dash-btn" onclick="openCmdk()"><span class="app-dash-ico">⌕</span>Rechercher</button>
           <a class="app-dash-btn" href="#faq"><span class="app-dash-ico">💬</span>Aide</a>
+        </div>
+        <div class="app-status-row" aria-label="État de Frbonplan">
+          <span><i></i> Service actif</span>
+          <span>950+ membres</span>
+          <span>Mis à jour chaque jour</span>
         </div>
       </div>
       <div class="reveal in-view">
@@ -5849,12 +5866,12 @@ body.app-standalone .jump-articles-link { display:none }
 
   <div class="marquee" aria-hidden="true">
     <div class="marquee-track">
-      <span class="marquee-item"><b>900+</b> membres Telegram<span class="marquee-dot"></span></span>
+      <span class="marquee-item"><b>950+</b> membres Telegram<span class="marquee-dot"></span></span>
       <span class="marquee-item"><b>1000+</b> posts Hacoo vérifiés<span class="marquee-dot"></span></span>
       <span class="marquee-item"><b>2400+</b> commandes passées<span class="marquee-dot"></span></span>
       <span class="marquee-item"><b>25+</b> montres expédiées<span class="marquee-dot"></span></span>
       <span class="marquee-item"><b>-14%</b> sur Hacoo, <b>-40%</b> chez nous<span class="marquee-dot"></span></span>
-      <span class="marquee-item"><b>900+</b> membres Telegram<span class="marquee-dot"></span></span>
+      <span class="marquee-item"><b>950+</b> membres Telegram<span class="marquee-dot"></span></span>
       <span class="marquee-item"><b>1000+</b> posts Hacoo vérifiés<span class="marquee-dot"></span></span>
       <span class="marquee-item"><b>2400+</b> commandes passées<span class="marquee-dot"></span></span>
       <span class="marquee-item"><b>25+</b> montres expédiées<span class="marquee-dot"></span></span>
@@ -6144,7 +6161,7 @@ body.app-standalone .jump-articles-link { display:none }
         <h2>Frbonplan en chiffres</h2>
       </div>
       <div class="stats-grid">
-        <div class="stat-card reveal"><b id="statMembers">900+</b><span>Membres Telegram</span></div>
+        <div class="stat-card reveal"><b id="statMembers">950+</b><span>Membres Telegram</span></div>
         <div class="stat-card reveal reveal-delay-1"><b id="statOffers">1000+</b><span>Posts sur Hacoo</span></div>
         <div class="stat-card reveal reveal-delay-2"><b id="statOrders">2400+</b><span>Commandes passées via Hacoo</span></div>
         <div class="stat-card reveal reveal-delay-3"><b id="statWatches">25+</b><span>Montres expédiées par nos soins</span></div>
@@ -7139,7 +7156,7 @@ body.app-standalone .jump-articles-link { display:none }
     entries.forEach(entry => {
       if(entry.isIntersecting && !counted){
         counted = true;
-        const target = 1800;
+        const target = 950;
         const duration = 1400;
         const start = performance.now();
         function step(now){
