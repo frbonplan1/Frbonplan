@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Admin — Frbonplan</title>
+<title>Gestion des produits — Frbonplan</title>
 <style>
 :root{--bg:#0b0f14;--card:#151b24;--card2:#1b222d;--border:#2a3442;--text:#f5f3ee;--muted:#a8b0bc;--gold:#f0c368;--red:#ff6952;--green:#5bd18b}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px Inter,system-ui,sans-serif}
@@ -17,39 +17,53 @@ button{border:0;border-radius:10px;padding:11px 14px;font:inherit;font-weight:80
 .toolbar{display:grid;grid-template-columns:1fr 180px;gap:10px}.product{display:grid;grid-template-columns:72px 1fr auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--border)}.product:last-child{border-bottom:0}.product img{width:72px;height:72px;object-fit:cover;border-radius:10px;background:var(--bg)}.name{font-weight:800}.tag{display:inline-block;margin-top:5px;padding:4px 8px;border-radius:999px;background:#272014;color:var(--gold);font-size:.75rem}.price{font-weight:900;margin-top:5px}.productBtns{display:flex;gap:6px}.productBtns button{padding:8px 10px;font-size:.8rem}
 .notice{padding:12px;border:1px dashed var(--gold);border-radius:12px;background:#211b10;color:#f8df9d}
 @media(max-width:650px){.grid2,.shops,.toolbar{grid-template-columns:1fr}.product{grid-template-columns:58px 1fr}.productBtns{grid-column:1/-1}.product img{width:58px;height:58px}}
+
+.utility{display:flex;gap:9px;flex-wrap:wrap;margin:12px 0 4px}
+.sectionHead{display:flex;justify-content:space-between;align-items:flex-start;gap:15px}
+.step{min-width:34px;height:34px;display:grid;place-items:center;border-radius:50%;background:var(--gold);color:#191307;font-weight:900}
+.optional{font-weight:500;color:var(--muted)}
+.formBottom{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px;padding-top:18px;border-top:1px solid var(--border)}
+.bigBtn{min-height:46px;padding:12px 18px}
+.publishBox{margin:16px 0 30px;padding:20px;border:1px solid var(--gold);border-radius:18px;background:linear-gradient(135deg,#211b10,#17130d);display:grid;grid-template-columns:1fr auto;gap:15px;align-items:center}
+.publishTitle{font-size:1.08rem;font-weight:900;margin-bottom:4px}
+.publishBtn{min-height:50px;padding:13px 22px;font-size:1rem}
+.publishBox .status{grid-column:1/-1;margin-top:0}
+.shop{transition:.15s transform,.15s border-color,.15s background}
+.shop:hover{transform:translateY(-1px)}
+@media(max-width:650px){
+  .publishBox{grid-template-columns:1fr}
+  .publishBtn{width:100%}
+  .utility button{flex:1}
+}
 </style>
 </head>
 <body>
 <div class="wrap">
   <h1>Administration <span>Frbonplan</span></h1>
-  <p class="muted">Ajoute, modifie, supprime et publie les produits directement dans GitHub.</p>
+  <p class="muted">Gère facilement tous tes produits depuis cette page.</p>
 
   <div id="login" class="card">
-    <h2>🔐 Connexion</h2>
-    <p class="muted">Le jeton reste uniquement en mémoire dans cette session.</p>
-    <label for="token">Jeton GitHub</label>
-    <input id="token" type="password" autocomplete="off" placeholder="github_pat_…">
+    <h2>🔐 Accès à l’administration</h2>
+    <p class="muted">Ton code d’accès est utilisé uniquement pendant cette session.</p>
+    <label for="token">Code d’accès</label>
+    <input id="token" type="password" autocomplete="off" placeholder="Entre ton code d’accès">
     <div class="actions"><button class="gold" onclick="connect()">Se connecter</button></div>
     <div id="loginStatus" class="status"></div>
   </div>
 
   <div id="app" style="display:none">
-    <div class="card">
-      <div class="actions" style="margin-top:0">
-        <button class="green" onclick="recoverHistory()">♻️ Récupérer les anciens produits</button>
-        <button class="dark" onclick="reloadProducts()">↻ Recharger GitHub</button>
-        <button class="gold" onclick="publish()">☁️ Publier sur le site</button>
-        <button class="dark" onclick="logout()">Déconnexion</button>
-      </div>
-      <div id="publishStatus" class="status"></div>
-      <div id="recoveryStatus" class="status"></div>
+    <div class="utility">
+      <button class="dark" onclick="recoverHistory()">♻️ Récupérer les anciens produits</button>
+      <button class="dark" onclick="reloadProducts()">↻ Actualiser</button>
+      <button class="dark" onclick="logout()">Déconnexion</button>
     </div>
+    <div id="recoveryStatus" class="status"></div>
 
     <div class="card">
-      <h2 id="formTitle">➕ Ajouter un produit</h2>
+      <div class="sectionHead"><div><h2 id="formTitle">➕ Ajouter un produit</h2><p class="muted">Remplis les informations ci-dessous. Tu peux choisir une image directement depuis ton téléphone.</p></div><span class="step">1</span></div>
       <input id="editingIndex" type="hidden">
 
-      <label>Boutique</label>
+      <label>Où le produit est-il vendu ?</label>
       <div class="shops">
         <div id="shopHacoo" class="shop active" onclick="setShop('hacoo')">🛍️ Boutique Hacoo</div>
         <div id="shopMontres" class="shop" onclick="setShop('montres')">⌚ Boutique officielle</div>
@@ -59,7 +73,7 @@ button{border:0;border-radius:10px;padding:11px 14px;font:inherit;font-weight:80
       <input id="name" placeholder="Ex. Montre automatique squelette">
 
       <div class="grid2">
-        <div><label for="priceOld">Ancien prix (facultatif)</label><input id="priceOld" inputmode="decimal" placeholder="49,99"></div>
+        <div><label for="priceOld">Ancien prix <span class="optional">(facultatif)</span></label><input id="priceOld" inputmode="decimal" placeholder="49,99"></div>
         <div><label for="priceNew">Prix actuel</label><input id="priceNew" inputmode="decimal" placeholder="29,99"></div>
       </div>
       <p class="muted">Tu écris seulement le nombre. Le site ajoute automatiquement « € ».</p>
@@ -74,18 +88,18 @@ button{border:0;border-radius:10px;padding:11px 14px;font:inherit;font-weight:80
       <label for="link">Lien du produit</label>
       <input id="link" type="url" placeholder="https://…">
 
-      <label for="badge">Petit badge (facultatif)</label>
+      <label for="badge">Petit badge <span class="optional">(facultatif)</span></label>
       <input id="badge" placeholder="Nouveau, -40%, Populaire…">
 
-      <div class="actions">
-        <button class="gold" onclick="saveProduct()">💾 Enregistrer le produit</button>
-        <button class="dark" onclick="resetForm()">Annuler</button>
+      <div class="formBottom">
+        <button class="gold bigBtn" onclick="saveProduct()">💾 Enregistrer le produit</button>
+        <button class="dark bigBtn" onclick="resetForm()">Réinitialiser</button>
       </div>
       <div id="formStatus" class="status"></div>
     </div>
 
     <div class="card">
-      <h2>📦 Produits <span id="count">0</span></h2>
+      <div class="sectionHead"><div><h2>📦 Mes produits <span id="count">0</span></h2><p class="muted">Modifie ou supprime un produit à tout moment.</p></div><span class="step">2</span></div>
       <div class="toolbar">
         <input id="search" oninput="renderList()" placeholder="🔎 Rechercher un produit…">
         <select id="filter" onchange="renderList()">
@@ -96,6 +110,15 @@ button{border:0;border-radius:10px;padding:11px 14px;font:inherit;font-weight:80
       </div>
       <div id="list" style="margin-top:12px"></div>
       <div id="empty" class="notice" style="display:none;margin-top:12px">Aucun produit dans la liste actuelle.</div>
+    </div>
+
+    <div class="publishBox">
+      <div>
+        <div class="publishTitle">🚀 Dernière étape</div>
+        <div class="muted">Quand tout est bon, publie les modifications sur ton site.</div>
+      </div>
+      <button class="gold publishBtn" onclick="publish()">🚀 Publier les modifications</button>
+      <div id="publishStatus" class="status"></div>
     </div>
   </div>
 </div>
@@ -140,7 +163,7 @@ async function loadProducts(first=false){
     document.getElementById('login').style.display='none';
     document.getElementById('app').style.display='block';
     renderList();
-    if(first&&products.length===0) status('recoveryStatus','wait','La liste actuelle est vide. Utilise « Récupérer les anciens produits » pour chercher une ancienne version dans l’historique Git.');
+    if(first&&products.length===0) status('recoveryStatus','wait','La liste actuelle est vide. Utilise « Récupérer les anciens produits » pour chercher une ancienne version dans l’historique.');
   }catch(e){status(first?'loginStatus':'publishStatus','err','Connexion impossible : '+e.message)}
 }
 async function reloadProducts(){await loadProducts(false)}
@@ -246,9 +269,8 @@ async function recoverHistory(){
   status('recoveryStatus','wait','Recherche d’une ancienne version de products.json…');
   try{
     const cr=await fetch(API.replace('/contents/','')+'/commits?path='+encodeURIComponent(PATH)+'&per_page=50',{headers:headers()});
-    if(!cr.ok)throw new Error('Impossible de lire l’historique GitHub ('+cr.status+').');
-    const commits=await cr.json();
-    let found=null;
+    if(!cr.ok)throw new Error('Impossible de lire l’historiqueHub ('+cr.status+').');
+    const commits=await cr.json();a
     for(const c of commits){
       const r=await fetch(api(PATH)+'?ref='+encodeURIComponent(c.sha),{headers:headers()});
       if(!r.ok)continue;
