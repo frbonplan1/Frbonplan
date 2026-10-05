@@ -5489,6 +5489,52 @@ body.data-saver .data-saver-banner { display:flex }
 .jump-articles-link:hover { color:var(--gold) }
 @keyframes jumpBounce { 0%,100%{ transform:translateY(0) } 50%{ transform:translateY(4px) } }
 body.app-standalone .jump-articles-link { display:none }
+
+/* Reprise de visite : dernière montre consultée */
+.recent-watch {
+  display:none;
+  position:fixed;
+  left:14px;
+  right:14px;
+  bottom:calc(74px + env(safe-area-inset-bottom,0px));
+  z-index:72;
+  max-width:560px;
+  margin:0 auto;
+  padding:10px 12px;
+  align-items:center;
+  gap:10px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  box-shadow:0 12px 32px rgba(0,0,0,.22);
+  backdrop-filter:blur(16px);
+}
+.recent-watch.show { display:flex; animation:recentWatchIn .28s ease-out; }
+.recent-watch-copy { min-width:0; flex:1; }
+.recent-watch-label { display:block; font-size:.68rem; color:var(--gold-soft); text-transform:uppercase; letter-spacing:.08em; font-weight:800; }
+.recent-watch-name { display:block; margin-top:2px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:.82rem; color:var(--text-soft); }
+.recent-watch-go { flex:none; border:0; border-radius:11px; padding:9px 12px; background:var(--gold); color:#111; font-weight:800; cursor:pointer; }
+.recent-watch-close { flex:none; border:0; background:transparent; color:var(--text-dim); font-size:18px; cursor:pointer; padding:4px; }
+@keyframes recentWatchIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+@media (min-width:760px) { .recent-watch { left:auto; right:22px; bottom:22px; margin:0; } }
+
+/* Radar de prix : surveillance locale des prix */
+.price-radar-panel{display:none;margin:18px 0 20px;padding:16px;border:1px solid var(--border);border-radius:18px;background:linear-gradient(135deg,rgba(255,196,77,.09),rgba(255,255,255,.025));box-shadow:0 10px 30px rgba(0,0,0,.12)}
+.price-radar-panel.show{display:block;animation:recentWatchIn .25s ease-out}
+.price-radar-head{display:flex;align-items:center;gap:12px}
+.price-radar-icon{width:42px;height:42px;display:grid;place-items:center;border-radius:13px;background:rgba(255,196,77,.12);font-size:1.25rem;flex:none}
+.price-radar-title{margin:0;font-size:.98rem}.price-radar-sub{margin:3px 0 0;color:var(--text-dim);font-size:.76rem;line-height:1.45}
+.price-radar-list{display:grid;gap:8px;margin-top:12px}
+.price-radar-item{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:12px;background:rgba(255,255,255,.035);font-size:.78rem}
+.price-radar-item-name{min-width:0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text-soft)}
+.price-radar-price{font-weight:800;white-space:nowrap}.price-radar-drop{color:#74e39b;font-weight:900;white-space:nowrap}
+.price-radar-remove{border:0;background:transparent;color:var(--text-dim);font-size:.9rem;line-height:1;cursor:pointer;padding:4px 5px;border-radius:7px}.price-radar-remove:hover{color:var(--text);background:rgba(255,255,255,.07)}
+.price-radar-meta{margin-top:10px;font-size:.72rem;color:var(--text-dim)}
+.price-radar-watch{display:inline-flex;align-items:center;gap:6px;margin-top:9px;padding:7px 9px;border:1px solid var(--border);border-radius:10px;background:transparent;color:var(--text-soft);font-size:.72rem;font-weight:800;cursor:pointer}
+.price-radar-watch:hover{border-color:var(--gold-soft);color:var(--gold-soft)}
+.price-radar-watch.active{border-color:rgba(116,227,155,.35);color:#74e39b;background:rgba(116,227,155,.07)}
+.shop-card .price-radar-watch{position:relative;z-index:3}
+@media(max-width:560px){.price-radar-item{align-items:flex-start;flex-wrap:wrap}.price-radar-item-name{flex-basis:100%}}
 </style>
 <script type="application/ld+json">
 {
@@ -6020,6 +6066,19 @@ body.app-standalone .jump-articles-link { display:none }
         <div class="search-with-mic"><input type="text" id="catalogSearchInput" placeholder="🔍 Chercher un article (Hacoo ou montres)..." oninput="filterCatalog(this.value)" style="width:100%;"><button type="button" class="mic-btn" id="catalogMicBtn" aria-label="Recherche vocale" title="Recherche vocale"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4"/></svg></button></div>
       </div>
       <p class="catalog-no-results" id="catalogNoResults">Aucun article ne correspond à votre recherche.</p>
+
+      <div class="price-radar-panel reveal" id="priceRadarPanel" aria-live="polite">
+        <div class="price-radar-head">
+          <div class="price-radar-icon">📉</div>
+          <div>
+            <h3 class="price-radar-title">Radar de baisse de prix</h3>
+            <p class="price-radar-sub">Surveille tes articles préférés. Si le prix affiché ici baisse lors d'une prochaine visite, Frbonplan te le signale.</p>
+          </div>
+        </div>
+        <div class="price-radar-list" id="priceRadarList"></div>
+        <div class="price-radar-meta" id="priceRadarMeta"></div>
+      </div>
+
       <div class="shop-grid">
         <a class="shop-card shop-card-official reveal" href="https://frbonplan.myshopify.com/discount/FRBONPLAN?redirect=%2Fproducts%2Fbinbond-luxury-hollow-out-quartz-wristwatch-for-men-luminous-waterproof-mens-watch-business-sport-fashion-reloj-hommes%3Fvariant%3D54834620662099" target="_blank" rel="noopener">
           <div class="shop-card-img"><button class="shop-fav" data-fav-id="fav1" onclick="event.preventDefault(); event.stopPropagation(); toggleFav(this)" aria-label="Ajouter aux favoris"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l8.8-8.6 1-1a5.5 5.5 0 0 0 0-7.8Z"/></svg></button>
@@ -6806,6 +6865,15 @@ body.app-standalone .jump-articles-link { display:none }
   <span class="zoom-overlay-hint">Touchez n'importe où pour fermer</span>
 </div>
 
+
+<div class="recent-watch" id="recentWatch" role="status" aria-live="polite">
+  <div class="recent-watch-copy">
+    <span class="recent-watch-label">⌚ Votre dernière montre</span>
+    <span class="recent-watch-name" id="recentWatchName"></span>
+  </div>
+  <button class="recent-watch-go" id="recentWatchGo" type="button">Reprendre →</button>
+  <button class="recent-watch-close" id="recentWatchClose" type="button" aria-label="Fermer">×</button>
+</div>
 <!-- GROS 3 : programme de fidélité -->
 <button class="loyalty-pill" id="loyaltyPill" onclick="openProfileSheet()" aria-label="Mon profil Frbonplan">
   🏆 <span id="loyaltyPillPts">0</span> pts
@@ -9948,6 +10016,138 @@ body.app-standalone .jump-articles-link { display:none }
     }
   }, true);
 
+
+  // ---------- Reprise de visite : dernière montre consultée ----------
+  (function(){
+    const KEY = 'frbonplan_last_watch';
+    const box = document.getElementById('recentWatch');
+    const nameEl = document.getElementById('recentWatchName');
+    const goBtn = document.getElementById('recentWatchGo');
+    const closeBtn = document.getElementById('recentWatchClose');
+    if(!box || !nameEl || !goBtn || !closeBtn) return;
+
+    function read(){
+      try {
+        const item = JSON.parse(localStorage.getItem(KEY) || 'null');
+        return item && item.url && item.name ? item : null;
+      } catch(e){ return null; }
+    }
+    function show(){
+      const item = read();
+      if(!item) return;
+      nameEl.textContent = item.name;
+      box.classList.add('show');
+    }
+    document.addEventListener('click', (e) => {
+      const card = e.target.closest && e.target.closest('.shop-card[data-shop="montres"]');
+      if(!card || !card.href) return;
+      try {
+        localStorage.setItem(KEY, JSON.stringify({ name:(card.querySelector('h3')?.textContent || 'Montre').trim(), url:card.href, at:Date.now() }));
+      } catch(err){}
+    });
+    goBtn.addEventListener('click', () => {
+      const item = read();
+      if(item) window.open(item.url, '_blank', 'noopener');
+    });
+    closeBtn.addEventListener('click', () => box.classList.remove('show'));
+    show();
+  })();
+
+
+  // ---------- Radar de baisse de prix ----------
+  // Surveillance locale : aucune donnée n'est envoyée à un serveur.
+  const PRICE_RADAR_KEY = 'frbonplan_price_radar_v2';
+  function radarRead(){
+    try {
+      const v = JSON.parse(localStorage.getItem(PRICE_RADAR_KEY) || '[]');
+      return Array.isArray(v) ? v.filter(x => x && x.key && Number.isFinite(Number(x.price))).slice(0,8) : [];
+    } catch(e){ return []; }
+  }
+  function radarWrite(items){
+    try { localStorage.setItem(PRICE_RADAR_KEY, JSON.stringify(items.slice(0,8))); } catch(e){}
+  }
+  function radarProductKey(card){
+    return String(card.dataset.productId || card.getAttribute('href') || card.querySelector('h3')?.textContent || '').trim();
+  }
+  function radarProductPrice(card){
+    const el = card.querySelector('.shop-price-new');
+    if(!el) return NaN;
+    const n = Number((el.textContent || '').replace(/[^0-9,.-]/g,'').replace(',','.'));
+    return Number.isFinite(n) ? n : NaN;
+  }
+  function radarProductName(card){ return (card.querySelector('h3')?.textContent || 'Article').trim(); }
+  function radarRemove(key){
+    const items=radarRead().filter(x=>x.key!==key);
+    radarWrite(items);
+    document.querySelectorAll('#boutique .shop-card').forEach(card=>{
+      if(radarProductKey(card)!==key) return;
+      const btn=card.querySelector('.price-radar-watch');
+      if(btn){ btn.classList.remove('active'); btn.textContent='📉 Surveiller le prix'; }
+    });
+    radarRender();
+    showToast('Surveillance retirée');
+  }
+  function radarRender(){
+    const panel=document.getElementById('priceRadarPanel'), list=document.getElementById('priceRadarList'), meta=document.getElementById('priceRadarMeta');
+    if(!panel || !list) return;
+    const items=radarRead();
+    const cards=Array.from(document.querySelectorAll('#boutique .shop-card'));
+    const current=new Map();
+    cards.forEach(card=>{ const key=radarProductKey(card), price=radarProductPrice(card); if(key && Number.isFinite(price)) current.set(key,{card,price}); });
+    let changed=false;
+    const rows=[];
+    items.forEach(item=>{
+      const now=current.get(item.key);
+      if(!now) return;
+      const previous=Number(item.price);
+      const drop=now.price < previous-0.005;
+      if(drop){
+        const amount=previous-now.price;
+        item.price=now.price;
+        item.lastDrop=amount;
+        item.lastDropAt=Date.now();
+        changed=true;
+        showToast('📉 Baisse détectée : '+item.name+' (-'+formatProductPrice(amount)+')');
+        trackEvent('price_radar_drop', { product:item.name, amount:Number(amount.toFixed(2)) });
+      }
+      const dropHtml=drop?'<span class="price-radar-drop">↓ '+formatProductPrice(Number(item.lastDrop))+'</span>':(Number(item.lastDrop)>0?'<span class="price-radar-drop">↓ '+formatProductPrice(Number(item.lastDrop))+'</span>':'');
+      rows.push('<div class="price-radar-item"><span class="price-radar-item-name" title="'+escapeHtml(item.name)+'">'+escapeHtml(item.name)+'</span><span class="price-radar-price">'+formatProductPrice(now.price)+'</span>'+dropHtml+'<button type="button" class="price-radar-remove" aria-label="Retirer '+escapeHtml(item.name)+' du radar" title="Retirer" data-radar-remove="'+escapeHtml(item.key)+'">×</button></div>');
+    });
+    if(changed) radarWrite(items);
+    list.innerHTML=rows.join('');
+    list.querySelectorAll('[data-radar-remove]').forEach(btn=>btn.addEventListener('click',()=>radarRemove(btn.getAttribute('data-radar-remove'))));
+    if(meta) meta.textContent=items.length+' / 8 article'+(items.length>1?'s':'')+' surveillé'+(items.length>1?'s':'')+' · vérification automatique à chaque actualisation du catalogue.';
+    panel.classList.toggle('show', rows.length>0);
+  }
+  function radarToggle(card, btn){
+    const key=radarProductKey(card), price=radarProductPrice(card), name=radarProductName(card);
+    if(!key || !Number.isFinite(price)) return;
+    let items=radarRead();
+    const index=items.findIndex(x=>x.key===key);
+    if(index>=0){ radarRemove(key); return; }
+    if(items.length>=8){ showToast('Radar plein : retire une surveillance avant d’en ajouter une.'); return; }
+    items.unshift({key,name,price,addedAt:Date.now(),lastDrop:0});
+    btn.classList.add('active'); btn.textContent='✓ Prix surveillé';
+    radarWrite(items); radarRender();
+    showToast('📉 Prix surveillé');
+    trackEvent('price_radar_add', { product:name });
+  }
+  function radarSyncButtons(){
+    const watched=new Set(radarRead().map(x=>x.key));
+    document.querySelectorAll('#boutique .shop-card').forEach(card=>{
+      if(card.querySelector('.price-radar-watch')) return;
+      const body=card.querySelector('.shop-card-body');
+      if(!body || !Number.isFinite(radarProductPrice(card))) return;
+      const btn=document.createElement('button');
+      btn.type='button'; btn.className='price-radar-watch'+(watched.has(radarProductKey(card))?' active':'');
+      btn.textContent=watched.has(radarProductKey(card))?'✓ Prix surveillé':'📉 Surveiller le prix';
+      btn.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();radarToggle(card,btn);});
+      body.appendChild(btn);
+    });
+    radarRender();
+  }
+  radarSyncButtons();
+
   // ---------- Produits gérés depuis l'administration GitHub ----------
   // Un seul catalogue JSON, avec shop: "hacoo" ou shop: "montres".
   function escapeHtml(s){
@@ -10010,6 +10210,7 @@ body.app-standalone .jump-articles-link { display:none }
     grid.outerHTML = products.map(productCardHtml).join('') + '<div id="hacooProductGrid" style="display:none"></div>';
     try { restoreFavs(); } catch(e){}
     document.querySelectorAll('#boutique .shop-card').forEach(c => c.classList.add('in-view'));
+    try { radarSyncButtons(); } catch(e){}
   }
 
   fetch('products.json?v=' + Date.now())
