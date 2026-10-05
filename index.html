@@ -3260,7 +3260,84 @@ body.comfort-mode .aurora,body.comfort-mode .particle-layer,body.comfort-mode .s
     display:none
   }
 }
-
+.install-app-btn {
+  position:fixed;
+  right:22px;
+  bottom:78px;
+  z-index:64;
+  display:none;
+  align-items:center;
+  gap:8px;
+  background:linear-gradient(135deg,var(--gold),#d16f0a);
+  color:#1a0f00;
+  border:none;
+  padding:11px 18px;
+  border-radius:999px;
+  font-weight:700;
+  font-size:0.86rem;
+  cursor:pointer;
+  box-shadow:0 10px 26px rgba(232,138,18,0.4);
+  font-family:'Inter',system-ui,sans-serif
+}
+.install-app-btn.show {
+  display:flex
+}
+.install-app-btn svg {
+  width:16px;
+  height:16px;
+  flex-shrink:0
+}
+@media (max-width:760px) {
+  .install-app-btn {
+    right:16px;
+    bottom:144px;
+    font-size:0.8rem;
+    padding:10px 14px
+  }
+}
+.ios-install-modal {
+  position:fixed;
+  inset:0;
+  z-index:270;
+  background:rgba(0,0,0,0.66);
+  backdrop-filter:blur(6px);
+  display:none;
+  align-items:flex-end;
+  justify-content:center;
+  padding:20px calc(16px + env(safe-area-inset-right,0px)) calc(20px + env(safe-area-inset-bottom,0px)) calc(16px + env(safe-area-inset-left,0px))
+}
+.ios-install-modal.show {
+  display:flex
+}
+@media (min-width:761px) {
+  .ios-install-modal {
+    align-items:center
+  }
+}
+.ios-install-box {
+  position:relative;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:26px 24px 24px;
+  max-width:400px;
+  width:100%;
+  box-shadow:0 30px 70px rgba(0,0,0,0.55);
+  animation:installUp .34s cubic-bezier(.2,.9,.25,1) both;
+  max-height:86vh;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch
+}
+@keyframes installUp {
+  from {
+    opacity:0;
+    transform:translateY(26px) scale(.97)
+  }
+  to {
+    opacity:1;
+    transform:none
+  }
+}
 .ios-install-box h3 {
   font-size:1.12rem;
   margin:0 0 4px
@@ -6613,7 +6690,13 @@ body.app-standalone .jump-articles-link { display:none }
       </div>
       <div class="install-section-card reveal">
         <div>
-          <h3>Installer Frbonplan</h3>
+          <h3>Installation en 10 secondes</h3>
+          <p>Ça ajoute une icône Frbonplan sur votre écran d'accueil, comme une vraie application — un seul geste et vous êtes sur le site, sans passer par un navigateur ni taper d'adresse. Les codes du jour restent même lisibles sans connexion. Compatible Android et iPhone, y compris les dernières versions.</p>
+          <div class="install-section-list">
+            <span>✓ Aucun compte requis</span>
+            <span>✓ Aucune autorisation demandée</span>
+            <span>✓ Désinstallable en un geste</span>
+          </div>
           <button class="btn-primary" id="installSectionBtn" onclick="triggerInstall()" style="border:none; cursor:pointer;">Installer l'application</button>
           <div class="install-already" id="installAlready">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;flex-shrink:0;"><path d="M20 6 9 17l-5-5"/></svg>
@@ -7006,6 +7089,35 @@ body.app-standalone .jump-articles-link { display:none }
     </button>
   </div>
   <button class="fab-main" onclick="toggleFab()" aria-label="Actions rapides">+</button>
+</div>
+
+<button class="install-app-btn" id="installAppBtn" onclick="triggerInstall()">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>
+  Installer l'application
+</button>
+
+<div class="ios-install-modal" id="iosInstallModal" role="dialog" aria-modal="true" aria-labelledby="installModalTitle">
+  <div class="ios-install-box">
+    <button class="ios-install-close" onclick="closeInstallModal()" aria-label="Fermer">✕</button>
+    <div class="install-hero">
+      <img src="unnamed.png" alt="">
+      <div class="install-hero-meta">
+        <b>Frbonplan</b>
+        <span>Bons plans &amp; montres · Gratuit</span>
+      </div>
+    </div>
+    <h3 id="installModalTitle">Installer l'application</h3>
+    <p class="ios-install-sub" id="installModalSub">Suivez ces trois étapes, c'est instantané.</p>
+    <div class="install-perks">
+      <span>⚡ Ouverture instantanée</span>
+      <span>📴 Consultable hors-ligne</span>
+      <span>🔕 Sans publicité</span>
+      <span>📦 0 Mo à télécharger</span>
+    </div>
+    <ol id="installSteps"></ol>
+    <button class="install-do-btn" id="installDoBtn" hidden onclick="runNativeInstall()">Installer maintenant</button>
+    <p id="installModalNote">L'icône Frbonplan rejoindra votre écran d'accueil, comme n'importe quelle autre application.</p>
+  </div>
 </div>
 
 <div class="ptr-indicator" id="ptrIndicator" aria-hidden="true">
@@ -8323,34 +8435,139 @@ body.app-standalone .jump-articles-link { display:none }
                        window.matchMedia('(display-mode: minimal-ui)').matches ||
                        window.navigator.standalone === true;
 
+  const installBtn = document.getElementById('installAppBtn');
   const installSectionBtn = document.getElementById('installSectionBtn');
   const installAlready = document.getElementById('installAlready');
   let deferredInstallPrompt = null;
 
   function markAsInstalled(){
     document.body.classList.add('app-standalone');
+    if(installBtn) installBtn.classList.remove('show');
     if(installSectionBtn) installSectionBtn.style.display = 'none';
     if(installAlready) installAlready.classList.add('show');
     setTimeout(() => addLoyaltyPoints(5, 'install'), 0);
   }
   if(isStandalone) markAsInstalled();
 
-  // Installation : un clic doit ouvrir directement la fenêtre native du navigateur.
+  // Étapes affichées selon l'appareil réellement utilisé
+  function installStepsFor(){
+    if(isIOS && isSafari){
+      return {
+        title: "Ajouter à l'écran d'accueil",
+        sub: "Sur iPhone et iPad, l'ajout se fait depuis Safari.",
+        steps: [
+          'Appuyez sur <strong>Partager</strong> <span class="ios-icon">􀈂</span> dans la barre de Safari',
+          'Faites défiler puis choisissez <strong>« Sur l\'écran d\'accueil »</strong>',
+          'Appuyez sur <strong>Ajouter</strong> en haut à droite'
+        ],
+        note: "L'icône Frbonplan rejoindra votre écran d'accueil, comme n'importe quelle autre application."
+      };
+    }
+    if(isIOS){
+      return {
+        title: "Ouvrez d'abord Safari",
+        sub: "iOS n'autorise l'installation que depuis Safari.",
+        steps: [
+          'Appuyez sur <strong>⋯</strong> puis <strong>« Ouvrir dans Safari »</strong>',
+          'Dans Safari, touchez <strong>Partager</strong> <span class="ios-icon">􀈂</span>',
+          'Choisissez <strong>« Sur l\'écran d\'accueil »</strong> puis <strong>Ajouter</strong>'
+        ],
+        note: "Une fois ajoutée, l'app s'ouvre en plein écran, sans barre de navigateur."
+      };
+    }
+    if(isAndroid && (isFirefox || isSamsung)){
+      return {
+        title: "Installer sur Android",
+        sub: isSamsung ? "Depuis Samsung Internet." : "Depuis Firefox.",
+        steps: [
+          'Ouvrez le menu <strong>☰</strong> de votre navigateur',
+          'Choisissez <strong>« Ajouter la page à »</strong> → <strong>Écran d\'accueil</strong>',
+          'Validez avec <strong>Ajouter</strong>'
+        ],
+        note: "Astuce : sur Chrome, l'installation se fait en un seul appui."
+      };
+    }
+    if(isAndroid){
+      return {
+        title: "Installer sur Android",
+        sub: "Frbonplan lance directement l'installation quand Chrome/Edge fournit le bouton natif.",
+        steps: [
+          'Appuyez sur <strong>Installer l\'application</strong> ici',
+          'La fenêtre d\'installation native Android s\'ouvre directement',
+          'Confirmez avec <strong>Installer</strong>'
+        ],
+        note: "Si votre navigateur ne fournit pas le bouton d'installation natif, il n'autorise pas le lancement direct depuis une page web."
+      };
+    }
+    return {
+      title: "Installer sur ordinateur",
+      sub: "Chrome, Edge, Brave et Opera.",
+      steps: [
+        'Cliquez sur <strong>Installer l\'application</strong> ici',
+        'Le navigateur compatible ouvre directement sa fenêtre d\'installation',
+        'Confirmez : l\'app s\'ouvre dans sa propre fenêtre'
+      ],
+      note: "Si aucun prompt natif n'est fourni, ce navigateur ne permet pas à une page web de déclencher directement l'installation."
+    };
+  }
+
+  function openInstallModal(){
+    const cfg = installStepsFor();
+    document.getElementById('installModalTitle').innerHTML = cfg.title;
+    document.getElementById('installModalSub').textContent = cfg.sub;
+    document.getElementById('installSteps').innerHTML = cfg.steps.map(x => '<li>' + x + '</li>').join('');
+    document.getElementById('installModalNote').textContent = cfg.note;
+    const doBtn = document.getElementById('installDoBtn');
+    if(doBtn) doBtn.hidden = !deferredInstallPrompt;
+    document.getElementById('iosInstallModal').classList.add('show');
+    document.body.style.overflow = 'hidden';
+    trackEvent('pwa_install_guide', { platform: isIOS ? 'ios' : (isAndroid ? 'android' : 'desktop') });
+  }
+  function closeInstallModal(){
+    document.getElementById('iosInstallModal').classList.remove('show');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('iosInstallModal').addEventListener('click', (e) => {
+    if(e.target.id === 'iosInstallModal') closeInstallModal();
+  });
+
   function runNativeInstall(){
-    if(!deferredInstallPrompt) return false;
+    if(!deferredInstallPrompt){ return; }
     const prompt = deferredInstallPrompt;
     deferredInstallPrompt = null;
+    closeInstallModal();
     prompt.prompt();
     prompt.userChoice.then((choice) => {
       trackEvent('pwa_install_prompt', { outcome: choice.outcome });
-      if(choice.outcome !== 'accepted') deferredInstallPrompt = prompt;
+      if(choice.outcome === 'accepted'){
+        if(installBtn) installBtn.classList.remove('show');
+      } else {
+        deferredInstallPrompt = prompt;
+        showToast("Vous pourrez installer l'app à tout moment depuis cette page");
+      }
     }).catch(() => {});
-    return true;
   }
 
   function triggerInstall(){
-    if(isStandalone) return;
-    runNativeInstall();
+    if(isStandalone){
+      showToast("L'application est déjà installée 🎉");
+      return;
+    }
+    // Priorité absolue au prompt natif : un clic sur Frbonplan doit lancer
+    // directement l'installation dès que le navigateur nous l'a fourni.
+    if(deferredInstallPrompt){
+      runNativeInstall();
+      return;
+    }
+    // Certains navigateurs exposent l'installation avec un léger délai.
+    // On force une vérification du Service Worker sans perdre le clic :
+    // si le prompt arrive, le prochain clic l'utilisera directement.
+    if('serviceWorker' in navigator){
+      navigator.serviceWorker.getRegistration('./').then(reg => {
+        if(reg) reg.update().catch(() => {});
+      }).catch(() => {});
+    }
+    openInstallModal();
   }
 
   // Réaffiche immédiatement le bouton dès que Chrome/Edge/Brave fournit le prompt,
@@ -8358,7 +8575,9 @@ body.app-standalone .jump-articles-link { display:none }
   function acceptInstallPrompt(e){
     try { e.preventDefault(); } catch(_){}
     deferredInstallPrompt = e;
-    if(installSectionBtn && !isStandalone) installSectionBtn.disabled = false;
+    if(installBtn && !isStandalone) installBtn.classList.add('show');
+    const doBtn = document.getElementById('installDoBtn');
+    if(doBtn) doBtn.hidden = false;
   }
 
   window.addEventListener('beforeinstallprompt', acceptInstallPrompt);
@@ -8371,7 +8590,16 @@ body.app-standalone .jump-articles-link { display:none }
   });
 
   // Le bouton flottant reste visible sur iOS (aucun événement natif n'existe là-bas)
+  if(!isStandalone && (isIOS || isSamsung || isFirefox) && installBtn) installBtn.classList.add('show');
 
+  // Filet de sécurité : même sur les navigateurs où `beforeinstallprompt` tarde
+  // (ou ne se déclenche pas tout de suite selon l'historique du site), le
+  // bouton doit rester accessible. S'il n'apparaît pas tout seul après 4s,
+  // on l'affiche quand même : un clic lance soit l'installation native soit
+  // le guide d'installation en 3 étapes, jamais une absence de bouton.
+  if(!isStandalone && installBtn){
+    setTimeout(() => { installBtn.classList.add('show'); }, 4000);
+  }
 
   // --- Service Worker : cache + détection de nouvelle version ---
   let swWaiting = null;
@@ -8766,6 +8994,7 @@ body.app-standalone .jump-articles-link { display:none }
   // --- 1. Le bouton « retour » ferme les fenêtres au lieu de quitter l'app ---
   (function(){
     const panels = [
+      { id:'iosInstallModal', isOpen:(el) => el.classList.contains('show'), close:() => closeInstallModal() },
       { id:'cmdkOverlay',     isOpen:(el) => el.classList.contains('show'), close:() => closeCmdk() },
       { id:'shortcutsModal',  isOpen:(el) => el.classList.contains('show'), close:() => toggleShortcuts(false) },
       { id:'favSheet',        isOpen:(el) => el.classList.contains('show'), close:() => closeFavSheet() }
@@ -8983,6 +9212,35 @@ body.app-standalone .jump-articles-link { display:none }
     });
   })();
 
+  // --- 5. Accessibilité des fenêtres : Échap, focus piégé, focus rendu ---
+  (function(){
+    const modal = document.getElementById('iosInstallModal');
+    if(!modal) return;
+    let lastFocus = null;
+    const focusables = () => Array.from(modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'))
+      .filter(el => el.offsetParent !== null);
+
+    new MutationObserver(() => {
+      if(modal.classList.contains('show')){
+        lastFocus = document.activeElement;
+        setTimeout(() => focusables()[0]?.focus(), 60);
+      } else if(lastFocus){
+        try { lastFocus.focus(); } catch(e){}
+        lastFocus = null;
+      }
+    }).observe(modal, { attributes:true, attributeFilter:['class'] });
+
+    document.addEventListener('keydown', (e) => {
+      if(!modal.classList.contains('show')) return;
+      if(e.key === 'Escape'){ e.preventDefault(); closeInstallModal(); return; }
+      if(e.key !== 'Tab') return;
+      const list = focusables();
+      if(list.length === 0) return;
+      const first = list[0], last = list[list.length - 1];
+      if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+      else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+    });
+  })();
 
   // Touch swipe for testimonial carousel
   let touchStartX = 0;
