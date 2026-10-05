@@ -5367,23 +5367,6 @@ body.app-standalone .app-dashboard {
 .prefs-row-txt b { display:block; font-size:0.92rem; color:var(--text-soft) }
 .prefs-row-txt span { display:block; font-size:0.78rem; color:var(--text-dim); margin-top:2px }
 .prefs-size-group { display:flex; gap:6px }
-.prefs-size-group button {
-  width:34px; height:34px; border-radius:10px; border:1px solid var(--border);
-  background:var(--bg-soft); color:var(--text-soft); cursor:pointer; font-weight:700
-}
-.prefs-size-group button.active { border-color:var(--gold-soft); color:var(--gold-soft); background:rgba(217,164,65,0.12) }
-.reminder-switch.prefs-switch {} /* alias visuel identique au switch existant */
-
-/* Taille de texte réglable */
-html[data-text-size="lg"] body { font-size:1.08em }
-html[data-text-size="xl"] body { font-size:1.18em }
-
-/* Police adaptée (meilleure lisibilité, espacement plus large) */
-body.dyslexia-font, body.dyslexia-font * {
-  font-family:Verdana, Arial, sans-serif !important;
-  letter-spacing:0.02em !important;
-  line-height:1.6 !important;
-}
 
 /* Mode économie de données : coupe les animations décoratives lourdes */
 body.data-saver .hero-bg, body.data-saver .particle-layer, body.data-saver #particleCanvas,
@@ -5866,7 +5849,7 @@ body.app-standalone .jump-articles-link { display:none }
         <div class="greeting-badge" id="greetingBadge"></div>
         <div class="eyebrow"><span class="dot"></span>Sélection mise à jour chaque jour</div>
         <h1>On trie. On sélectionne. <em>Deux univers, deux niveaux d’offre.</em></h1>
-        <p class="lede">Pour Hacoo, Frbonplan repère les bons plans et les codes intéressants. À côté, notre boutique de montres est un univers totalement distinct : une collection Frbonplan indépendante, pensée pour un niveau de gamme plus premium.</p>
+        <p class="lede">Des bons plans Hacoo sélectionnés chaque jour, et une boutique de montres Frbonplan totalement indépendante. Deux univers, une sélection claire.</p>
         <a href="#boutique" class="jump-articles-link">Voir les articles du jour ↓</a>
         <div class="cta-row">
           <a class="btn-primary" href="https://t.me/promohacoo" target="_blank" rel="noopener">
@@ -6360,24 +6343,19 @@ body.app-standalone .jump-articles-link { display:none }
 
   <div class="wrap" style="margin:56px auto;">
     <div class="section-head reveal">
-      <div class="eyebrow"><span class="dot"></span>Simulateur</div>
+      <div class="eyebrow"><span class="dot"></span>Boutique de montres</div>
       <h2>Combien vous pourriez économiser</h2>
-      <p>Déplacez le curseur selon votre rythme d'achat habituel.</p>
+      <p>Testez le montant de votre panier : <b style="color:var(--gold-soft);">-40% sur votre 1ère commande</b> avec FRBONPLAN.</p>
     </div>
     <div class="savings-sim reveal">
       <div class="savings-sim-row">
-        <label for="simOrders">Commandes par mois</label>
-        <b id="simOrdersVal" style="color:var(--gold-soft);">3</b>
+        <label for="simBasket">Montant de votre panier</label>
+        <b id="simBasketVal" style="color:var(--gold-soft);">50 €</b>
       </div>
-      <input type="range" id="simOrders" min="1" max="15" value="3" oninput="updateSavingsSim()">
-      <div class="savings-sim-row" style="margin-top:22px;">
-        <label for="simBasket">Panier moyen</label>
-        <b id="simBasketVal" style="color:var(--gold-soft);">25 €</b>
-      </div>
-      <input type="range" id="simBasket" min="10" max="120" step="5" value="25" oninput="updateSavingsSim()">
+      <input type="range" id="simBasket" min="20" max="300" step="5" value="50" oninput="updateSavingsSim()" aria-label="Montant du panier de la boutique de montres">
       <div class="savings-sim-result">
-        <b id="simResult">126 €</b>
-        <span>d'économies estimées sur 12 mois avec le code -14%</span>
+        <b id="simResult">20 €</b>
+        <span>d'économie sur cette 1ère commande avec le code FRBONPLAN (-40%)</span>
       </div>
     </div>
   </div>
@@ -6924,19 +6902,7 @@ body.app-standalone .jump-articles-link { display:none }
   <div class="fav-sheet-grip"></div>
   <h3>Confort &amp; accessibilité</h3>
   <div class="prefs-row">
-    <div class="prefs-row-txt"><b>Taille du texte</b><span>S'applique à tout le site</span></div>
-    <div class="prefs-size-group" id="prefsSizeGroup">
-      <button type="button" data-size="md" onclick="setTextSize('md')">A</button>
-      <button type="button" data-size="lg" onclick="setTextSize('lg')">A+</button>
-      <button type="button" data-size="xl" onclick="setTextSize('xl')">A++</button>
-    </div>
-  </div>
-  <div class="prefs-row">
-    <div class="prefs-row-txt"><b>Police plus lisible</b><span>Lettres plus espacées, meilleure lecture</span></div>
-    <button class="reminder-switch" id="prefsDyslexiaSwitch" onclick="toggleDyslexiaFont()" role="switch" aria-checked="false" aria-label="Activer la police plus lisible"></button>
-  </div>
-  <div class="prefs-row">
-    <div class="prefs-row-txt"><b>Contraste élevé</b><span>Textes et bordures plus marqués</span></div>
+    <div class="prefs-row-txt"><b>Contraste élevé</b><span>Rend les textes et bordures plus visibles</span></div>
     <button class="reminder-switch" id="prefsContrastSwitch" onclick="togglePrefsContrast()" role="switch" aria-checked="false" aria-label="Activer le contraste élevé"></button>
   </div>
   <div class="prefs-row">
@@ -6944,9 +6910,10 @@ body.app-standalone .jump-articles-link { display:none }
     <button class="reminder-switch" id="prefsComfortSwitch" onclick="togglePrefsComfort()" role="switch" aria-checked="false" aria-label="Réduire les animations"></button>
   </div>
   <div class="prefs-row">
-    <div class="prefs-row-txt"><b>Mode économie de données</b><span>Coupe les effets visuels lourds — utile en 4G/3G</span></div>
+    <div class="prefs-row-txt"><b>Mode économie de données</b><span>Réduit les effets visuels et les animations</span></div>
     <button class="reminder-switch" id="prefsDataSwitch" onclick="togglePrefsDataSaver()" role="switch" aria-checked="false" aria-label="Activer le mode économie de données"></button>
   </div>
+  <button type="button" class="btn-ghost" style="width:100%;margin-top:6px;" onclick="resetDisplayPrefs()">Réinitialiser mes paramètres</button>
 </div>
 
 <div class="shortcuts-modal" id="shortcutsModal">
@@ -8406,7 +8373,7 @@ body.app-standalone .jump-articles-link { display:none }
         'Ou ouvrez le menu <strong>⋮</strong> → <strong>« Installer Frbonplan »</strong>',
         'Confirmez : l\'app s\'ouvre dans sa propre fenêtre'
       ],
-      note: "Vous pourrez l'épingler à votre barre des tâches ou à votre Dock."
+      note: "Sur un navigateur compatible, aucune adresse ni menu n'est nécessaire depuis le bouton Frbonplan."
     };
   }
 
@@ -8452,6 +8419,12 @@ body.app-standalone .jump-articles-link { display:none }
       showToast("L'application est déjà installée 🎉");
       return;
     }
+    // Sur Chrome/Edge/Brave/Opera, le bouton lance directement la fenêtre native.
+    if(deferredInstallPrompt){
+      runNativeInstall();
+      return;
+    }
+    // Aucun prompt natif disponible : on affiche uniquement l'aide adaptée au navigateur.
     openInstallModal();
   }
 
@@ -9458,15 +9431,18 @@ body.app-standalone .jump-articles-link { display:none }
   });
   renderRecentlyViewed();
 
-  // ---------- GROS 5 : Simulateur d'économies annuelles ----------
+  // ---------- GROS 5 : Simulateur boutique de montres (-40% 1ère commande) ----------
   function updateSavingsSim(){
-    const orders = parseInt(document.getElementById('simOrders').value, 10);
-    const basket = parseInt(document.getElementById('simBasket').value, 10);
-    document.getElementById('simOrdersVal').textContent = orders;
-    document.getElementById('simBasketVal').textContent = basket + ' €';
-    const yearly = orders * 12 * basket * 0.14;
-    document.getElementById('simResult').textContent = Math.round(yearly).toLocaleString('fr-FR') + ' €';
+    const basketEl = document.getElementById('simBasket');
+    const basketValEl = document.getElementById('simBasketVal');
+    const resultEl = document.getElementById('simResult');
+    if(!basketEl || !basketValEl || !resultEl) return;
+    const basket = Math.max(0, parseFloat(basketEl.value) || 0);
+    const savings = basket * 0.40;
+    basketValEl.textContent = basket.toLocaleString('fr-FR', {maximumFractionDigits:0}) + ' €';
+    resultEl.textContent = savings.toLocaleString('fr-FR', {minimumFractionDigits:0, maximumFractionDigits:2}) + ' €';
   }
+  updateSavingsSim();
 
   // ---------- GROS 6 : Export / Import de mes données ----------
   function collectMyData(){
@@ -9642,36 +9618,7 @@ body.app-standalone .jump-articles-link { display:none }
   }
   document.getElementById('prefsSheetBackdrop').addEventListener('click', closePrefsSheet);
 
-  // Taille du texte — persistée, appliquée via un attribut sur <html>
-  function setTextSize(size){
-    document.documentElement.setAttribute('data-text-size', size === 'md' ? '' : size);
-    document.querySelectorAll('#prefsSizeGroup button').forEach(b => b.classList.toggle('active', b.dataset.size === size));
-    try { localStorage.setItem('frbonplan_text_size', size); } catch(e){}
-    trackEvent('text_size_changed', { size });
-  }
-  (function(){
-    let size = 'md';
-    try { size = localStorage.getItem('frbonplan_text_size') || 'md'; } catch(e){}
-    if(size !== 'md') document.documentElement.setAttribute('data-text-size', size);
-    document.addEventListener('DOMContentLoaded', () => {
-      const btn = document.querySelector('#prefsSizeGroup button[data-size="' + size + '"]');
-      if(btn) btn.classList.add('active');
-    });
-  })();
-
-  // Police plus lisible — persistée
-  function toggleDyslexiaFont(){
-    const active = document.body.classList.toggle('dyslexia-font');
-    document.getElementById('prefsDyslexiaSwitch').setAttribute('aria-checked', String(active));
-    document.getElementById('prefsDyslexiaSwitch').classList.toggle('active', active);
-    try { localStorage.setItem('frbonplan_dyslexia_font', active ? '1' : '0'); } catch(e){}
-    showToast(active ? 'Police plus lisible activée' : 'Police plus lisible désactivée');
-  }
-  (function(){
-    let on = false;
-    try { on = localStorage.getItem('frbonplan_dyslexia_font') === '1'; } catch(e){}
-    if(on){ document.body.classList.add('dyslexia-font'); }
-  })();
+  // Les paramètres affichés ici restent volontairement limités aux options réellement utiles et fiables.
 
   // Contraste élevé — relié à la fonction existante toggleHighContrast (jusqu'ici sans bouton)
   function togglePrefsContrast(){
@@ -9680,6 +9627,21 @@ body.app-standalone .jump-articles-link { display:none }
     const active = document.body.classList.contains('high-contrast');
     sw.setAttribute('aria-checked', String(active));
     sw.classList.toggle('active', active);
+  }
+
+  function resetDisplayPrefs(){
+    try {
+      localStorage.removeItem('frbonplan_high_contrast');
+      localStorage.removeItem('frbonplan_comfort_mode');
+      localStorage.removeItem('frbonplan_data_saver');
+    } catch(e){}
+    document.body.classList.remove('high-contrast','comfort-mode','data-saver');
+    const c=document.getElementById('prefsContrastSwitch');
+    const d=document.getElementById('prefsDataSwitch');
+    if(c){ c.setAttribute('aria-checked','false'); c.classList.remove('active'); }
+    if(d){ d.setAttribute('aria-checked','false'); d.classList.remove('active'); }
+    syncComfortSwitch();
+    showToast('Paramètres réinitialisés');
   }
 
   // Réduire les animations — même mécanisme que le bouton ✨ existant, mais persisté
@@ -9726,9 +9688,6 @@ body.app-standalone .jump-articles-link { display:none }
     const cOn = document.body.classList.contains('high-contrast');
     const cSw = document.getElementById('prefsContrastSwitch');
     if(cSw){ cSw.setAttribute('aria-checked', String(cOn)); cSw.classList.toggle('active', cOn); }
-    const yOn = document.body.classList.contains('dyslexia-font');
-    const ySw = document.getElementById('prefsDyslexiaSwitch');
-    if(ySw){ ySw.setAttribute('aria-checked', String(yOn)); ySw.classList.toggle('active', yOn); }
   });
 
   // ---------- GROS : recherche vocale (Web Speech API) ----------
