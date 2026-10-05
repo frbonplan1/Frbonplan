@@ -5,7 +5,7 @@
    - tout le reste (CDN, Shopify, Google) : jamais mis en cache
    Pour publier une nouvelle version : incrémentez CACHE_VERSION. */
 
-const CACHE_VERSION = 'v18';
+const CACHE_VERSION = 'v20';
 const CACHE_NAME = 'frbonplan-' + CACHE_VERSION;
 
 const PRECACHE = [
