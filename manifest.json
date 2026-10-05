@@ -1,5 +1,5 @@
 {
-  "id": "./index.html",
+  "id": "./",
   "name": "Frbonplan",
   "short_name": "Frbonplan",
   "description": "Application Frbonplan : bons plans, codes promo, favoris et boutique de montres.",
@@ -33,18 +33,6 @@
   ],
   "shortcuts": [
     {
-      "name": "Accueil",
-      "short_name": "Accueil",
-      "url": "./index.html#accueil",
-      "icons": [
-        {
-          "src": "unnamed.png",
-          "sizes": "192x192",
-          "type": "image/png"
-        }
-      ]
-    },
-    {
       "name": "Offres",
       "short_name": "Offres",
       "url": "./index.html#offres",
@@ -71,7 +59,7 @@
     {
       "name": "Favoris",
       "short_name": "Favoris",
-      "url": "./index.html#accueil",
+      "url": "./index.html#favoris",
       "icons": [
         {
           "src": "unnamed.png",
