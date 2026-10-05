@@ -1349,59 +1349,68 @@ html {
   line-height:1.5
 }
 
-/* Ciel profond — constellations discrètes et reconnaissables. */
+/* Ciel profond — détail astronomique discret, pensé pour être découvert. */
 .hero-constellation{
-  position:absolute;inset:0;pointer-events:none;z-index:-1;overflow:hidden;
-  opacity:.9;
-  animation:skyDrift 28s ease-in-out infinite alternate;
+  position:absolute;inset:-3%;pointer-events:none;z-index:-1;overflow:hidden;
+  opacity:.48;
+  animation:skyDrift 90s ease-in-out infinite alternate;
+  mix-blend-mode:screen;
 }
 .constellation-svg{
-  position:absolute;inset:0;width:100%;height:100%;
-  overflow:visible;
+  position:absolute;inset:0;width:100%;height:100%;overflow:visible;
 }
 .constellation-svg .const-line{
-  fill:none;stroke:rgba(235,205,145,.24);stroke-width:.7;
-  stroke-linecap:round;stroke-dasharray:2 100;
-  animation:constellationForm 18s ease-in-out infinite;
+  fill:none;stroke:rgba(225,232,245,.055);stroke-width:.48;
+  stroke-linecap:round;stroke-dasharray:1 180;
+  animation:constellationTrace 42s ease-in-out infinite;
 }
 .constellation-svg .const-star{
-  fill:#f7dfaa;opacity:.62;
-  filter:drop-shadow(0 0 3px rgba(240,195,104,.72));
-  animation:starPulse 5s ease-in-out infinite;
+  fill:rgba(232,238,248,.72);opacity:.34;
+  filter:drop-shadow(0 0 1.5px rgba(225,235,255,.34));
+  animation:starPulse 11s ease-in-out infinite;
   transform-box:fill-box;transform-origin:center;
 }
-.constellation-svg .dim{opacity:.32;animation-duration:7s}
-.constellation-svg .bright{opacity:.9;filter:drop-shadow(0 0 6px rgba(250,220,145,.95))}
-.constellation-name{
-  fill:rgba(235,205,145,.13);font:10px 'Space Grotesk',system-ui,sans-serif;
-  letter-spacing:2px;text-transform:uppercase;
-}
+.constellation-svg .dim{opacity:.16;filter:none;animation-duration:15s}
+.constellation-svg .bright{opacity:.55;filter:drop-shadow(0 0 2.5px rgba(225,235,255,.5))}
+.constellation-name{display:none}
 .sky-stars{
   position:absolute;inset:-5%;
   background-image:
-    radial-gradient(circle at 7% 18%,rgba(255,255,255,.65) 0 1px,transparent 1.7px),
-    radial-gradient(circle at 16% 74%,rgba(240,215,170,.5) 0 1px,transparent 1.8px),
-    radial-gradient(circle at 28% 31%,rgba(255,255,255,.42) 0 .8px,transparent 1.6px),
-    radial-gradient(circle at 38% 83%,rgba(255,255,255,.48) 0 1px,transparent 1.7px),
-    radial-gradient(circle at 49% 14%,rgba(240,215,170,.5) 0 .9px,transparent 1.7px),
-    radial-gradient(circle at 61% 68%,rgba(255,255,255,.45) 0 1px,transparent 1.8px),
-    radial-gradient(circle at 73% 12%,rgba(255,255,255,.58) 0 1px,transparent 1.7px),
-    radial-gradient(circle at 84% 57%,rgba(240,215,170,.45) 0 .9px,transparent 1.7px),
-    radial-gradient(circle at 94% 25%,rgba(255,255,255,.5) 0 1px,transparent 1.7px);
-  opacity:.55;animation:starfieldDrift 45s linear infinite;
+    radial-gradient(circle at 5% 14%,rgba(255,255,255,.30) 0 .55px,transparent 1.3px),
+    radial-gradient(circle at 11% 63%,rgba(225,232,245,.18) 0 .45px,transparent 1.2px),
+    radial-gradient(circle at 18% 27%,rgba(255,255,255,.24) 0 .5px,transparent 1.25px),
+    radial-gradient(circle at 24% 82%,rgba(215,226,242,.16) 0 .45px,transparent 1.2px),
+    radial-gradient(circle at 31% 12%,rgba(255,255,255,.22) 0 .5px,transparent 1.25px),
+    radial-gradient(circle at 37% 48%,rgba(225,232,245,.16) 0 .4px,transparent 1.15px),
+    radial-gradient(circle at 44% 76%,rgba(255,255,255,.21) 0 .5px,transparent 1.2px),
+    radial-gradient(circle at 51% 21%,rgba(215,226,242,.18) 0 .45px,transparent 1.2px),
+    radial-gradient(circle at 58% 58%,rgba(255,255,255,.24) 0 .5px,transparent 1.25px),
+    radial-gradient(circle at 66% 9%,rgba(225,232,245,.18) 0 .45px,transparent 1.2px),
+    radial-gradient(circle at 72% 38%,rgba(255,255,255,.20) 0 .5px,transparent 1.25px),
+    radial-gradient(circle at 79% 79%,rgba(215,226,242,.17) 0 .45px,transparent 1.2px),
+    radial-gradient(circle at 86% 18%,rgba(255,255,255,.25) 0 .5px,transparent 1.25px),
+    radial-gradient(circle at 93% 61%,rgba(225,232,245,.18) 0 .45px,transparent 1.2px);
+  opacity:.42;animation:starfieldDrift 120s linear infinite;
 }
-@keyframes constellationForm{
-  0%,18%{stroke-dasharray:0 100;opacity:0}
-  34%,72%{stroke-dasharray:100 0;opacity:1}
-  88%,100%{stroke-dasharray:100 0;opacity:0}
+.hero-constellation::after{
+  content:"";position:absolute;inset:-20%;
+  background:
+    radial-gradient(ellipse at 58% 42%,rgba(92,112,148,.045) 0 12%,transparent 42%),
+    radial-gradient(ellipse at 34% 64%,rgba(125,105,160,.028) 0 9%,transparent 34%);
+  filter:blur(22px);opacity:.75;
 }
-@keyframes starPulse{0%,100%{opacity:.38;transform:scale(.82)}50%{opacity:.92;transform:scale(1.12)}}
-@keyframes skyDrift{0%{transform:translate3d(0,0,0) scale(1)}100%{transform:translate3d(-7px,4px,0) scale(1.015)}}
-@keyframes starfieldDrift{from{transform:translate3d(0,0,0)}to{transform:translate3d(-24px,10px,0)}}
+@keyframes constellationTrace{
+  0%,38%{stroke-dasharray:0 180;opacity:0}
+  50%,70%{stroke-dasharray:180 0;opacity:1}
+  84%,100%{stroke-dasharray:180 0;opacity:0}
+}
+@keyframes starPulse{0%,100%{opacity:.25;transform:scale(.92)}50%{opacity:.52;transform:scale(1.04)}}
+@keyframes skyDrift{0%{transform:translate3d(0,0,0) scale(1)}100%{transform:translate3d(-4px,2px,0) scale(1.006)}}
+@keyframes starfieldDrift{from{transform:translate3d(0,0,0)}to{transform:translate3d(-10px,4px,0)}}
 @media (max-width:760px){
-  .hero-constellation{opacity:.72;animation-duration:36s}
-  .constellation-svg .const-line{stroke-width:.85;stroke:rgba(235,205,145,.19)}
-  .sky-stars{opacity:.42}
+  .hero-constellation{opacity:.34;animation-duration:110s}
+  .constellation-svg .const-line{stroke-width:.42;stroke:rgba(225,232,245,.045)}
+  .sky-stars{opacity:.30}
 }
 @media (prefers-reduced-motion:reduce){
   .hero-constellation,.sky-stars,.constellation-svg .const-line,.constellation-svg .const-star{animation:none}
@@ -5918,40 +5927,35 @@ body.app-standalone .jump-articles-link { display:none }
       <div class="sparkle" style="top:20%; left:80%; animation-delay:0.6s;"></div>
       <div class="hero-constellation" aria-hidden="true">
         <div class="sky-stars"></div>
-        <!-- Grande Ourse / Ursa Major -->
         <svg class="constellation-svg" viewBox="0 0 1000 560" preserveAspectRatio="none">
+          <!-- Grande Ourse : tracé astronomique volontairement presque imperceptible -->
           <g class="ursa-major">
-            <path class="const-line" d="M610 118 L690 105 L760 135 L742 205 L665 218 L600 176 L610 118 L675 270 L742 205"/>
-            <circle class="const-star bright" cx="610" cy="118" r="4.2"/><circle class="const-star" cx="690" cy="105" r="3"/>
-            <circle class="const-star bright" cx="760" cy="135" r="4.5"/><circle class="const-star" cx="742" cy="205" r="3.2"/>
-            <circle class="const-star" cx="665" cy="218" r="2.8"/><circle class="const-star" cx="600" cy="176" r="3.4"/>
-            <circle class="const-star dim" cx="675" cy="270" r="2.2"/>
-            <text class="constellation-name" x="690" y="245">URSA MAJOR</text>
+            <path class="const-line" d="M595 126 L676 112 L748 139 L732 207 L655 220 L586 178 L595 126 M655 220 L666 272 L732 207"/>
+            <circle class="const-star bright" cx="595" cy="126" r="3.2"/><circle class="const-star" cx="676" cy="112" r="2.2"/>
+            <circle class="const-star bright" cx="748" cy="139" r="3.4"/><circle class="const-star" cx="732" cy="207" r="2.5"/>
+            <circle class="const-star" cx="655" cy="220" r="2.2"/><circle class="const-star" cx="586" cy="178" r="2.6"/>
+            <circle class="const-star dim" cx="666" cy="272" r="1.7"/>
           </g>
           <!-- Orion -->
-          <g class="orion" style="animation-delay:4s">
-            <path class="const-line" d="M270 245 L315 275 L350 240 M315 275 L337 330 L385 345 M350 240 L382 205 L410 250 L385 345"/>
-            <path class="const-line" d="M350 240 L365 300 L337 330 M365 300 L395 305"/>
-            <circle class="const-star bright" cx="270" cy="245" r="3.5"/><circle class="const-star" cx="315" cy="275" r="3"/>
-            <circle class="const-star bright" cx="350" cy="240" r="3.8"/><circle class="const-star" cx="382" cy="205" r="4"/>
-            <circle class="const-star bright" cx="410" cy="250" r="4.4"/><circle class="const-star" cx="337" cy="330" r="3.2"/>
-            <circle class="const-star" cx="385" cy="345" r="3.8"/><circle class="const-star dim" cx="365" cy="300" r="2"/>
-            <circle class="const-star" cx="395" cy="305" r="2.3"/>
-            <text class="constellation-name" x="290" y="365">ORION</text>
+          <g class="orion">
+            <path class="const-line" d="M278 228 L319 258 L351 224 L389 192 L421 239 L390 337 L338 322 L319 258 M351 224 L365 290 L338 322 M365 290 L399 296"/>
+            <circle class="const-star bright" cx="278" cy="228" r="2.8"/><circle class="const-star" cx="319" cy="258" r="2.1"/>
+            <circle class="const-star bright" cx="351" cy="224" r="3"/><circle class="const-star" cx="389" cy="192" r="2.9"/>
+            <circle class="const-star bright" cx="421" cy="239" r="3.2"/><circle class="const-star" cx="338" cy="322" r="2.5"/>
+            <circle class="const-star" cx="390" cy="337" r="2.8"/><circle class="const-star dim" cx="365" cy="290" r="1.5"/>
+            <circle class="const-star dim" cx="399" cy="296" r="1.7"/>
           </g>
           <!-- Cassiopée -->
-          <g class="cassiopeia" style="animation-delay:8s">
-            <path class="const-line" d="M105 135 L155 95 L205 150 L255 105 L300 145"/>
-            <circle class="const-star" cx="105" cy="135" r="2.8"/><circle class="const-star bright" cx="155" cy="95" r="3.8"/>
-            <circle class="const-star" cx="205" cy="150" r="3"/><circle class="const-star bright" cx="255" cy="105" r="4"/><circle class="const-star" cx="300" cy="145" r="2.8"/>
-            <text class="constellation-name" x="165" y="180">CASSIOPEIA</text>
+          <g class="cassiopeia">
+            <path class="const-line" d="M112 138 L160 101 L208 150 L258 108 L302 144"/>
+            <circle class="const-star" cx="112" cy="138" r="2.1"/><circle class="const-star bright" cx="160" cy="101" r="2.8"/>
+            <circle class="const-star" cx="208" cy="150" r="2.2"/><circle class="const-star bright" cx="258" cy="108" r="3"/><circle class="const-star" cx="302" cy="144" r="2.1"/>
           </g>
-          <!-- Lyre -->
-          <g class="lyra" style="animation-delay:12s">
-            <path class="const-line" d="M815 300 L850 270 L890 305 L850 345 L815 300 M850 270 L875 225"/>
-            <circle class="const-star bright" cx="875" cy="225" r="4.6"/><circle class="const-star" cx="815" cy="300" r="2.7"/>
-            <circle class="const-star" cx="850" cy="270" r="3"/><circle class="const-star" cx="890" cy="305" r="2.8"/><circle class="const-star" cx="850" cy="345" r="2.8"/>
-            <text class="constellation-name" x="825" y="375">LYRA</text>
+          <!-- Lyre / Véga : minuscule détail dans le ciel -->
+          <g class="lyra">
+            <path class="const-line" d="M817 302 L850 272 L889 305 L851 343 L817 302 M850 272 L875 225"/>
+            <circle class="const-star bright" cx="875" cy="225" r="3.4"/><circle class="const-star" cx="817" cy="302" r="1.9"/>
+            <circle class="const-star" cx="850" cy="272" r="2.1"/><circle class="const-star" cx="889" cy="305" r="2"/><circle class="const-star dim" cx="851" cy="343" r="1.8"/>
           </g>
         </svg>
       </div>
