@@ -1348,6 +1348,33 @@ html {
   margin:0;
   line-height:1.5
 }
+
+/* Grande Ourse décorative : légère, animée, visible aussi dans l'appli installée. */
+.hero-constellation {
+  position:absolute; inset:0; pointer-events:none; opacity:.42; z-index:-1;
+  animation: constellationFloat 12s ease-in-out infinite;
+}
+.const-star {
+  position:absolute; width:5px; height:5px; border-radius:50%;
+  background:var(--gold-soft); box-shadow:0 0 10px rgba(240,195,104,.9);
+}
+.const-line {
+  position:absolute; height:1px; transform-origin:left center;
+  background:linear-gradient(90deg,rgba(240,195,104,.38),rgba(240,195,104,.04));
+}
+.const-star.s1{left:68%;top:19%;width:7px;height:7px}.const-star.s2{left:76%;top:23%}
+.const-star.s3{left:82%;top:31%;width:6px;height:6px}.const-star.s4{left:78%;top:39%;width:5px;height:5px}
+.const-star.s5{left:70%;top:37%}.const-star.s6{left:64%;top:31%;width:6px;height:6px}.const-star.s7{left:59%;top:26%;width:4px;height:4px}
+.const-line.l1{left:68.4%;top:20%;width:8%;transform:rotate(24deg)}
+.const-line.l2{left:76.2%;top:24%;width:7%;transform:rotate(42deg)}
+.const-line.l3{left:82%;top:32%;width:8%;transform:rotate(100deg)}
+.const-line.l4{left:78%;top:39%;width:8%;transform:rotate(185deg)}
+.const-line.l5{left:70.4%;top:37%;width:7%;transform:rotate(-150deg)}
+.const-line.l6{left:64.2%;top:31%;width:7%;transform:rotate(-135deg)}
+@keyframes constellationFloat { 0%,100%{transform:translate3d(0,0,0);opacity:.34} 50%{transform:translate3d(-5px,4px,0);opacity:.5} }
+@media (max-width:760px){.hero-constellation{opacity:.28;transform:scale(.9);transform-origin:70% 30%}}
+@media (prefers-reduced-motion:reduce){.hero-constellation{animation:none}}
+
 #particleCanvas {
   position:absolute;
   inset:0;
@@ -4093,7 +4120,7 @@ header.shrink ~ .resume-chip {
 @media (max-width:760px) {
   .aurora span {
     filter:blur(36px);
-    animation:none
+    animation:auroraDrift 30s ease-in-out infinite;
   }
 }
 .sparkle-trail {
@@ -5260,14 +5287,29 @@ body.app-standalone #appSplash.show { display:flex }
 /* Masquer le folklore "site vitrine" une fois installée en appli */
 body.app-standalone .announce-bar { display:none !important }
 body.app-standalone .brand-name small { display:none }
+/* En mode appli, on allège le texte marketing mais on conserve intégralement
+   l'ambiance visuelle du hero : aurores, particules, étoiles et parallaxe. */
 body.app-standalone .hero .eyebrow,
-body.app-standalone .hero h1,
 body.app-standalone .hero .greeting-badge,
 body.app-standalone .hero > .wrap > .reveal > .lede,
-body.app-standalone .hero .cta-row,
 body.app-standalone .hero .microtrust,
 body.app-standalone .hero > .wrap > .reveal > p:not(.lede) {
   display:none !important;
+}
+body.app-standalone .hero h1 {
+  display:block !important;
+  font-size:clamp(1.65rem,4vw,2.4rem);
+  margin-bottom:12px;
+}
+body.app-standalone .hero .cta-row {
+  display:flex !important;
+}
+body.app-standalone .hero-bg,
+body.app-standalone #particleCanvas,
+body.app-standalone .aurora,
+body.app-standalone .sparkle,
+body.app-standalone .blob {
+  visibility:visible !important;
 }
 
 /* Titre de section dynamique dans la barre d'appli (remplace le slogan marketing) */
@@ -5278,6 +5320,23 @@ body.app-standalone .hero > .wrap > .reveal > p:not(.lede) {
 body.app-standalone .app-bar-title { display:block }
 
 /* Tableau de bord natif — uniquement affiché dans l'appli installée */
+/* Version installée : on privilégie une interface d'application, pas une vitrine web. */
+body.app-standalone footer,
+body.app-standalone .footer,
+body.app-standalone .fab-wrap { display:none !important }
+body.app-standalone main { padding-bottom:calc(110px + env(safe-area-inset-bottom,0px)); }
+body.app-standalone section { scroll-margin-top:78px; }
+body.app-standalone .section-head { margin-bottom:16px; }
+body.app-standalone .section-head h2 { font-size:1.45rem; letter-spacing:-.025em; }
+body.app-standalone .wrap { max-width:720px; }
+body.app-standalone .shop-card,
+body.app-standalone .montre-spotlight,
+body.app-standalone .ticket,
+body.app-standalone .quiz-card,
+body.app-standalone .faq-item { border-radius:20px; }
+body.app-standalone .app-tabbar { backdrop-filter:blur(20px) saturate(1.25); -webkit-backdrop-filter:blur(20px) saturate(1.25); }
+body.app-standalone .app-dashboard { border:1px solid var(--border); border-radius:22px; padding:18px; margin:4px 0 22px; background:linear-gradient(145deg,var(--card),var(--bg-alt)); box-shadow:0 18px 45px rgba(0,0,0,.18); }
+
 .app-dashboard { display:none }
 body.app-standalone .app-dashboard {
   display:block; padding:6px 0 22px;
@@ -5825,6 +5884,12 @@ body.app-standalone .jump-articles-link { display:none }
       <div class="sparkle" style="top:34%; left:68%; animation-delay:1.1s;"></div>
       <div class="sparkle" style="top:58%; left:12%; animation-delay:2.2s;"></div>
       <div class="sparkle" style="top:20%; left:80%; animation-delay:0.6s;"></div>
+      <div class="hero-constellation" aria-hidden="true">
+        <span class="const-line l1"></span><span class="const-line l2"></span><span class="const-line l3"></span>
+        <span class="const-line l4"></span><span class="const-line l5"></span><span class="const-line l6"></span>
+        <i class="const-star s1"></i><i class="const-star s2"></i><i class="const-star s3"></i>
+        <i class="const-star s4"></i><i class="const-star s5"></i><i class="const-star s6"></i><i class="const-star s7"></i>
+      </div>
     </div>
     <div class="wrap hero-grid">
       <div class="app-dashboard" id="appDashboard">
@@ -8419,22 +8484,34 @@ body.app-standalone .jump-articles-link { display:none }
       showToast("L'application est déjà installée 🎉");
       return;
     }
-    // Sur Chrome/Edge/Brave/Opera, le bouton lance directement la fenêtre native.
+    // Priorité absolue au prompt natif : un clic sur Frbonplan doit lancer
+    // directement l'installation dès que le navigateur nous l'a fourni.
     if(deferredInstallPrompt){
       runNativeInstall();
       return;
     }
-    // Aucun prompt natif disponible : on affiche uniquement l'aide adaptée au navigateur.
+    // Certains navigateurs exposent l'installation avec un léger délai.
+    // On force une vérification du Service Worker sans perdre le clic :
+    // si le prompt arrive, le prochain clic l'utilisera directement.
+    if('serviceWorker' in navigator){
+      navigator.serviceWorker.getRegistration('./').then(reg => {
+        if(reg) reg.update().catch(() => {});
+      }).catch(() => {});
+    }
     openInstallModal();
   }
 
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
+  // Réaffiche immédiatement le bouton dès que Chrome/Edge/Brave fournit le prompt,
+  // même si l'événement arrive après le chargement initial de la page.
+  function acceptInstallPrompt(e){
+    try { e.preventDefault(); } catch(_){}
     deferredInstallPrompt = e;
     if(installBtn && !isStandalone) installBtn.classList.add('show');
     const doBtn = document.getElementById('installDoBtn');
     if(doBtn) doBtn.hidden = false;
-  });
+  }
+
+  window.addEventListener('beforeinstallprompt', acceptInstallPrompt);
 
   window.addEventListener('appinstalled', () => {
     trackEvent('pwa_installed', {});
@@ -8787,31 +8864,10 @@ body.app-standalone .jump-articles-link { display:none }
     });
   })();
 
-  // --- D. Mode léger automatique (connexion lente, batterie faible, économiseur) ---
-  (function(){
-    const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-    let reason = null;
-    if(conn && conn.saveData) reason = 'économiseur de données';
-    else if(conn && /^(slow-2g|2g|3g)$/.test(conn.effectiveType || '')) reason = 'connexion lente';
-    else if(navigator.deviceMemory && navigator.deviceMemory <= 2) reason = 'appareil léger';
-
-    function enableLight(why){
-      if(document.body.classList.contains('comfort-mode')) return;
-      document.body.classList.add('comfort-mode');
-      const canvas = document.getElementById('particleCanvas');
-      if(canvas) canvas.style.display = 'none';
-      try { if(typeof particleRAF !== 'undefined' && particleRAF){ cancelAnimationFrame(particleRAF); particleRAF = null; particleRunning = false; } } catch(e){}
-      document.querySelectorAll('.blob, .sparkle').forEach(el => el.style.display = 'none');
-      trackEvent('light_mode_auto', { reason: why });
-      setTimeout(() => showToast('Mode léger activé (' + why + ') — touche ✨ pour revenir'), 1500);
-    }
-    if(reason){ enableLight(reason); return; }
-    if(navigator.getBattery){
-      navigator.getBattery().then(b => {
-        if(b.level <= 0.2 && !b.charging) enableLight('batterie faible');
-      }).catch(() => {});
-    }
-  })();
+  // --- D. Mode léger : uniquement sur demande explicite de l'utilisateur.
+  // Le site ne coupe plus automatiquement ses animations selon la RAM, la batterie
+  // ou la connexion : cela supprimait l'identité visuelle de Frbonplan.
+  // Le mode économie de données reste disponible dans les paramètres.
 
   // --- E. Squelettes d'images : retrait dès que l'image est arrivée ---
   (function(){
