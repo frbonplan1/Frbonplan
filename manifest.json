@@ -1,49 +1,84 @@
 {
-  "updated": "2025-01-01T00:00:00.000Z",
-  "products": [
+  "id": "./index.html",
+  "name": "Frbonplan",
+  "short_name": "Frbonplan",
+  "description": "Application Frbonplan : bons plans, codes promo, favoris et boutique de montres.",
+  "lang": "fr-FR",
+  "dir": "ltr",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": [
+    "window-controls-overlay",
+    "standalone",
+    "minimal-ui"
+  ],
+  "orientation": "portrait-primary",
+  "background_color": "#090b10",
+  "theme_color": "#090b10",
+  "prefer_related_applications": false,
+  "icons": [
     {
-      "id": "sneakers-running",
-      "name": "Chaussures de running — plusieurs coloris",
-      "shareName": "Chaussures de running, plusieurs coloris",
-      "image": "produit-sneakers.png",
-      "link": "https://c.onlyaff.app/15arcP",
-      "priceOld": "35,42 €",
-      "priceNew": "30,46 €",
-      "delivery": "🚚 Livraison estimée 7-14 jours",
-      "badge": ""
+      "src": "unnamed.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-      "id": "tshirt-oversize",
-      "name": "T-shirt oversize — 100% coton",
-      "shareName": "T-shirt oversize 100% coton",
-      "image": "produit-tshirt.png",
-      "link": "https://c.onlyaff.app/aPGpP5",
-      "priceOld": "8,20 €",
-      "priceNew": "7,05 €",
-      "delivery": "🚚 Livraison estimée 7-14 jours",
-      "badge": ""
+      "src": "unnamed.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Accueil",
+      "short_name": "Accueil",
+      "url": "./index.html#accueil",
+      "icons": [
+        {
+          "src": "unnamed.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
     },
     {
-      "id": "polo-casual",
-      "name": "Polo casual — plusieurs coloris",
-      "shareName": "Polo casual, plusieurs coloris",
-      "image": "produit-polo.png",
-      "link": "https://c.onlyaff.app/aPGtEq",
-      "priceOld": "12,71 €",
-      "priceNew": "10,93 €",
-      "delivery": "🚚 Livraison estimée 7-14 jours",
-      "badge": ""
+      "name": "Offres",
+      "short_name": "Offres",
+      "url": "./index.html#offres",
+      "icons": [
+        {
+          "src": "unnamed.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
     },
     {
-      "id": "ecouteurs-sans-fil",
-      "name": "Écouteurs sans fil — compatible Apple",
-      "shareName": "Écouteurs sans fil compatible Apple",
-      "image": "produit-ecouteurs.jpg",
-      "link": "https://c.onlyaff.app/aTdSJV",
-      "priceOld": "11,46 €",
-      "priceNew": "9,86 €",
-      "delivery": "🚚 Livraison estimée 7-14 jours",
-      "badge": ""
+      "name": "Montres",
+      "short_name": "Montres",
+      "url": "./index.html#montres",
+      "icons": [
+        {
+          "src": "unnamed.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Favoris",
+      "short_name": "Favoris",
+      "url": "./index.html#accueil",
+      "icons": [
+        {
+          "src": "unnamed.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
     }
   ]
 }
