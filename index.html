@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Frbonplan — Bons plans Hacoo & boutique de montres</title>
-<meta name="description" content="Frbonplan : bons plans Hacoo sélectionnés à la main et boutique de montres en propre. Codes promo, qualité vérifiée, aucune fausse promesse.">
+<meta name="description" content="Frbonplan : bons plans Hacoo sélectionnés à la main et boutique de montres indépendante, positionnée sur une gamme premium. Codes promo, sélection claire et aucune fausse promesse.">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="format-detection" content="telephone=no, date=no, email=no, address=no">
 <meta name="theme-color" content="#0b0f14" id="themeColorMeta">
@@ -11,7 +11,7 @@
 <meta name="application-name" content="Frbonplan">
 <meta name="apple-mobile-web-app-orientations" content="portrait">
 <meta property="og:title" content="Frbonplan — Bons plans Hacoo & boutique de montres">
-<meta property="og:description" content="Une sélection des meilleurs articles et bons plans Hacoo, avec des codes promo vérifiés en bonus.">
+<meta property="og:description" content="Une sélection des meilleurs bons plans Hacoo, et une boutique de montres Frbonplan totalement indépendante avec sa propre gamme premium.">
 <meta property="og:image" content="https://frbonplan.github.io/Frbonplan/unnamed.png">
 <meta property="og:url" content="https://frbonplan.github.io/Frbonplan/">
 <link rel="canonical" href="https://frbonplan.github.io/Frbonplan/">
@@ -19,7 +19,7 @@
 <meta property="og:locale" content="fr_FR">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Frbonplan — Bons plans Hacoo & boutique de montres">
-<meta name="twitter:description" content="Sélection quotidienne d'articles et codes promo Hacoo, vérifiés à la main — et boutique officielle Frbonplan dédiée aux montres.">
+<meta name="twitter:description" content="Bons plans Hacoo sélectionnés à la main — et boutique officielle Frbonplan dédiée à une collection de montres indépendante et premium.">
 <meta name="twitter:image" content="https://frbonplan.github.io/Frbonplan/unnamed.png">
 <link rel="icon" type="image/png" href="unnamed.png">
 <link rel="apple-touch-icon" href="unnamed.png">
@@ -4936,6 +4936,25 @@ header.shrink ~ .compare-bar {
   white-space:nowrap
 }
 
+
+/* --- Programme fidélité 2.0 : progression + avantages d’application --- */
+.loyalty-reward-box{margin:14px 0 4px;padding:14px;border:1px solid var(--border);border-radius:16px;background:linear-gradient(135deg,var(--bg-alt),var(--card-hi));}
+.loyalty-reward-title{font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;color:var(--gold-soft);font-weight:800;margin-bottom:8px}
+.loyalty-reward-current{font-size:.9rem;font-weight:800;margin-bottom:5px}
+.loyalty-reward-next{font-size:.76rem;color:var(--text-dim);line-height:1.45}
+.loyalty-progress{height:7px;border-radius:99px;background:var(--border);overflow:hidden;margin:10px 0 8px}
+.loyalty-progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold-soft),var(--gold));border-radius:inherit}
+.loyalty-missions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.loyalty-mission{padding:10px;border-radius:12px;background:var(--bg-alt);border:1px solid var(--border);font-size:.72rem;color:var(--text-dim)}
+.loyalty-mission b{display:block;color:var(--text);margin-bottom:2px}
+.watch-premium-promise{margin:18px auto 2px;max-width:760px;padding:18px;border:1px solid rgba(217,164,65,.38);border-radius:20px;background:linear-gradient(135deg,rgba(217,164,65,.10),rgba(255,255,255,.025));text-align:left}
+.watch-premium-kicker{font-size:.67rem;letter-spacing:.16em;font-weight:900;color:var(--gold-soft);margin-bottom:7px}
+.watch-premium-promise strong{display:block;font-size:1.02rem;margin-bottom:7px}
+.watch-premium-promise p{margin:0;color:var(--text-dim);font-size:.82rem;line-height:1.6}
+.watch-premium-points{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px}
+.watch-premium-points span{font-size:.68rem;padding:6px 9px;border:1px solid var(--border);border-radius:999px;color:var(--text-soft)}
+@media(max-width:600px){.loyalty-missions{grid-template-columns:1fr}.watch-premium-promise{padding:15px}}
+
 /* --- GROS 3 : Programme de fidélité gamifié --- */
 .loyalty-pill {
   position:fixed;
@@ -5597,7 +5616,7 @@ body.app-standalone .jump-articles-link { display:none }
       "name": "Que se passe-t-il si un article ne correspond pas à mes attentes ?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Frbonplan est une sélection indépendante : nous ne fabriquons, ne stockons et ne vendons aucun article. Chaque achat est conclu directement avec Hacoo, qui reste seul responsable de la conformité, de la qualité et du service après-vente du produit. Pour un retour, un remboursement ou une réclamation, le contact est le support Hacoo, pas Frbonplan."
+        "text": "Sur Hacoo, Frbonplan agit uniquement comme sélectionneur et relais : nous ne vendons pas les articles Hacoo et chaque achat est conclu directement avec Hacoo, qui reste responsable de la conformité, de la qualité et du service après-vente. Pour notre boutique de montres, c’est différent : il s’agit de notre propre boutique et de notre propre gamme, avec ses conditions de vente, son paiement, son expédition et son service client."
       }
     },
     {
@@ -5800,8 +5819,8 @@ body.app-standalone .jump-articles-link { display:none }
       <div class="reveal in-view">
         <div class="greeting-badge" id="greetingBadge"></div>
         <div class="eyebrow"><span class="dot"></span>Sélection mise à jour chaque jour</div>
-        <h1>On trie. On teste. <em>On ne garde que les meilleurs articles.</em></h1>
-        <p class="lede">Pendant que d'autres relaient tout ce qui passe, Frbonplan sélectionne les meilleurs articles et bons plans Hacoo — avec, en bonus, des codes promo vérifiés à la main.</p>
+        <h1>On trie. On sélectionne. <em>Deux univers, deux niveaux d’offre.</em></h1>
+        <p class="lede">Pour Hacoo, Frbonplan repère les bons plans et les codes intéressants. À côté, notre boutique de montres est un univers totalement distinct : une collection Frbonplan indépendante, pensée pour un niveau de gamme plus premium.</p>
         <a href="#boutique" class="jump-articles-link">Voir les articles du jour ↓</a>
         <div class="cta-row">
           <a class="btn-primary" href="https://t.me/promohacoo" target="_blank" rel="noopener">
@@ -5857,10 +5876,10 @@ body.app-standalone .jump-articles-link { display:none }
 
   <div class="wrap">
     <div class="trust-bar reveal in-view">
-      <div class="trust-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4.5 8-11V5l-8-3-8 3v6c0 6.5 8 11 8 11Z"/><path d="m9 12 2 2 4-4"/></svg>Aucun paiement sur cette page</div>
+      <div class="trust-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4.5 8-11V5l-8-3-8 3v6c0 6.5 8 11 8 11Z"/><path d="m9 12 2 2 4-4"/></svg>Hacoo : paiement directement sur Hacoo</div>
       <div class="trust-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>Codes vérifiés manuellement</div>
       <div class="trust-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Support direct sur Telegram</div>
-      <div class="trust-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Aucune donnée bancaire collectée ici</div>
+      <div class="trust-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Montres : paiement sécurisé sur notre boutique</div>
     </div>
   </div>
 
@@ -5869,12 +5888,12 @@ body.app-standalone .jump-articles-link { display:none }
       <span class="marquee-item"><b>950+</b> membres Telegram<span class="marquee-dot"></span></span>
       <span class="marquee-item"><b>1000+</b> posts Hacoo vérifiés<span class="marquee-dot"></span></span>
       <span class="marquee-item"><b>2400+</b> commandes passées<span class="marquee-dot"></span></span>
-      <span class="marquee-item"><b>25+</b> montres expédiées<span class="marquee-dot"></span></span>
+      <span class="marquee-item">Collection de montres indépendante<span class="marquee-dot"></span></span>
       <span class="marquee-item"><b>-14%</b> sur Hacoo, <b>-40%</b> chez nous<span class="marquee-dot"></span></span>
       <span class="marquee-item"><b>950+</b> membres Telegram<span class="marquee-dot"></span></span>
       <span class="marquee-item"><b>1000+</b> posts Hacoo vérifiés<span class="marquee-dot"></span></span>
       <span class="marquee-item"><b>2400+</b> commandes passées<span class="marquee-dot"></span></span>
-      <span class="marquee-item"><b>25+</b> montres expédiées<span class="marquee-dot"></span></span>
+      <span class="marquee-item">Collection de montres indépendante<span class="marquee-dot"></span></span>
       <span class="marquee-item"><b>-14%</b> sur Hacoo, <b>-40%</b> chez nous<span class="marquee-dot"></span></span>
     </div>
   </div>
@@ -5923,15 +5942,22 @@ body.app-standalone .jump-articles-link { display:none }
         <span class="montre-twinkle" aria-hidden="true" style="bottom:28%; right:18%; font-size:0.8rem; animation-delay:2.4s;">✦</span>
         <span class="montre-twinkle" aria-hidden="true" style="top:48%; left:6%; font-size:0.7rem; animation-delay:1.2s;">✦</span>
         <div class="montre-ring">⌚</div>
-        <div class="montre-eyebrow">✦ Boutique officielle Frbonplan</div>
-        <h2>Nos montres ne restent pas <em>longtemps en ligne.</em></h2>
-        <p class="montre-sub">La même exigence que sur Hacoo, appliquée à notre propre sélection de montres. Repérées, choisies, mises en ligne sur notre boutique officielle — sans intermédiaire.</p>
+        <div class="montre-eyebrow">✦ Boutique officielle Frbonplan · Univers indépendant</div>
+        <h2>Des montres d’un <em>autre niveau.</em></h2>
+        <p class="montre-sub">Ici, on change complètement de niveau : nos montres sont une gamme Frbonplan indépendante, pensée et sélectionnée à part de Hacoo. Nous recherchons une finition, un design et une présentation nettement plus premium — des modèles que vous trouverez uniquement dans notre boutique de montres.</p>
         <div class="montre-trust-row">
-          <span>📦 50+ montres déjà expédiées</span>
-          <span>⌚ Sélection resserrée</span>
-          <span>✓ Boutique officielle Frbonplan</span>
+          <span>✨ Collection indépendante</span>
+          <span>⌚ Gamme premium sélectionnée à part</span>
+          <span>✓ Uniquement sur notre boutique</span>
           <span>🔒 Paiement sécurisé</span>
         </div>
+        <div class="watch-premium-promise">
+          <div class="watch-premium-kicker">NIVEAU FRBONPLAN</div>
+          <strong>Pas une extension de Hacoo. Une vraie collection à part.</strong>
+          <p>Les montres Frbonplan ne sont pas une simple sélection Hacoo remise en avant. Nous construisons ici un univers plus exigeant, avec des modèles choisis pour leur présence, leur finition et leur identité. L’objectif : des pièces qui se démarquent et que vous venez chercher <b>sur notre boutique</b>.</p>
+          <div class="watch-premium-points"><span>✦ Sélection dédiée</span><span>✦ Positionnement premium</span><span>✦ Disponible sur notre boutique</span></div>
+        </div>
+        <div class="montre-note" style="color:var(--text-soft);font-weight:700;max-width:60ch;margin:14px auto 0;">⌚ Pas de simple relais Hacoo : cette collection est sélectionnée pour notre boutique, avec une priorité donnée au design, aux finitions et à l’expérience produit.</div>
         <a class="montre-cta" href="https://frbonplan.myshopify.com/discount/FRBONPLAN?redirect=%2F" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="7"/><path d="M12 9v3l2 2"/></svg>
           Découvrir la collection →
@@ -6117,7 +6143,7 @@ body.app-standalone .jump-articles-link { display:none }
       </div>
       <div class="protection-note reveal">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4m0 4h.01M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L14.71 3.86a2 2 0 0 0-3.42 0Z"/></svg>
-        <p><b>Avertissement :</b> Frbonplan met en avant une sélection d'articles et de codes promo Hacoo. Sur cette partie, nous ne vendons rien, ne stockons aucun article et ne recevons aucun paiement : chaque commande Hacoo est passée directement auprès de Hacoo, seul responsable de la qualité, de la conformité et de la livraison. Frbonplan ne peut donc être tenu responsable d'un article qui ne correspondrait pas à vos attentes, d'un retard, d'un défaut ou d'un litige lié à un achat effectué via nos liens ou codes Hacoo — pour toute réclamation, le contact est le support Hacoo. Notre boutique de montres est une entité distincte, avec ses propres conditions de vente, son propre service client et ses propres garanties : pour toute question la concernant, écrivez-nous directement.</p>
+        <p><b>Hacoo :</b> Frbonplan sélectionne et relaie des offres et codes promo. Sur cette partie, nous ne vendons pas les articles Hacoo et le paiement est effectué directement sur Hacoo. Hacoo reste responsable de la qualité, de la conformité et de la livraison. <b>Montres Frbonplan :</b> notre boutique est distincte : nous y présentons notre propre collection, avec son propre parcours d’achat, ses conditions de vente et son service client. Frbonplan ne peut donc être tenu responsable d'un article qui ne correspondrait pas à vos attentes, d'un retard, d'un défaut ou d'un litige lié à un achat effectué via nos liens ou codes Hacoo — pour toute réclamation, le contact est le support Hacoo. Notre boutique de montres est une entité distincte, avec ses propres conditions de vente, son propre service client et ses propres garanties : pour toute question la concernant, écrivez-nous directement.</p>
       </div>
     </div>
   </section>
@@ -6164,7 +6190,7 @@ body.app-standalone .jump-articles-link { display:none }
         <div class="stat-card reveal"><b id="statMembers">950+</b><span>Membres Telegram</span></div>
         <div class="stat-card reveal reveal-delay-1"><b id="statOffers">1000+</b><span>Posts sur Hacoo</span></div>
         <div class="stat-card reveal reveal-delay-2"><b id="statOrders">2400+</b><span>Commandes passées via Hacoo</span></div>
-        <div class="stat-card reveal reveal-delay-3"><b id="statWatches">25+</b><span>Montres expédiées par nos soins</span></div>
+        <div class="stat-card reveal reveal-delay-3"><b>Collection</b><span>Montres Frbonplan indépendantes</span></div>
         <div class="stat-card reveal"><b>14%</b><span>Réduction Hacoo</span></div>
         <div class="stat-card reveal reveal-delay-1"><b>2026</b><span>Actif depuis</span></div>
       </div>
@@ -6591,7 +6617,7 @@ body.app-standalone .jump-articles-link { display:none }
       </div>
       <div class="faq-item reveal" data-q="responsabilité problème litige article ne correspond pas garantie">
         <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false"><span class="faq-q-text"><span class="faq-tag faq-tag-general">ℹ️ Général</span>Que se passe-t-il si un article ne correspond pas à mes attentes ?</span><span class="plus">+</span></button>
-        <div class="faq-a"><p>Frbonplan est une sélection indépendante : nous ne fabriquons, ne stockons et ne vendons aucun article Hacoo. Chaque achat est conclu directement avec Hacoo, qui reste seul responsable de la conformité, de la qualité et du service après-vente du produit. Pour un retour, un remboursement ou une réclamation, le contact est le support Hacoo, pas Frbonplan. Pour un achat sur notre boutique de montres, les conditions de vente, garanties et retours de cette boutique s'appliquent — consultez-les avant de commander.</p><div class="faq-reactions"><button class="faq-react-btn" onclick="faqReact(this,'faqr11',true)">👍 Utile</button><button class="faq-react-btn" onclick="faqReact(this,'faqr11',false)">👎 Pas clair</button></div></div>
+        <div class="faq-a"><p>Sur Hacoo, Frbonplan ne vend pas les articles : l’achat est conclu directement avec Hacoo, qui reste responsable de la conformité, de la qualité et du service après-vente. Notre boutique de montres est au contraire notre propre boutique, avec une collection indépendante, ses propres conditions de vente, garanties et retours.</p><div class="faq-reactions"><button class="faq-react-btn" onclick="faqReact(this,'faqr11',true)">👍 Utile</button><button class="faq-react-btn" onclick="faqReact(this,'faqr11',false)">👎 Pas clair</button></div></div>
       </div>
       <div class="faq-item reveal" data-q="montre livraison délai boutique frbonplan expédition">
         <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false"><span class="faq-q-text"><span class="faq-tag faq-tag-montres">⌚ Montres</span>Quel délai de livraison pour une montre ?</span><span class="plus">+</span></button>
@@ -6791,6 +6817,18 @@ body.app-standalone .jump-articles-link { display:none }
     <div class="profile-level-ring" id="profileRing" style="--pct:0;"><span id="profileRingIcon">🌱</span></div>
     <h3 id="profileLevelName">Découvreur</h3>
     <p id="profileLevelSub">0 point — continuez à explorer !</p>
+  </div>
+  <div class="loyalty-reward-box" id="loyaltyRewardBox">
+    <div class="loyalty-reward-title">Votre progression</div>
+    <div class="loyalty-reward-current" id="loyaltyRewardCurrent">🌱 Découvreur</div>
+    <div class="loyalty-progress"><span id="loyaltyProgressBar"></span></div>
+    <div class="loyalty-reward-next" id="loyaltyRewardNext">Continuez à utiliser l’application pour débloquer les prochains niveaux.</div>
+    <div class="loyalty-missions">
+      <div class="loyalty-mission"><b>🔥 Série quotidienne</b>Revenez chaque jour pour conserver votre progression.</div>
+      <div class="loyalty-mission"><b>⌚ Mission montres</b>Découvrez la collection indépendante pour gagner le bonus du jour.</div>
+      <div class="loyalty-mission"><b>❤️ Collection</b>Ajoutez vos coups de cœur aux favoris.</div>
+      <div class="loyalty-mission"><b>📤 Partage</b>Partagez un bon plan utile autour de vous.</div>
+    </div>
   </div>
   <div class="badge-grid" id="profileBadgeGrid"></div>
   <div class="profile-actions">
@@ -7573,13 +7611,14 @@ body.app-standalone .jump-articles-link { display:none }
     document.getElementById('favPlural').textContent = favCount > 1 ? 's' : '';
     wrap.classList.toggle('show', favCount > 0);
     updateFaviconBadge(favCount);
-    if(favCount >= 5) addLoyaltyPoints(8, 'collectionneur');
     const tabBadge = document.getElementById('tabFavBadge');
     if(tabBadge){ tabBadge.textContent = favCount; tabBadge.classList.toggle('show', favCount > 0); }
     if(document.getElementById('favSheet')?.classList.contains('show')) renderFavSheet();
     updateAppBadge(favCount);
     saveFavs();
     trackEvent('toggle_favorite', { active: isActive, product: btn.dataset.favId });
+    if(isActive) addLoyaltyPoints(2, 'first_fav');
+    if(favCount === 5) addLoyaltyPoints(8, 'collectionneur');
     if(favCount === 3){
       showToast('Vous avez du goût ! Rejoignez le canal pour ne rien manquer 👀');
     }
@@ -9065,6 +9104,7 @@ body.app-standalone .jump-articles-link { display:none }
         href: card?.getAttribute('href') || '#'
       });
       btn.classList.add('active');
+      addLoyaltyPoints(2, 'comparateur');
     }
     renderCompareBar();
     trackEvent('toggle_compare', { count: compareItems.size });
@@ -9157,12 +9197,12 @@ body.app-standalone .jump-articles-link { display:none }
   const LOYALTY_KEY = 'frbonplan_loyalty_pts';
   const LOYALTY_ACTIONS_KEY = 'frbonplan_loyalty_actions';
   const LEVELS = [
-    { min:0,   name:'Découvreur',           icon:'🌱' },
-    { min:15,  name:'Chasseur de bons plans', icon:'🔍' },
-    { min:40,  name:'Expert Frbonplan',      icon:'⭐' },
-    { min:80,  name:'Légende Frbonplan',     icon:'👑' },
-    { min:150, name:'Ambassadeur Frbonplan', icon:'🏆' },
-    { min:250, name:'Icône Frbonplan',       icon:'💎' }
+    { min:0,   name:'Découvreur',           icon:'🌱', perk:'Profil membre' },
+    { min:15,  name:'Chasseur de bons plans', icon:'🔍', perk:'Badge Chasseur débloqué' },
+    { min:40,  name:'Expert Frbonplan',      icon:'⭐', perk:'Profil Expert + carte membre' },
+    { min:80,  name:'Légende Frbonplan',     icon:'👑', perk:'Badge Légende + progression premium' },
+    { min:150, name:'Ambassadeur Frbonplan', icon:'🏆', perk:'Badge Ambassadeur + carte avancée' },
+    { min:250, name:'Icône Frbonplan',       icon:'💎', perk:'Niveau maximum + profil Icône' }
   ];
   const BADGES = [
     { id:'first_fav',    icon:'❤️', label:'Premier favori' },
@@ -9182,17 +9222,30 @@ body.app-standalone .jump-articles-link { display:none }
     { id:'calculateur',  icon:'🧮', label:'A calculé ses gains' },
     { id:'montres',      icon:'⌚', label:'Boutique montres visitée' }
   ];
-  function getLoyaltyPts(){ try { return parseInt(localStorage.getItem(LOYALTY_KEY) || '0', 10); } catch(e){ return 0; } }
-  function getLoyaltyActions(){ try { return JSON.parse(localStorage.getItem(LOYALTY_ACTIONS_KEY) || '[]'); } catch(e){ return []; } }
+  let loyaltyMemoryPts = null;
+  let loyaltyMemoryActions = null;
+  function getLoyaltyPts(){
+    if(loyaltyMemoryPts !== null) return loyaltyMemoryPts;
+    try { loyaltyMemoryPts = Math.max(0, parseInt(localStorage.getItem(LOYALTY_KEY) || '0', 10) || 0); } catch(e){ loyaltyMemoryPts = 0; }
+    return loyaltyMemoryPts;
+  }
+  function getLoyaltyActions(){
+    if(loyaltyMemoryActions) return loyaltyMemoryActions.slice();
+    try { const p = JSON.parse(localStorage.getItem(LOYALTY_ACTIONS_KEY) || '[]'); loyaltyMemoryActions = Array.isArray(p) ? p : []; } catch(e){ loyaltyMemoryActions = []; }
+    return loyaltyMemoryActions.slice();
+  }
   function addLoyaltyPoints(pts, actionId){
+    pts = Number(pts) || 0;
+    if(pts <= 0) return false;
     const actions = getLoyaltyActions();
-    if(actionId && actions.includes(actionId)) return; // pas de double comptage pour les badges uniques
+    if(actionId && actions.includes(actionId)) return false;
     const before = getLoyaltyPts();
     const total = before + pts;
-    const prevLevel = currentLevel(before);
+    loyaltyMemoryPts = total;
+    if(actionId) loyaltyMemoryActions = actions.concat(actionId);
     try {
       localStorage.setItem(LOYALTY_KEY, String(total));
-      if(actionId){ actions.push(actionId); localStorage.setItem(LOYALTY_ACTIONS_KEY, JSON.stringify(actions)); }
+      if(actionId) localStorage.setItem(LOYALTY_ACTIONS_KEY, JSON.stringify(loyaltyMemoryActions));
     } catch(e){}
     paintLoyaltyPill(total);
     floatPointsGain(pts);
@@ -9201,11 +9254,12 @@ body.app-standalone .jump-articles-link { display:none }
       if(badge) showToast(badge.icon + ' Badge débloqué : ' + badge.label + ' (+' + pts + ' pts)');
     }
     const newLevel = currentLevel(total);
-    if(newLevel.name !== prevLevel.name){
+    if(newLevel.name !== currentLevel(before).name){
       setTimeout(() => showToast('🎉 Nouveau niveau : ' + newLevel.icon + ' ' + newLevel.name + ' !'), actionId ? 1600 : 0);
       const pillEl = document.getElementById('loyaltyPill');
       if(pillEl){ pillEl.classList.add('level-up'); setTimeout(() => pillEl.classList.remove('level-up'), 900); }
     }
+    return true;
   }
   function floatPointsGain(pts){
     if(pts <= 0) return;
@@ -9249,6 +9303,14 @@ body.app-standalone .jump-articles-link { display:none }
     document.getElementById('profileLevelSub').textContent = next
       ? pts + ' points — encore ' + (next.min - pts) + ' pour ' + next.name
       : pts + ' points — niveau maximum atteint 🎉';
+    const rewardCurrent = document.getElementById('loyaltyRewardCurrent');
+    const rewardNext = document.getElementById('loyaltyRewardNext');
+    const rewardBar = document.getElementById('loyaltyProgressBar');
+    if(rewardCurrent) rewardCurrent.textContent = lvl.icon + ' ' + lvl.name + ' · ' + lvl.perk;
+    if(rewardBar) rewardBar.style.width = (next ? Math.min(100, Math.round((pts - lvl.min) / (next.min - lvl.min) * 100)) : 100) + '%';
+    if(rewardNext) rewardNext.textContent = next
+      ? 'Encore ' + (next.min - pts) + ' pts pour débloquer ' + next.name + ' : ' + next.perk + '.'
+      : 'Tous les niveaux de progression sont débloqués 🎉';
     const grid = document.getElementById('profileBadgeGrid');
     grid.innerHTML = BADGES.map(b => (
       '<div class="badge-item' + (actions.includes(b.id) ? ' unlocked' : '') + '">' +
@@ -9481,10 +9543,6 @@ body.app-standalone .jump-articles-link { display:none }
   })();
 
   // Points de fidélité branchés sur des actions déjà existantes sur le site
-  document.addEventListener('click', (e) => {
-    if(e.target.closest && e.target.closest('.shop-fav.active')) addLoyaltyPoints(2, 'first_fav');
-    if(e.target.closest && e.target.closest('.shop-compare.active')) addLoyaltyPoints(2, 'comparateur');
-  }, true);
 
   // ============================================================
   // ROUND 10 — 7 grosses + 5 légères améliorations
@@ -9874,14 +9932,20 @@ body.app-standalone .jump-articles-link { display:none }
     sections.forEach(s => obs.observe(s));
   })();
 
-  // ---------- La boutique de montres rapporte bien plus que le reste ----------
-  // C'est la seule vraie vente (vs. l'affiliation Hacoo) : on la pousse clairement.
+  // ---------- Bonus fidélité : boutique de montres ----------
+  // Les points récompensent l’engagement dans l’application. Ils ne simulent jamais un achat ou une commande.
   document.addEventListener('click', (e) => {
     const link = e.target.closest('a[href*="myshopify.com"]');
     if(!link) return;
-    addLoyaltyPoints(20, 'montres');   // gros bonus unique à la première visite
-    addLoyaltyPoints(5);               // + bonus à chaque visite suivante, sans limite
-    trackEvent('watch_shop_visit_bonus', {});
+    const todayKey = new Date().toISOString().slice(0,10);
+    let lastWatchDay = '';
+    try { lastWatchDay = localStorage.getItem('frbonplan_watch_bonus_day') || ''; } catch(e){}
+    if(lastWatchDay !== todayKey){
+      if(!getLoyaltyActions().includes('montres')) addLoyaltyPoints(20, 'montres');
+      else addLoyaltyPoints(3);
+      try { localStorage.setItem('frbonplan_watch_bonus_day', todayKey); } catch(e){}
+      trackEvent('watch_shop_visit_bonus', { daily: true });
+    }
   }, true);
 
   // ---------- Produits gérés depuis l'administration GitHub ----------
