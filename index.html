@@ -5618,6 +5618,20 @@ body.app-standalone .jump-articles-link { display:none }
 .price-radar-watch.active{border-color:rgba(116,227,155,.35);color:#74e39b;background:rgba(116,227,155,.07)}
 .shop-card .price-radar-watch{position:relative;z-index:3}
 @media(max-width:560px){.price-radar-item{align-items:flex-start;flex-wrap:wrap}.price-radar-item-name{flex-basis:100%}}
+
+/* L'appli installée a son propre tableau de bord (#appDashboard) : les blocs
+   d'argumentaire marketing destinés à convaincre un visiteur web (pourquoi
+   Frbonplan, comment ça marche, pourquoi deux boutiques, conseils, carte
+   d'installation désormais inutile) n'ont plus leur place une fois que la
+   personne a déjà l'appli ouverte. Rien n'est supprimé : ces blocs restent
+   entiers pour le site web classique, juste masqués ici. */
+body.app-standalone #pourquoi-deux,
+body.app-standalone #mission,
+body.app-standalone #fonctionnement,
+body.app-standalone #conseils,
+body.app-standalone #installer,
+body.app-standalone .trust-bar,
+body.app-standalone .marquee { display:none !important; }
 </style>
 <script type="application/ld+json">
 {
@@ -8615,6 +8629,10 @@ body.app-standalone .jump-articles-link { display:none }
   if('serviceWorker' in navigator){
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('./sw.js').then((reg) => {
+        // Réévaluation immédiate (en plus de celle au retour sur l'app) : aide le
+        // navigateur à constater plus vite qu'un manifeste/SW autrefois invalide
+        // est maintenant correct, au lieu de garder en mémoire un ancien verdict.
+        reg.update().catch(() => {});
         if(reg.waiting){
           swWaiting = reg.waiting;
           document.getElementById('updateBanner').classList.add('show');
