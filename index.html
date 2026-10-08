@@ -5328,6 +5328,19 @@ body.app-standalone #appSplash.show { display:flex }
 /* Masquer le folklore "site vitrine" une fois installée en appli */
 body.app-standalone .announce-bar { display:none !important }
 body.app-standalone .brand-name small { display:none }
+/* Header d'appli : la navigation complète du site (Mission/Quiz/Boutique/...,
+   le bouton Rejoindre, le menu hamburger) n'a plus de raison d'être — la
+   barre d'onglets en bas gère déjà toute la navigation en mode appli. */
+body.app-standalone .main-nav,
+body.app-standalone .header-cta,
+body.app-standalone .menu-toggle { display:none !important; }
+body.app-standalone .header-inner { justify-content:space-between; }
+body.app-standalone .theme-toggle { margin-left:auto; }
+/* Le grand argumentaire marketing (titre, sous-titre, CTA Telegram/Hacoo) sert
+   à convaincre un nouveau visiteur du site — une fois dans l'appli, le tableau
+   de bord juste au-dessus a déjà rempli ce rôle. On garde seulement la carte
+   code promo (ticket), qui reste utile au quotidien. */
+body.app-standalone .hero-grid > .reveal.in-view { display:none !important; }
 /* En mode appli, on allège le texte marketing mais on conserve intégralement
    l'ambiance visuelle du hero : aurores, particules, étoiles et parallaxe. */
 body.app-standalone .hero .eyebrow,
@@ -5632,6 +5645,15 @@ body.app-standalone #conseils,
 body.app-standalone #installer,
 body.app-standalone .trust-bar,
 body.app-standalone .marquee { display:none !important; }
+
+/* Carte "Offre du jour" du tableau de bord (mode appli uniquement) */
+.app-dash-today{display:none;flex-direction:column;gap:3px;text-decoration:none;color:var(--text);
+  background:linear-gradient(135deg,rgba(240,195,104,0.14),rgba(255,105,82,0.07));
+  border:1px solid rgba(240,195,104,0.32);border-radius:16px;padding:12px 14px;margin:0 0 12px}
+body.app-standalone .app-dash-today.show{display:flex !important}
+.app-dash-today-label{font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--gold-soft)}
+.app-dash-today b{font-size:0.95rem;line-height:1.3}
+.app-dash-today span:last-child{font-size:0.78rem;color:var(--text-soft)}
 </style>
 <script type="application/ld+json">
 {
@@ -5977,8 +5999,14 @@ body.app-standalone .marquee { display:none !important; }
     <div class="wrap hero-grid">
       <div class="app-dashboard" id="appDashboard">
         <div class="app-dash-greet" id="appDashGreet">Bonjour 👋</div>
-        <div class="app-dash-sub">Votre sélection Frbonplan du jour</div>
+        <div class="app-dash-sub" id="appDashSub">Votre sélection Frbonplan du jour</div>
+        <a class="app-dash-today" id="appDashToday" href="#boutique" style="display:none;">
+          <span class="app-dash-today-label">Offre du jour</span>
+          <b id="appDashTodayName">—</b>
+          <span id="appDashTodayDesc"></span>
+        </a>
         <div class="app-dash-grid">
+          <button type="button" class="app-dash-btn" onclick="copyGeneric(this, 'FRBONPLAN')"><span class="app-dash-ico">📋</span>Copier FRBONPLAN</button>
           <a class="app-dash-btn" href="#codes"><span class="app-dash-ico">🎟️</span>Codes promo</a>
           <a class="app-dash-btn" href="#boutique"><span class="app-dash-ico">🛍️</span>Boutique</a>
           <a class="app-dash-btn" href="https://frbonplan.myshopify.com/discount/FRBONPLAN?redirect=%2F" target="_blank" rel="noopener"><span class="app-dash-ico">⌚</span>Montres<span class="app-dash-badge">+20 pts</span></a>
@@ -5990,6 +6018,7 @@ body.app-standalone .marquee { display:none !important; }
         <div class="app-status-row" aria-label="État de Frbonplan">
           <span><i></i> Service actif</span>
           <span>950+ membres</span>
+          <span id="appDashSince">Bienvenue</span>
           <span>Mis à jour chaque jour</span>
         </div>
       </div>
@@ -9474,6 +9503,7 @@ body.app-standalone .marquee { display:none !important; }
     if(!pill) return;
     if(num) num.textContent = total;
     if(total > 0) pill.classList.add('show');
+    if(typeof window.refreshAppDash === 'function') window.refreshAppDash();
   }
   function currentLevel(pts){
     let lvl = LEVELS[0];
@@ -10331,6 +10361,64 @@ body.app-standalone .marquee { display:none !important; }
       const grid = document.getElementById('hacooProductGrid');
       if(grid) grid.innerHTML = '';
     });
+
+  // ===== Mode appli : personnalisation du tableau de bord + navigation par glissement =====
+  (function(){
+    const SINCE_KEY = 'frbonplan_since';
+    function refreshAppDash(){
+      const sub = document.getElementById('appDashSub');
+      if(sub && typeof currentLevel === 'function'){
+        const pts = getLoyaltyPts();
+        const lvl = currentLevel(pts);
+        sub.textContent = lvl.icon + ' ' + lvl.name + ' · ' + pts + ' pt' + (pts > 1 ? 's' : '');
+      }
+      const today = document.getElementById('appDashToday');
+      const name = document.getElementById('dailyOfferName');
+      const box = document.getElementById('dailyOfferBox');
+      if(today && name && box && box.style.display !== 'none' && name.textContent.trim() && name.textContent.trim() !== '—'){
+        document.getElementById('appDashTodayName').textContent = name.textContent.trim();
+        document.getElementById('appDashTodayDesc').textContent = (document.getElementById('dailyOfferDesc')?.textContent || '').trim();
+        const link = document.getElementById('dailyOfferLink');
+        if(link && link.getAttribute('href')){
+          today.setAttribute('href', link.getAttribute('href'));
+          if(/^https?:/.test(link.getAttribute('href'))){ today.target = '_blank'; today.rel = 'noopener'; }
+        }
+        today.classList.add('show');
+      }
+    }
+    try {
+      let since = parseInt(localStorage.getItem(SINCE_KEY) || '0', 10);
+      if(!since){ since = Date.now(); localStorage.setItem(SINCE_KEY, String(since)); }
+      const days = Math.floor((Date.now() - since) / 86400000);
+      const el = document.getElementById('appDashSince');
+      if(el) el.textContent = days < 1 ? 'Bienvenue' : 'Membre depuis ' + days + ' jour' + (days > 1 ? 's' : '');
+    } catch(e){}
+    window.refreshAppDash = refreshAppDash;
+    refreshAppDash();
+    setTimeout(refreshAppDash, 1200);
+
+    // Glisser à gauche/droite pour changer d'onglet — uniquement dans l'appli installée
+    if(!document.body.classList.contains('app-standalone')) return;
+    const order = ['accueil','offres','codes','montres'];
+    let sx = 0, sy = 0, st = 0;
+    document.addEventListener('touchstart', (e) => {
+      if(e.touches.length !== 1) return;
+      sx = e.touches[0].clientX; sy = e.touches[0].clientY; st = Date.now();
+    }, { passive:true });
+    document.addEventListener('touchend', (e) => {
+      if(!e.changedTouches.length) return;
+      if(e.target.closest && e.target.closest('input, textarea, select, .fav-sheet, .ios-install-modal, .cmdk-overlay, .testi-carousel, .showcase-box, .recently-viewed-row, [role="dialog"]')) return;
+      const dx = e.changedTouches[0].clientX - sx;
+      const dy = e.changedTouches[0].clientY - sy;
+      if(Math.abs(dx) < 90 || Math.abs(dx) < Math.abs(dy) * 2 || Date.now() - st > 600) return;
+      const active = document.querySelector('.app-tabbar .app-tab.active');
+      const cur = active ? Math.max(0, order.indexOf(active.dataset.tab)) : 0;
+      const next = cur + (dx < 0 ? 1 : -1);
+      if(next < 0 || next >= order.length) return;
+      const target = document.querySelector('.app-tabbar .app-tab[data-tab="' + order[next] + '"]');
+      if(target) target.click(); // réutilise le comportement d'onglet existant (retour haptique inclus)
+    }, { passive:true });
+  })();
 </script>
 
 </body>
