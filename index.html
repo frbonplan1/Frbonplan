@@ -26,6 +26,8 @@
 <link rel="apple-touch-icon" sizes="180x180" href="unnamed.png">
 <link rel="mask-icon" href="unnamed.png" color="#d9a441">
 <link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://c.onlyaff.app">
+<link rel="dns-prefetch" href="https://c.onlyaff.app">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -5654,6 +5656,13 @@ body.app-standalone .app-dash-today.show{display:flex !important}
 .app-dash-today-label{font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--gold-soft)}
 .app-dash-today b{font-size:0.95rem;line-height:1.3}
 .app-dash-today span:last-child{font-size:0.78rem;color:var(--text-soft)}
+
+/* ===== Améliorations de confort (typo, tactile, énergie) ===== */
+h1,h2,h3{text-wrap:balance}
+p,li{text-wrap:pretty}
+button,a,select,summary,[role="button"],.app-tab{touch-action:manipulation}
+.app-dash-btn:active,.app-tab:active,.copy-btn:active{transform:scale(.96)}
+html.page-hidden *,html.page-hidden *::before,html.page-hidden *::after{animation-play-state:paused !important}
 </style>
 <script type="application/ld+json">
 {
@@ -10418,6 +10427,79 @@ body.app-standalone .app-dash-today.show{display:flex !important}
       const target = document.querySelector('.app-tabbar .app-tab[data-tab="' + order[next] + '"]');
       if(target) target.click(); // réutilise le comportement d'onglet existant (retour haptique inclus)
     }, { passive:true });
+  })();
+
+  // ===== Améliorations de confort et de fiabilité =====
+  (function(){
+    // 1) Copie fiable : repli automatique si le presse-papiers moderne est refusé ou absent
+    const nativeWrite = (navigator.clipboard && navigator.clipboard.writeText) ? navigator.clipboard.writeText.bind(navigator.clipboard) : null;
+    function legacyCopy(text){
+      return new Promise((resolve, reject) => {
+        try {
+          const ta = document.createElement('textarea');
+          ta.value = text; ta.setAttribute('readonly', '');
+          ta.style.cssText = 'position:fixed;top:-1000px;opacity:0';
+          document.body.appendChild(ta); ta.select(); ta.setSelectionRange(0, text.length);
+          const ok = document.execCommand('copy'); ta.remove();
+          ok ? resolve() : reject(new Error('copy'));
+        } catch(e){ reject(e); }
+      });
+    }
+    const safeWrite = (t) => nativeWrite ? nativeWrite(t).catch(() => legacyCopy(t)) : legacyCopy(t);
+    try { Object.defineProperty(navigator, 'clipboard', { value: { writeText: safeWrite }, configurable: true }); } catch(e){}
+
+    // 2) Économie de batterie : on fige les animations quand l'onglet/l'appli n'est pas visible
+    document.addEventListener('visibilitychange', () => {
+      document.documentElement.classList.toggle('page-hidden', document.hidden);
+    });
+
+    // 3) Liens externes : rel="noopener noreferrer" posé au moment du clic (couvre aussi les cartes chargées dynamiquement)
+    document.addEventListener('click', (e) => {
+      const a = e.target.closest && e.target.closest('a[target="_blank"]');
+      if(a) a.rel = 'noopener noreferrer';
+    }, true);
+
+    // 4) Clavier mobile adapté aux champs de recherche et au calculateur
+    document.querySelectorAll('#catalogSearchInput, #faqSearch, .search-with-mic input').forEach(inp => {
+      inp.setAttribute('enterkeyhint', 'search');
+      inp.setAttribute('autocomplete', 'off');
+      inp.setAttribute('autocapitalize', 'off');
+      inp.setAttribute('spellcheck', 'false');
+    });
+    const calc = document.getElementById('calcPrice');
+    if(calc){
+      calc.setAttribute('inputmode', 'decimal');
+      calc.setAttribute('enterkeyhint', 'done');
+      calc.addEventListener('focus', () => { try { calc.select(); } catch(e){} });
+    }
+
+    // 5) Touche Échap : ferme toute fenêtre ou feuille ouverte via les fonctions de fermeture existantes
+    document.addEventListener('keydown', (e) => {
+      if(e.key !== 'Escape') return;
+      ['closeFavSheet', 'closeInstallModal', 'closeCompare', 'closeProfileSheet'].forEach(fn => {
+        if(typeof window[fn] === 'function'){ try { window[fn](); } catch(err){} }
+      });
+    });
+
+    // 6) Accessibilité : l'onglet actif de la barre du bas est annoncé comme "page courante"
+    const bar = document.getElementById('appTabbar');
+    if(bar){
+      const syncCurrent = () => bar.querySelectorAll('.app-tab').forEach(t => {
+        if(t.classList.contains('active')) t.setAttribute('aria-current', 'page'); else t.removeAttribute('aria-current');
+      });
+      syncCurrent();
+      new MutationObserver(syncCurrent).observe(bar, { attributes:true, subtree:true, attributeFilter:['class'] });
+    }
+
+    // 7) Images : chargement différé pour tout ce qui n'est pas critique (logo et en-tête exclus)
+    function lazyImages(){
+      document.querySelectorAll('img:not([loading])').forEach(img => {
+        if(img.closest('header') || img.classList.contains('logo-photo') || img.closest('.hero')) return;
+        img.setAttribute('loading', 'lazy');
+      });
+    }
+    lazyImages();
+    setTimeout(lazyImages, 2500); // couvre les produits Hacoo injectés après chargement de products.json
   })();
 </script>
 
