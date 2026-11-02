@@ -1,4 +1,17 @@
 {
-  "updated": "2026-10-04T10:45:02.405Z",
-  "products": []
+  "updated": "2026-11-02T11:52:48.437Z",
+  "products": [
+    {
+      "id": "sneakers-mvz791ut",
+      "shop": "hacoo",
+      "name": "Sneakers",
+      "shareName": "Sneakers",
+      "priceOld": "68,85 €",
+      "priceNew": "32,54 €",
+      "image": "images/sneakers-1793620342852.png",
+      "link": "https://www.hacoo.pl/p/14269375",
+      "badge": "",
+      "delivery": "🚚 Livraison estimée 7-14 jours"
+    }
+  ]
 }
